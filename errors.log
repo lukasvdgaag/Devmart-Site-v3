@@ -1,0 +1,10 @@
+[22-Oct-2022 20:29:32 UTC] PHP Warning:  require(D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master/vendor/autoload.php): Failed to open stream: No such file or directory in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan on line 18
+[22-Oct-2022 20:29:32 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master/vendor/autoload.php' (include_path='.;C:\php\pear') in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan:18
+Stack trace:
+#0 {main}
+  thrown in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan on line 18
+[22-Oct-2022 20:30:38 UTC] PHP Warning:  require(D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master/vendor/autoload.php): Failed to open stream: No such file or directory in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan on line 18
+[22-Oct-2022 20:30:38 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master/vendor/autoload.php' (include_path='.;C:\php\pear') in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan:18
+Stack trace:
+#0 {main}
+  thrown in D:\laravel\laravel-vue3-vite-master\laravel-vue3-vite-master\artisan on line 18
