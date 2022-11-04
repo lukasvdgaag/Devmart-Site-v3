@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Plugins\Plugin;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,9 +19,14 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
+        'surname',
         'email',
         'password',
+        'discord',
+        'spigot',
+        'discord_suggestion_notifications'
     ];
 
     /**
@@ -39,6 +45,23 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'timestamp',
+        'discord_verified' => 'boolean',
+        'spigot_verified' => 'boolean',
+        'username_changed_at' => 'timestamp'
     ];
+
+    public function getPlugins(): Builder
+    {
+        if ($this->role === "admin") {
+            return Plugin::query()
+                ->whereNested(function ($closure) {
+                    $closure->where('custom', '=', 1)
+                        ->orWhere('price', '>', 0);
+                });
+        }
+        return Plugin::query()->whereBelongsTo($this)
+            ->orWhere('author', '=', $this->id);
+//        return $this->belongsToMany(Plugin::class);
+    }
 }

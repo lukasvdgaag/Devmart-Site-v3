@@ -1,10 +1,20 @@
-import HomeView from "@/views/HomeView";
-import {createWebHistory, createRouter} from 'vue-router';
+import HomePage from "@/pages/HomePage";
+import {createRouter, createWebHistory} from 'vue-router';
+import LoginPage from "@/pages/auth/LoginPage";
+import RegisterPage from "@/pages/auth/RegisterPage";
 
 const routes = [
     {
         path: '/',
-        component: HomeView
+        component: HomePage
+    },
+    {
+        path: '/login',
+        component: LoginPage
+    },
+    {
+        path: '/register',
+        component: RegisterPage
     }
 ];
 
