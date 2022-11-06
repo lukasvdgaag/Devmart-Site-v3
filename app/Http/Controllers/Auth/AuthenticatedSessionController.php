@@ -27,18 +27,20 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      *
      * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(LoginRequest $request)
     {
-        try {
-            $request->authenticate();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect('/login')->withErrors($e->errors());
-        }
-
-        $request->session()->regenerate();
-        return redirect()->intended(WebUtils::redirectOrGoHome($request, true));
+        return response("yeh no lol")->setStatusCode(400);
+//        try {
+//            $request->authenticate();
+//        } catch (\Illuminate\Validation\ValidationException $e) {
+//            return response()->setStatusCode(400)->json(['errors' => $e->errors()]);
+////            return redirect('/login')->withErrors($e->errors());
+//        }
+//
+//        $request->session()->regenerate();
+////        return redirect()->intended(WebUtils::redirectOrGoHome($request, true));
+//        return response("it works bruh");
     }
 
     /**

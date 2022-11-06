@@ -3,7 +3,7 @@
         <div class="w-100 flex align-items-center m-0 p-0 h-100">
             <Navbar :background="true"/>
             <AuthCard class="w-100">
-                <form>
+                <form method="post" @submit.prevent="login">
                     <a href="/login-with-discord"
                        class="button primary flex align-center plain p-3">
                         <div class="flex flex-row gap-2">
@@ -17,7 +17,7 @@
                     <div>
                         <Label for="username" value="Username or Email"/>
                         <Input id="username"
-                               v-bind="data.username"
+                               v-model="data.username"
                                class="block mt-1 w-full"
                                type="text"
                                name="username"
@@ -27,7 +27,7 @@
                     <div class="mt-4">
                         <Label for="password" value="Username or Email"/>
                         <Input id="password"
-                               v-bind="data.password"
+                               v-model="data.password"
                                class="block mt-1 w-full"
                                type="password"
                                name="password"
@@ -38,7 +38,7 @@
                         <div>
                             <label for="remember_me" class="inline-flex items-center h-100">
                                 <Input id="remember_me"
-                                       v-bind="data.remember"
+                                       v-model="data.remember"
                                        type="checkbox"
                                        class="rounded"
                                        name="remember"/>
@@ -71,6 +71,7 @@ import Navbar from "@/components/Common/Navbar";
 import AuthCard from "@/components/Common/AuthCard";
 import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
+import {post} from "@/helpers/utils";
 
 export default {
     name: "LoginPage",
@@ -78,12 +79,23 @@ export default {
 
     data() {
         return {
+            username: '',
             data: {
                 username: '',
                 password: '',
                 remember: false
             }
         }
+    },
+
+    methods: {
+      async login() {
+          console.log(this.username)
+          console.log(this.data)
+          let message = await post('/login', this.data, {Accept: 'application/json'});
+          console.log(message);
+          console.log(await message.json())
+      }
     },
 
     computed: {
