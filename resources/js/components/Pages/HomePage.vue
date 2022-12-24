@@ -1,5 +1,4 @@
 <template>
-
     <div class="landing-page h-100 w-100">
         <div class="h-100 w-100"
              style="background-color: #cf0063;background-image: linear-gradient(135deg, #dd1173, #350e47);">

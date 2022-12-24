@@ -8,7 +8,7 @@ export async function callApi(method = 'GET', url, body = null, options = {}) {
 export async function post(href, body = {}, headers = {}) {
     return fetch(href, {
         method: 'POST',
-        headers: {...headers, 'Content-Type': 'application/json'},
+        headers: {...headers, 'Content-Type': 'application/json', 'Accept': 'application/json'},
         body: JSON.stringify(body)
     });
 }

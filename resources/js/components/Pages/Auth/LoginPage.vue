@@ -25,7 +25,7 @@
                                autofocus/>
                     </div>
                     <div class="mt-4">
-                        <Label for="password" value="Username or Email"/>
+                        <Label for="password" value="Password"/>
                         <Input id="password"
                                v-model="data.password"
                                class="block mt-1 w-full"
@@ -34,6 +34,8 @@
                                required
                                autocomplete="current-password"/>
                     </div>
+
+                    <div v-if="'email' in errors" class="text-red-600 mt-2">{{errors.email[0]}}</div>
                     <div class="flex flex-row mt-2 center justify-space-between">
                         <div>
                             <label for="remember_me" class="inline-flex items-center h-100">
@@ -52,13 +54,9 @@
                     </div>
 
                     <div class="flex items-center justify-end mt-4">
-                        <button class="primary w-100 p-2">
+                        <button class="primary w-100 p-2" :disabled="loggingIn">
                             Log in
                         </button>
-                    </div>
-
-                    <div class="mt-4 text-center">
-                        Not registered yet? <router-link to="register" class="static">Create an account!</router-link>
                     </div>
                 </form>
             </AuthCard>
@@ -72,29 +70,57 @@ import AuthCard from "@/components/Common/AuthCard";
 import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
 import {post} from "@/helpers/utils";
+import {useAuth} from "@/store/authStore";
 
 export default {
     name: "LoginPage",
     components: {Input, Label, AuthCard, Navbar},
 
+    created() {
+        let loggedIn = this.authStore.loggedIn;
+        console.log(loggedIn)
+        if (loggedIn) {
+          this.$router.push("/");
+      }
+    },
+
     data() {
         return {
-            username: '',
+            authStore: useAuth(),
+            errors: {},
             data: {
                 username: '',
                 password: '',
                 remember: false
-            }
+            },
+            loggingIn: false
         }
     },
 
     methods: {
       async login() {
-          console.log(this.username)
-          console.log(this.data)
-          let message = await post('/login', this.data, {Accept: 'application/json'});
-          console.log(message);
-          console.log(await message.json())
+          if (this.loggingIn) return;
+
+          console.log("yeh")
+          const response = await this.authStore.login(this.data);
+
+          //
+          // this.loggingIn = true;
+          // let response = await post('/login', this.data, {Accept: 'application/json'});
+          console.log(response)
+          // if (response.status === 401) {
+          //     const json =  await response.json();
+          //     this.errors = json.errors;
+          // } else if (response.status === 200) {
+          //     // todo user logged in correctly.
+          //     this.errors = {};
+          //     this.$index.push('/');
+          // } else {
+          //     this.errors = {
+          //         email: ['Something went wrong.']
+          //     }
+          // }
+          this.loggingIn = false;
       }
     },
 

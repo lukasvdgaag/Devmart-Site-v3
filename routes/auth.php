@@ -9,21 +9,27 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->withoutMiddleware('web')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+//Route::prefix('api')->group(function () {
+//    Route::middleware('auth:sanctum')->group(function () {
+//        Route::get('/users/auth', function (Request $request) {
+//            return $request->user();
+//        });
+//    });
+//});
 
+Route::middleware('guest')->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store']);
-
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('login-discord', function (\Illuminate\Http\Request $request) {
         if ($request->has('code')) {
             $request->merge([
-               'username' => 'unknown',
-               'password' => 'unknown'
+                'username' => 'unknown',
+                'password' => 'unknown'
             ]);
 
             $authCon = new AuthenticatedSessionController();

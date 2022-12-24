@@ -2,26 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Classes\WebUtils;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Nette\Schema\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('auth.login');
-    }
 
     /**
      * Handle an incoming authentication request.
@@ -30,17 +18,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        return response("yeh no lol")->setStatusCode(400);
-//        try {
-//            $request->authenticate();
-//        } catch (\Illuminate\Validation\ValidationException $e) {
-//            return response()->setStatusCode(400)->json(['errors' => $e->errors()]);
-////            return redirect('/login')->withErrors($e->errors());
-//        }
-//
+        try {
+            $request->authenticate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response()->json(['errors' => $e->errors()], 401);
+        }
+
 //        $request->session()->regenerate();
-////        return redirect()->intended(WebUtils::redirectOrGoHome($request, true));
-//        return response("it works bruh");
+//        return redirect()->intended(WebUtils::redirectOrGo    Home($request, true));
+        Log::debug("auth successful.");
+        return \response()->json(['message' => 'Auth was successful.', 'user' => Auth::user()])->setStatusCode(200);
     }
 
     /**

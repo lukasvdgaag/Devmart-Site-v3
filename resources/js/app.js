@@ -1,20 +1,28 @@
 import './bootstrap';
 
-import {createApp} from 'vue'
+import {createApp, markRaw} from 'vue'
 import App from './App.vue'
-import router from "@/router";
-import store from "@/store";
+import router from "@/router/index";
+import "../css/output.css";
 
 import {faGithub, faDiscord} from "@fortawesome/free-brands-svg-icons";
-import {faGear, faRightFromBracket, faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import {faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {library} from "@fortawesome/fontawesome-svg-core";
+import {createPinia} from "pinia";
 
-library.add(faGithub, faGear, faRightFromBracket, faDiscord, faEye, faEyeSlash);
+library.add(
+    faGithub, faDiscord,
+    faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark
+);
+
+const pinia = createPinia().use(({store}) => {
+    store.router = markRaw(router);
+});
 
 createApp(App)
     .use(router)
-    .use(store)
+    .use(pinia)
     .component('font-awesome-icon', FontAwesomeIcon)
-    .mount("#app")
+    .mount("#app");
