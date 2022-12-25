@@ -25,6 +25,9 @@ Route::prefix('api')->group(function () {
         Route::get('/users/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserSearch']);
         Route::put('/users/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserUpdate']);
 
+        Route::get('/users/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationRetrieval']);
+        Route::put('/users/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationUpdate']);
+
     });
 });
 

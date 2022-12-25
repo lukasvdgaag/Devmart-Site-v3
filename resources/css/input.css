@@ -1871,7 +1871,7 @@ textarea {
 }
 
 .wiki-quicklink.gh:hover {
-    background-image: url("/img/github-logo-colored.png");
+    background-image: url("/assets/img/github-logo-colored.png");
     background-color: #000;
 }
 

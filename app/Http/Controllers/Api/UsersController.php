@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController
@@ -13,41 +13,77 @@ class UsersController
 
     public function handleUserSearch(Request $request, int $userId): \Illuminate\Http\JsonResponse
     {
-        $user = $request->user();
-        if ($user == null || ($user->id != $userId && $user->role != "admin")) {
-            return response()->json([
-                'error' => 'Not authorized'
-            ], 401);
-        }
-
-        Log::error("User id: " . $userId);
+        // todo check if it actually redirects here
+        $user = $this->getUserOrRedirect($request, $userId);
 
         return response()->json([
             'user' => User::query()->where('id', $userId)->get()->first()
         ]);
     }
 
+    public function handleUserPayPalInformationRetrieval(Request $request, int $userId)
+    {
+        $user = $this->getUserOrRedirect($request, $userId);
+
+        $paypalInformation = DB::query()
+            ->selectRaw('COALESCE(p.name, u.name) AS name')
+            ->addSelect(DB::raw('COALESCE(p.surname, u.surname) AS surname'))
+            ->addSelect(DB::raw('COALESCE(p.email, u.email) AS email'))
+            ->addSelect('p.business')
+            ->from('users', 'u')
+            ->leftJoin('user_paypal AS p', 'u.id', '=', 'p.user')
+            ->where('u.id', $userId)->get()->first();
+
+        return response()->json([
+            'paypal_information' => $paypalInformation
+        ]);
+    }
+
+    public function handleUserPayPalInformationUpdate(Request $request, int $userId)
+    {
+        $requestUser = $this->getUserOrRedirect($request, $userId);
+
+        $json = $request->json();
+        Validator::make($json->all(), [
+            'name' => ['nullable', 'string', 'max:255'],
+            'surname' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'string', 'max:255'],
+            'business' => ['nullable', 'string', 'max:100']
+        ])->validate();
+
+        $name = $json->get('name') ?? '';
+        if ($name === '') $name = null;
+        $surname = $json->get('surname') ?? '';
+        if ($surname === '') $surname = null;
+        $email = $json->get('email') ?? '';
+        if ($email === '') $email = null;
+        $business = $json->get('business') ?? '';
+        if ($business === '') $business = null;
+
+        DB::table('user_paypal')->updateOrInsert([
+            'user' => $userId
+        ], [
+            'name' => $name,
+            'surname' => $surname,
+            'email' => $email,
+            'business' => $business,
+        ]);
+
+        // return the updated paypal information from the database.
+        return $this->handleUserPayPalInformationRetrieval($request, $userId);
+    }
+
     public function handleUserUpdate(Request $request, int $userId)
     {
-        Log::error("Updating user.");
-        $requestUser = $request->user();
-        if ($requestUser == null || ($requestUser->id != $userId && $requestUser->role != "admin")) {
-            Log::error("Not authorized.");
-            return response()->json([
-                'error' => 'Not authorized'
-            ], 401);
-        }
+        $requestUser = $this->getUserOrRedirect($request, $userId);
 
-        Validator::make($request->json()->all(), [
+        $json = $request->json();
+        Validator::make($json->all(), [
             'username' => ['required', 'string', 'alpha_dash', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'theme' => ['required', 'in:light,dark,system'],
             'discord_suggestion_notifications' => ['required', 'in:ALL_MESSAGES,ONLY_ADMINS,ONLY_RESPONSES,NONE']
         ])->validate();
-
-        $json = $request->json();
-        Log::error("Validated request.");
-
 
         $username = $json->get('username');
         $email = $json->get('email');
@@ -104,6 +140,17 @@ class UsersController
         return response()->json([
             'user' => $user
         ]);
+    }
+
+    public function getUserOrRedirect(Request $request, int $userId)
+    {
+        $user = $request->user();
+        if ($user == null || ($user->id != $userId && $user->role != "admin")) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+        return $user;
     }
 
 }

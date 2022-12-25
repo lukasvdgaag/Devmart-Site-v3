@@ -105,7 +105,7 @@
                 <div class="grid-full flex align-items-center flex-row">
 
                     <div class="w-100 h-100 flex align-center">
-                        <img style="max-height: 80%" src="/img/plugins-preview2.png" alt="Plugins preview">
+                        <img style="max-height: 80%" src="/assets/img/plugins-preview2.png" alt="Plugins preview">
                     </div>
                     <div class="w-100 text-center flex align-center">
                         <div class="mw-767px">

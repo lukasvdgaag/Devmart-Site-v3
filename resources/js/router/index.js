@@ -5,6 +5,7 @@ import RegisterPage from "@/components/pages/auth/RegisterPage";
 import {checkAuthenticated} from "@/middleware";
 import AccountLayout from "@/components/Pages/Account/AccountLayout.vue";
 import AccountHome from "@/components/Pages/Account/AccountHome.vue";
+import AccountBilling from "@/components/Pages/Account/AccountBilling.vue";
 
 const routes = [
     {
@@ -33,23 +34,25 @@ const routes = [
         meta: {
             requireAuth: true
         },
-        children: [{
-            path: '',
-            name: 'accountHome',
-            component: AccountHome
-        }, {
-            path: 'billing',
-            name: 'accountBilling',
-            component: AccountHome
-        }, {
-            path: 'sales',
-            name: 'accountSales',
-            component: AccountHome
-        }, {
-            path: 'pastes',
-            name: 'accountPastes',
-            component: AccountHome
-        }]
+        children: [
+            {
+                path: '',
+                name: 'accountHome',
+                component: AccountHome
+            }, {
+                path: 'billing',
+                name: 'accountBilling',
+                component: AccountBilling
+            }, {
+                path: 'sales',
+                name: 'accountSales',
+                component: AccountHome
+            }, {
+                path: 'pastes',
+                name: 'accountPastes',
+                component: AccountHome
+            }
+        ]
     }
 ];
 

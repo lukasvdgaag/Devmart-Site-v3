@@ -6,7 +6,7 @@ import router from "@/router/index";
 import "../css/output.css";
 
 import {faGithub, faDiscord} from "@fortawesome/free-brands-svg-icons";
-import {faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
+import {faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation} from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -14,7 +14,7 @@ import {createPinia} from "pinia";
 
 library.add(
     faGithub, faDiscord,
-    faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark
+    faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation
 );
 
 const pinia = createPinia().use(({store}) => {

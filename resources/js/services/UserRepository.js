@@ -14,5 +14,11 @@ export default {
     },
     async updateUserById(id, payload) {
         return await client.put(`/${id}`, JSON.stringify(payload));
+    },
+    async fetchUserPayPalById(id) {
+        return await client.get(`/${id}/paypal`);
+    },
+    async updateUserPayPalById(id, payload) {
+        return await client.put(`/${id}/paypal`, JSON.stringify(payload));
     }
 }

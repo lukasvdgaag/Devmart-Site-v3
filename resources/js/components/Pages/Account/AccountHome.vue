@@ -16,13 +16,14 @@
             <Label value="Username"/>
             <Input v-model="user.username"
                    class="block mt-1 w-full"
+                   placeholder="Username"
                    required
                    :errors="errors"
                    item="username"
                    :disabled="!canChangeUsername"/>
             <ValidationError :errors="errors" item="username"/>
 
-            <template v-if="!isAdmin">
+            <template v-if="userLoading || !isAdmin">
                 <MutedText v-if="canChangeUsername">
                     You can only change your username once every 30 days.
                 </MutedText>
@@ -37,6 +38,7 @@
             <div class="w-full">
                 <Label class="font-bold" value="First Name"/>
                 <Input v-model="user.name"
+                       placeholder="First Name"
                        class="block mt-1 w-full"
                        required
                        :disabled="!isAdmin"/>
@@ -44,12 +46,13 @@
             <div class="w-full">
                 <Label class="font-bold" value="Last Name"/>
                 <Input v-model="user.surname"
+                       placeholder="Last Name"
                        class="block mt-1 w-full"
                        required
                        :disabled="!isAdmin"/>
             </div>
         </div>
-        <MutedText v-if="!isAdmin">
+        <MutedText v-if="userLoading || !isAdmin">
             Your name cannot be changed after it has been entered during the signup process.
             If this name is incorrect, please contact a staff member to change it.
         </MutedText>
@@ -58,6 +61,8 @@
             <Label class="font-bold" value="Email"/>
             <Input v-model="user.email"
                    class="block mt-1 w-full"
+                   placeholder="Email"
+                   type="email"
                    :errors="errors"
                    item="email"
                    required/>
@@ -68,6 +73,7 @@
         <div class="mt-2">
             <Label class="font-bold" value="Discord"/>
             <Input v-model="user.discord"
+                   placeholder="Discord#1234"
                    class="block mt-1 w-full"
                    required/>
         </div>
@@ -92,9 +98,10 @@
             <Label class="font-bold" value="SpigotMC Account ID"/>
             <Input v-model="user.spigot"
                    class="block mt-1 w-full"
+                   placeholder="SpigotMC ID"
                    :disabled="!isAdmin"/>
 
-            <MutedText v-if="isAdmin">
+            <MutedText v-if="!userLoading && isAdmin">
                 Changing a user's SpigotMC ID will automatically verify their account, so make sure that
                 it is correct and actually belongs to the user.
             </MutedText>
@@ -108,7 +115,7 @@
         <h2 class="mt-4">Verification</h2>
         <div class="mt-2">
             <Label class="font-bold" value="Account ID"/>
-            <DisabledFormText>{{ user.id }}</DisabledFormText>
+            <DisabledFormText>{{ user.id ?? '0'}}</DisabledFormText>
 
             <MutedText v-if="isAdmin">
                 The account ID can be used to verify the GCNT account on any additional GCNT
@@ -122,7 +129,7 @@
         </div>
         <div class="mt-2">
             <Label class="font-bold" value="Verification Code"/>
-            <DisabledFormText>{{ user.verify_code }}</DisabledFormText>
+            <DisabledFormText>{{ user.verify_code ?? '000000' }}</DisabledFormText>
 
             <MutedText v-if="isAdmin">
                 This verification code can be used to verify the GCNT account on any additional GCNT
@@ -143,8 +150,8 @@
                  :class="{'selected': user.theme === type}"
                  @click="selectTheme(type)"
                  :value="type">
-                <img class="border-radius-small" :src="`/img/theme-${type}.svg`" :alt="`Theme ${type}`">
-                <span class="text-medium font-bold">{{ capFirstLetter()(type) }}</span>
+                <img class="border-radius-small" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
+                <span class="text-medium font-bold">{{ capFirstLetter(type) }}</span>
             </div>
         </div>
 
@@ -171,26 +178,15 @@ import MutedText from "@/components/Common/MutedText.vue";
 import ValidationError from "@/components/Common/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
+import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
 
 export default {
     name: "AccountHome",
-    components: {StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
+    components: {AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
     inject: ['dateService'],
-
-    created() {
-        const userId = this.$route.query.user;
-        console.log(userId)
-        if (this.user?.role === "admin" && userId) {
-            this.user = this.fetchUserInfo(userId);
-        } else {
-            this.user = this.fetchUserInfo(this.user?.id);
-        }
-    },
 
     data() {
         return {
-            authStore: useAuth(),
-            user: useAuth().user,
             errors: {},
             loading: false,
             justUpdated: false,
@@ -214,26 +210,14 @@ export default {
         },
     },
     methods: {
-        capFirstLetter() {
-            return capFirstLetter
+        capFirstLetter(text) {
+            return capFirstLetter(text);
         },
         AccountTheme() {
             return AccountTheme
         },
         DiscordSuggestionNotifications() {
             return DiscordSuggestionNotifications
-        },
-        async fetchUserInfo(id) {
-            try {
-                const res = await UserRepository.fetchUserById(id);
-                if (res.status === 200) {
-                    this.user = res.data.user;
-                    return;
-                }
-            } catch (e) {
-                console.error(e);
-            }
-            // todo send to 404 page?
         },
         selectTheme(theme) {
             this.user.theme = theme;
@@ -257,6 +241,21 @@ export default {
                 }
             }
             this.loading = false;
+        }
+    },
+
+    props: {
+        user: {
+            type: Object,
+            required: true
+        },
+        isAdmin: {
+            type: Boolean,
+            required: true
+        },
+        userLoading: {
+            type: Boolean,
+            required: true
         }
     }
 }
