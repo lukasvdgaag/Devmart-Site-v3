@@ -1,9 +1,13 @@
 <template>
     <input :value="modelValue"
            @change="onChange($event)"
+           :type="type"
            @input="$emit('update:modelValue', $event.target.value)"
-           class="rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-           :class="[hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200']"
+           class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600"
+           :class="[
+               hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
+               type === 'checkbox' ? 'p-2.5 rounded-md' : '',
+           ]"
     />
 </template>
 
@@ -12,7 +16,24 @@ export default {
     name: "Input",
     emits: ['update:modelValue'],
 
-    props: ['modelValue', 'errors', 'item'],
+    props: {
+        modelValue: {
+            required: false
+        },
+        errors: {
+            type: Object,
+            required: false
+        },
+        item: {
+            type: String,
+            required: false
+        },
+        type: {
+            type: String,
+            required: false,
+            default: 'text'
+        },
+    },
 
     computed: {
         hasError() {

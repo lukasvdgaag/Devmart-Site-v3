@@ -55,6 +55,7 @@
 
 <script>
 import Logo from "@/components/Common/Logo";
+import {useAuth} from "@/store/authStore";
 export default {
     name: "Navbar",
     components: {Logo},
@@ -67,17 +68,13 @@ export default {
 
     data() {
         return {
-            user: {
-                role: "admin",
-                username: "gcnt",
-                theme: "dark",
-            }
+            user: useAuth().user,
         }
     },
 
     methods: {
-        logoutUser($event) {
-
+        logoutUser() {
+            useAuth().logout();
         }
     }
 }

@@ -20,7 +20,8 @@
                                v-model="data.username"
                                class="block mt-1 w-full"
                                type="text"
-                               name="username"
+                               :errors="errors"
+                               item="username"
                                required
                                autofocus/>
                     </div>
@@ -30,20 +31,20 @@
                                v-model="data.password"
                                class="block mt-1 w-full"
                                type="password"
-                               name="password"
+                               :errors="errors"
+                               item="username"
                                required
                                autocomplete="current-password"/>
                     </div>
 
-                    <div v-if="'email' in errors" class="text-red-600 mt-2">{{errors.email[0]}}</div>
+                    <ValidationError item="username" :errors="errors"/>
+
                     <div class="flex flex-row mt-2 center justify-space-between">
                         <div>
                             <label for="remember_me" class="inline-flex items-center h-100">
                                 <Input id="remember_me"
                                        v-model="data.remember"
-                                       type="checkbox"
-                                       class="rounded"
-                                       name="remember"/>
+                                       type="checkbox"/>
 
                                 <span class="ml-2 text-sm text-gray-600">Remember me</span>
                             </label>
@@ -55,7 +56,7 @@
 
                     <div class="flex items-center justify-end mt-4">
                         <button class="primary w-100 p-2" :disabled="loggingIn">
-                            Log in
+                            {{ loggingIn ? "Logging you in..." : "Log in" }}
                         </button>
                     </div>
                 </form>
@@ -69,19 +70,18 @@ import Navbar from "@/components/Common/Navbar";
 import AuthCard from "@/components/Common/AuthCard";
 import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
-import {post} from "@/helpers/utils";
 import {useAuth} from "@/store/authStore";
+import ValidationError from "@/components/Common/ValidationError.vue";
 
 export default {
     name: "LoginPage",
-    components: {Input, Label, AuthCard, Navbar},
+    components: {ValidationError, Input, Label, AuthCard, Navbar},
 
     created() {
         let loggedIn = this.authStore.loggedIn;
-        console.log(loggedIn)
         if (loggedIn) {
-          this.$router.push("/");
-      }
+            this.$router.push("/");
+        }
     },
 
     data() {
@@ -98,30 +98,23 @@ export default {
     },
 
     methods: {
-      async login() {
-          if (this.loggingIn) return;
+        async login() {
+            if (this.loggingIn) return;
+            this.loggingIn = true;
 
-          console.log("yeh")
-          const response = await this.authStore.login(this.data);
+            try {
+                const response = await this.authStore.login(this.data);
+                if (response.status === 200) {
+                    this.$router.push({name: "home"});
+                } else {
+                    this.errors = response.data.errors;
+                }
+            } catch (e) {
+                this.errors = e?.response?.data?.errors ?? {};
+            }
 
-          //
-          // this.loggingIn = true;
-          // let response = await post('/login', this.data, {Accept: 'application/json'});
-          console.log(response)
-          // if (response.status === 401) {
-          //     const json =  await response.json();
-          //     this.errors = json.errors;
-          // } else if (response.status === 200) {
-          //     // todo user logged in correctly.
-          //     this.errors = {};
-          //     this.$index.push('/');
-          // } else {
-          //     this.errors = {
-          //         email: ['Something went wrong.']
-          //     }
-          // }
-          this.loggingIn = false;
-      }
+            this.loggingIn = false;
+        }
     },
 
     computed: {

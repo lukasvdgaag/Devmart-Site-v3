@@ -29,7 +29,6 @@ const routes = [
         }
     }, {
         path: '/account',
-        name: 'account',
         component: AccountLayout,
         meta: {
             requireAuth: true
@@ -37,7 +36,7 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'accountHome',
+                name: 'account',
                 component: AccountHome
             }, {
                 path: 'billing',

@@ -194,9 +194,6 @@ export default {
     },
 
     computed: {
-        isAdmin() {
-            return useAuth().user?.role === "admin" && (this.$route.query.user || useAuth().user?.id !== this.user?.id);
-        },
         canChangeUsername() {
             if (this.isAdmin) return true;
 
@@ -256,7 +253,11 @@ export default {
         userLoading: {
             type: Boolean,
             required: true
-        }
+        },
+        userId: {
+            type: Number,
+            required: true
+        },
     }
 }
 </script>

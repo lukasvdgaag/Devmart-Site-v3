@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -26,8 +27,7 @@ class AuthenticatedSessionController extends Controller
 
 //        $request->session()->regenerate();
 //        return redirect()->intended(WebUtils::redirectOrGo    Home($request, true));
-        Log::debug("auth successful.");
-        return \response()->json(['message' => 'Auth was successful.', 'user' => Auth::user()])->setStatusCode(200);
+        return \response()->json(['message' => 'Auth was successful.', 'user' => new UserResource(Auth::user())])->setStatusCode(200);
     }
 
     /**

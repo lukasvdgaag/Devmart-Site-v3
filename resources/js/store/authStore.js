@@ -13,18 +13,10 @@ export const useAuth = defineStore({
     actions: {
         async login(payload) {
             try {
-                let response = await AuthService.login(payload);
-                if (response.status !== 200) {
-                    return response;
-                }
-
-                let user = await this.getAuthUser();
-                return user;
+                return await AuthService.login(payload);
             } catch (error) {
-                this.error = error;
-                console.error(error)
+                return error.response;
             }
-            return null;
         },
         async logout() {
             try {
@@ -53,10 +45,7 @@ export const useAuth = defineStore({
     },
 
     getters: {
-        loggedIn: (state) => {
-            console.log("u", state.user);
-            return !!state.user
-        },
+        loggedIn: (state) => !!state.user,
         isAdmin: (state) => (state.user ? state.user.isAdmin : false),
     }
 });
