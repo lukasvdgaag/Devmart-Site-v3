@@ -39,4 +39,13 @@ export class DateService {
         return Math.ceil(diff / (1000 * 3600 * 24));
     }
 
+    /**
+     * @param {Date} date
+     * @returns {string}
+     */
+    formatDay(date) {
+        // format the date in format Month Day, e.g. January 1
+        return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+    }
+
 }

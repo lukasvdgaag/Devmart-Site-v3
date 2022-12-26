@@ -151,7 +151,7 @@
                  @click="selectTheme(type)"
                  :value="type">
                 <img class="border-radius-small" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
-                <span class="text-medium font-bold">{{ capFirstLetter(type) }}</span>
+                <span class="text-medium font-bold">{{ StringService.capFirstLetter(type) }}</span>
             </div>
         </div>
 
@@ -173,12 +173,12 @@ import Select from "@/components/Common/Select.vue";
 import DiscordSuggestionNotifications from "@/models/DiscordSuggestionNotifications";
 import DisabledFormText from "@/components/Common/DisabledFormText.vue";
 import AccountTheme from "@/models/AccountTheme";
-import {capFirstLetter} from "@/services/StringService";
 import MutedText from "@/components/Common/MutedText.vue";
 import ValidationError from "@/components/Common/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
+import StringService from "../../../services/StringService";
 
 export default {
     name: "AccountHome",
@@ -194,6 +194,9 @@ export default {
     },
 
     computed: {
+        StringService() {
+            return StringService
+        },
         canChangeUsername() {
             if (this.isAdmin) return true;
 
@@ -207,9 +210,6 @@ export default {
         },
     },
     methods: {
-        capFirstLetter(text) {
-            return capFirstLetter(text);
-        },
         AccountTheme() {
             return AccountTheme
         },

@@ -6,6 +6,7 @@ import {checkAuthenticated} from "@/middleware";
 import AccountLayout from "@/components/Pages/Account/AccountLayout.vue";
 import AccountHome from "@/components/Pages/Account/AccountHome.vue";
 import AccountBilling from "@/components/Pages/Account/AccountBilling.vue";
+import AccountSales from "@/components/Pages/Account/AccountSales.vue";
 
 const routes = [
     {
@@ -45,7 +46,7 @@ const routes = [
             }, {
                 path: 'sales',
                 name: 'accountSales',
-                component: AccountHome
+                component: AccountSales
             }, {
                 path: 'pastes',
                 name: 'accountPastes',

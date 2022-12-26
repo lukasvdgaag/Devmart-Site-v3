@@ -43,6 +43,12 @@
     --wiki-sidebar-child-selected: #393a3e;
     --wiki-sidebar-child-border: #e5e7eb;
     --wiki-sidebar-child-border-selected: #cbccd0;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
 }
 
 :root body.dark-theme {
@@ -2057,20 +2063,6 @@ input[type='password'] {
     flex-direction: column;
     -ms-flex-direction: column;
     -webkit-flex-direction: column;
-}
-
-.graph-compare {
-    margin-bottom: 3px;
-}
-
-.graph-compare.down *:not(.gtc-p) {
-    color: #fa604b;
-    stroke: #fa604b;
-}
-
-.graph-compare.up *:not(.gtc-p) {
-    color: #15a87c;
-    stroke: #15a87c;
 }
 
 .grid-row-2 {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -13,8 +14,8 @@ class UsersController
 
     public function handleUserSearch(Request $request, int $userId): \Illuminate\Http\JsonResponse
     {
-        // todo check if it actually redirects here
-        $user = $this->getUserOrRedirect($request, $userId);
+        $user = Controller::getUserOrRedirect($request, $userId);
+        if (!($user instanceof User)) return $user;
 
         return response()->json([
             'user' => User::query()->where('id', $userId)->get()->first()
@@ -23,7 +24,8 @@ class UsersController
 
     public function handleUserPayPalInformationRetrieval(Request $request, int $userId)
     {
-        $user = $this->getUserOrRedirect($request, $userId);
+        $user = Controller::getUserOrRedirect($request, $userId);
+        if (!($user instanceof User)) return $user;
 
         $paypalInformation = DB::query()
             ->selectRaw('COALESCE(p.name, u.name) AS name')
@@ -41,7 +43,8 @@ class UsersController
 
     public function handleUserPayPalInformationUpdate(Request $request, int $userId)
     {
-        $requestUser = $this->getUserOrRedirect($request, $userId);
+        $requestUser = Controller::getUserOrRedirect($request, $userId);
+        if (!($requestUser instanceof User)) return $requestUser;
 
         $json = $request->json();
         Validator::make($json->all(), [
@@ -75,7 +78,8 @@ class UsersController
 
     public function handleUserUpdate(Request $request, int $userId)
     {
-        $requestUser = $this->getUserOrRedirect($request, $userId);
+        $requestUser = Controller::getUserOrRedirect($request, $userId);
+        if (!($requestUser instanceof User)) return $requestUser;
 
         $json = $request->json();
         Validator::make($json->all(), [
@@ -140,17 +144,6 @@ class UsersController
         return response()->json([
             'user' => $user
         ]);
-    }
-
-    public function getUserOrRedirect(Request $request, int $userId)
-    {
-        $user = $request->user();
-        if ($user == null || ($user->id != $userId && $user->role != "admin")) {
-            return response()->json([
-                'error' => 'Not authorized'
-            ], 401);
-        }
-        return $user;
     }
 
 }

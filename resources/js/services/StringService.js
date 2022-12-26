@@ -1,3 +1,8 @@
-export const capFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+export default {
+    capFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    formatMoney(string) {
+        return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(string);
+    }
 }

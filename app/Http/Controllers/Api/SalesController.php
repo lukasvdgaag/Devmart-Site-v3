@@ -2,36 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\WebUtils;
 use App\Http\Controllers\Controller;
 use App\Models\Plugins\PluginPayment;
 use App\Models\User;
+use App\Utils\WebUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class SalesController extends Controller
 {
-
-    public function getUser(Request $request) {
-        $user = $request->user();
-        if ($user == null) return response()->json(['error' => 'You have no access!']);
-
-        if ($user->role === "admin" && request()->has('user')) {
-            $id = $request->get('user');
-            $user = User::query()
-                ->where('id', '=', $id)
-                ->first();
-            if ($user == null) {
-                return response()->json([
-                    'error' => "No user with id #$id could be found."
-                ]);
-            }
-        }
-
-        return $user;
-    }
 
     public function getRecentTransactions(Request $request)
     {
@@ -40,6 +20,7 @@ class SalesController extends Controller
 
         $search = $request->get('search', '');
 
+        // todo move over to new database
         $transactions = DB::table('gaagjescraft.mygcnt_payments')
             ->join('plugins', 'plugins.id', '=', 'mygcnt_payments.plugin_id')
             ->leftJoin('users', 'user_id', '=', 'users.id')

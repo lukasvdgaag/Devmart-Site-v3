@@ -17,16 +17,30 @@ require __DIR__ . '/auth.php';
 
 Route::prefix('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-
         Route::get('/user', function (\Illuminate\Http\Request $request) {
             return new \App\Http\Resources\UserResource($request->user());
         });
 
-        Route::get('/users/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserSearch']);
-        Route::put('/users/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserUpdate']);
+        Route::prefix('/users')->group(function () {
+            Route::get('/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserSearch']);
+            Route::put('/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserUpdate']);
 
-        Route::get('/users/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationRetrieval']);
-        Route::put('/users/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationUpdate']);
+            Route::get('/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationRetrieval']);
+            Route::put('/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationUpdate']);
+        });
+
+        Route::prefix('/plugins')->group(function () {
+            /*
+             * ?user=1
+             * ?from=2021-01-01
+             * ?to=2021-01-01
+             * ?records=10
+             * ?sum=1
+             */
+            Route::get('/sales', [\App\Http\Controllers\Api\PluginsController::class, 'handlePluginSalesRetrieval']);
+            Route::get('/sales/daily', [\App\Http\Controllers\Api\PluginsController::class, 'handleDailyPluginSalesRetrieval']);
+        });
+
 
     });
 });
