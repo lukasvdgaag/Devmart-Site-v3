@@ -10,7 +10,7 @@
                 <div class="flex align-center gap-0 text-center" style="height: 100%;margin-top:-80px;">
                     <h1 class="uppercase"
                         style="font-size: 100px;line-height:110px;color:#fff;font-weight: 900;">
-                        GCNT
+                        DEVMART
                     </h1>
                     <div class="size-24" style="color:#fff;margin-top:4px;">Minecraft plugins, web, builds, and more.
                     </div>

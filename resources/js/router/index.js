@@ -7,6 +7,7 @@ import AccountLayout from "@/components/Pages/Account/AccountLayout.vue";
 import AccountHome from "@/components/Pages/Account/AccountHome.vue";
 import AccountBilling from "@/components/Pages/Account/AccountBilling.vue";
 import AccountSales from "@/components/Pages/Account/AccountSales.vue";
+import PluginsListPage from "@/components/Pages/Plugins/PluginsListPage.vue";
 
 const routes = [
     {
@@ -22,12 +23,28 @@ const routes = [
         name: 'register',
         component: RegisterPage
     }, {
+        path: '/paste',
+        name: 'paste',
+    }, {
+        path: '/builds',
+        name: 'builds',
+    }, {
+        path: '/wiki',
+        name: 'wiki',
+    }, {
         path: '/admin',
         name: 'admin',
         meta: {
             requireAuth: true,
             requireAdmin: true
         }
+    }, {
+        path: '/plugins',
+        name: 'plugins',
+        component: PluginsListPage
+    }, {
+        path: '/plugins/:pluginId',
+        name: 'plugin-overview'
     }, {
         path: '/account',
         component: AccountLayout,

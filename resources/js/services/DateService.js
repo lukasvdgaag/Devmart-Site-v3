@@ -1,4 +1,4 @@
-export class DateService {
+export default {
 
     /**
      * @param {Number} numDays
@@ -9,7 +9,7 @@ export class DateService {
         const daysAgo = new Date(date.getTime());
         daysAgo.setDate(daysAgo.getDate() + numDays);
         return daysAgo;
-    }
+    },
 
     /**
      * @param {Date} toCheck
@@ -18,7 +18,7 @@ export class DateService {
      */
     isBefore(toCheck, beforeDate) {
         return toCheck.getTime() <= beforeDate.getTime();
-    }
+    },
 
     /**
      * @param {Date} toCheck
@@ -27,7 +27,7 @@ export class DateService {
      */
     isAfter(toCheck, afterDate) {
         return toCheck.getTime() >= afterDate.getTime();
-    }
+    },
 
     /**
      * @param {Date} date1
@@ -37,7 +37,7 @@ export class DateService {
     diffInDays(date1, date2) {
         const diff = Math.abs(date1.getTime() - date2.getTime());
         return Math.ceil(diff / (1000 * 3600 * 24));
-    }
+    },
 
     /**
      * @param {Date} date
@@ -45,7 +45,7 @@ export class DateService {
      */
     formatDay(date) {
         // format the date in format Month Day, e.g. January 1
-        return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
-    }
+        return new Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric'}).format(date);
+    },
 
 }

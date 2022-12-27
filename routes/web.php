@@ -30,6 +30,8 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/plugins')->group(function () {
+            Route::get("", [\App\Http\Controllers\Api\PluginsController::class, 'handlePluginListRetrieval']);
+
             /*
              * ?user=1
              * ?from=2021-01-01

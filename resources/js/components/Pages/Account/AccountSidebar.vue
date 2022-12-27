@@ -1,51 +1,31 @@
 <template>
-    <div class="sidebar-left sidebar-left-margin mb-2">
-        <router-link :to="{name: 'account', query: this.query}"
-                     class="preview-filter-link flex flex-row align-items-center plain">
-            <div class="preview-link-icon flex justify-content-center">
-                <font-awesome-icon icon="fa-house-user"/>
-            </div>
-            <h3 class="preview-link-title">Account Details</h3>
-        </router-link>
-        <router-link :to="{name: 'accountBilling', query: this.query}"
-                     class="preview-filter-link flex flex-row align-items-center plain">
-            <div class="preview-link-icon">
-                <font-awesome-icon icon="fa-money-bill-transfer"/>
-            </div>
-            <h3 class="preview-link-title">Billing</h3>
-        </router-link>
-        <router-link :to="{name: 'accountSales', query: this.query}"
-                     class="preview-filter-link flex flex-row align-items-center plain">
-            <div class="preview-link-icon">
-                <font-awesome-icon icon="fa-money-bill-transfer"/>
-            </div>
-            <h3 class="preview-link-title">Sales</h3>
-        </router-link>
-        <router-link :to="{name: 'accountPastes', query: this.query}"
-                     class="preview-filter-link flex flex-row align-items-center plain">
-            <div class="preview-link-icon">
-                <font-awesome-icon icon="fa-solid fa-paste"/>
-            </div>
-            <h3 class="preview-link-title">Your Pastes</h3>
-        </router-link>
-    </div>
-
+    <Sidebar :margin="true" :links="links"/>
 </template>
 
 <script>
+import Sidebar from "@/components/Common/Sidebar.vue";
+import SidebarItem from "@/models/SidebarItem";
+
 export default {
     name: "AccountSidebar",
+    components: {Sidebar},
     props: {
         active: String
     },
     computed: {
+        links() {
+            return [
+                new SidebarItem({name: 'account', query: this.query}, 'fa-house-user', 'Account Details'),
+                new SidebarItem({name: 'accountBilling', query: this.query}, 'fa-money-bill-transfer', 'Billing'),
+                new SidebarItem({name: 'accountSales', query: this.query}, 'fa-money-bill-transfer', 'Sales'),
+                new SidebarItem({name: 'accountPastes', query: this.query}, 'fa-solid fa-paste', 'Your Pastes'),
+            ];
+        },
         query() {
             const param = this.$route.query.user;
             if (!param) return {};
 
-            return {
-                user: param
-            }
+            return { user: param };
         }
     }
 }

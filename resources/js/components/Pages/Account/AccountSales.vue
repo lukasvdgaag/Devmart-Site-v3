@@ -80,13 +80,15 @@ import PluginRepository from "@/services/PluginRepository";
 import StringService from "../../../services/StringService";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
+import DateService from "@/services/DateService";
 
 export default {
     name: "AccountSales",
     components: {GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
-    inject: ['dateService'],
+
 
     async created() {
+        console.log(this.$route);
         await Promise.all([
             this.fetchRecentSales(),
             this.loadTotalSales(),
@@ -120,7 +122,7 @@ export default {
                     curve: 'smooth'
                 },
                 xaxis: {
-                    categories: new Array(7).fill(null).map((v, i) => this.dateService.formatDay(this.dateService.offset(i-6)))
+                    categories: new Array(7).fill(null).map((v, i) => DateService.formatDay(DateService.offset(i-6)))
                 },
                 fill: {
                     type: 'gradient',
@@ -171,16 +173,16 @@ export default {
         async loadTotalSales30Days() {
             const response = await PluginRepository.fetchSalesSum(
                 this.userId,
-                this.dateService.offset(-29),
+                DateService.offset(-29),
                 new Date(),
-                this.dateService.offset(-60),
-                this.dateService.offset(-30)
+                DateService.offset(-60),
+                DateService.offset(-30)
             );
             this.total30Days = StringService.formatMoney(response.data.total);
             this.difference30Days = this.calculateDifference(response.data.total, response.data.compareTotal);
         },
         async loadTotalSalesWeek() {
-            const response = await PluginRepository.fetchDailySales(this.userId, null, this.dateService.offset(-14), new Date(), 14);
+            const response = await PluginRepository.fetchDailySales(this.userId, null, DateService.offset(-14), new Date(), 14);
 
             /**
              * @type {Array}
@@ -197,7 +199,7 @@ export default {
                         count: 0,
                     });
                 }
-                prevDate = this.dateService.offset(-1, prevDate);
+                prevDate = DateService.offset(-1, prevDate);
             }
 
             let thisWeekDates = dates.slice(0, 7);

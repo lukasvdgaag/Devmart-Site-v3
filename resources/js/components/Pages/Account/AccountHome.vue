@@ -179,11 +179,11 @@ import Alert from "@/components/Common/Alert.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
 import StringService from "../../../services/StringService";
+import DateService from "@/services/DateService";
 
 export default {
     name: "AccountHome",
     components: {AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
-    inject: ['dateService'],
 
     data() {
         return {
@@ -201,12 +201,12 @@ export default {
             if (this.isAdmin) return true;
 
             const lastChangedDate = new Date(this.user.username_changed_at);
-            const thirtyDaysAgo = this.dateService.offset(-30);
-            return this.dateService.isBefore(lastChangedDate, thirtyDaysAgo);
+            const thirtyDaysAgo = DateService.offset(-30);
+            return DateService.isBefore(lastChangedDate, thirtyDaysAgo);
         },
         getDaysTillNextUsernameChange() {
-            const plus30 = this.dateService.offset(30, this.user.username_changed_at);
-            return this.dateService.diffInDays(new Date(), plus30);
+            const plus30 = DateService.offset(30, this.user.username_changed_at);
+            return DateService.diffInDays(new Date(), plus30);
         },
     },
     methods: {

@@ -3,14 +3,61 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plugins\Plugin;
+use App\Models\User;
 use App\Utils\WebUtils;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PluginsController
 {
+
+    public function handlePluginListRetrieval(Request $request)
+    {
+        $filter = $request->input('filter', 'all');
+        $query = $request->input('query', '');
+        $page = (int)$request->input('page', '1');
+        $perPage = (int)$request->input('perPage', '10');
+
+        $user = $request->user();
+        if ($user && $filter == 'purchased' && Auth::hasUser() && $user instanceof User) {
+            $plugins = $user->getPlugins();
+            $filter = 'purchased';
+        } else if ($filter == 'premium') {
+            $plugins = Plugin::query()
+                ->where('price', '>', 0)
+                ->where('custom', '=', 0);
+            $filter = 'premium';
+        } else if ($filter == 'free') {
+            $plugins = Plugin::query()
+                ->where('price', '=', 0)
+                ->where('custom', '=', 0);
+            $filter = 'free';
+        } else {
+            $plugins = Plugin::query()
+                ->where('custom', 0);
+            $filter = 'all';
+        }
+
+        if ($query !== '') {
+            $plugins = $plugins->whereNested(function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%$query%")
+                    ->orWhere('description', 'LIKE', "%$query%");
+            });
+        }
+
+        $plugins = $plugins->join('users', 'users.id', '=', 'plugins.author')
+            ->addSelect(DB::raw('plugins.*, users.username AS author_username'))
+            ->orderBy('last_updated', 'desc');
+
+        $plugins = new Collection($plugins->paginate($perPage)->items());
+        $plugins = $plugins->makeHidden(['features'])->all();
+        return response()->json($plugins);
+    }
 
     public function handlePluginSalesRetrieval(Request $request)
     {

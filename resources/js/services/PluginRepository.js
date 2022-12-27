@@ -64,6 +64,17 @@ export default {
         return await client.get("/sales/daily", {
             params: loadParams(user, query, from, to, records, false)
         })
+    },
+
+    async fetchPlugins(filter = "all", query = "", page = 1, perPage = 6) {
+        return await client.get("/", {
+            params: {
+                filter,
+                query,
+                page,
+                perPage
+            }
+        })
     }
 
 

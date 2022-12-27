@@ -2,17 +2,17 @@
 
     <header :class="{'header-filled': this.background}" class="header-big d-grid">
         <nav class="flex flex-row justify-space-between align-items-center">
-            <a href="/" class="nav-side">
+            <router-link exact-active-class="lmWixQ" :to="{name: 'home'}" class="nav-side">
                 <Logo class="header-logo"/>
-            </a>
+            </router-link>
 
             <div class="nav-links">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/plugins">Plugins</a>
-                <a class="nav-link" href="/paste">Paste</a>
-                <a class="nav-link" href="/builds">Builds</a>
-                <a class="nav-link" href="/wiki">Wiki</a>
-                <a v-if="this.user !== null && this.user.role === 'admin'" class="nav-link" href="/admin">Admin</a>
+                <router-link exact-active-class="active" :to="{name: 'home'}" class="nav-link">Home</router-link>
+                <router-link active-class="active" :to="{name: 'plugins'}" class="nav-link">Plugins</router-link>
+                <router-link active-class="active" :to="{name: 'paste'}" class="nav-link">Paste</router-link>
+                <router-link active-class="active" :to="{name: 'builds'}" class="nav-link">Builds</router-link>
+                <router-link active-class="active" :to="{name: 'wiki'}" class="nav-link">Wiki</router-link>
+                <router-link active-class="active" :to="{name: 'admin'}" v-if="this.user !== null && this.user.role === 'admin'" class="nav-link">Admin</router-link>
             </div>
 
             <div class="nav-button nav-side">
@@ -33,11 +33,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <a class="flex flex-row plain align-items-center gap-2 account-link account-popup-item"
-                               href="/account">
+                            <router-link exact-active-class="lmWixQ" :to="{name: 'account'}" class="flex flex-row plain align-items-center gap-2 account-link account-popup-item">
                                 <font-awesome-icon icon="gear" class="icon"/>
                                 <span>Settings</span>
-                            </a>
+                            </router-link>
                             <button class="flex flex-row plain align-items-center gap-2 logout-link border-radius-small-bottom account-popup-item"
                                     type="submit"
                                     @click="this.logoutUser($event)">
@@ -47,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <a v-else class="nav-action" href="/login">Login</a>
+                <router-link exact-active-class="lmWixQ" :to="{name: 'login'}" v-else class="nav-action">Login</router-link>
             </div>
         </nav>
     </header>

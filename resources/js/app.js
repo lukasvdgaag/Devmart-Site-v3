@@ -7,7 +7,7 @@ import "../css/output.css";
 
 import {faGithub, faDiscord} from "@fortawesome/free-brands-svg-icons";
 import {faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation, faSackDollar,
-faCalendarDays, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem} from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -16,7 +16,7 @@ import {createPinia} from "pinia";
 library.add(
     faGithub, faDiscord,
     faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation, faSackDollar,
-    faCalendarDays, faMagnifyingGlass
+    faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem
 );
 
 const pinia = createPinia().use(({store}) => {

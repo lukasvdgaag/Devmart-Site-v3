@@ -438,11 +438,6 @@ h1, h2, h3, h4, h5 {
     padding-bottom: 24px;
 }
 
-.stat {
-    font-size: 12px;
-    line-height: 16px;
-}
-
 .stat-dot {
     border-radius: 50%;
     width: 8px;
@@ -923,11 +918,6 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
     padding-right: 48px;
 }
 
-.plugin-preview {
-    width: 100%;
-    grid-column-gap: 15px;
-}
-
 .plugin-preview-info {
     height: 100%;
     min-height: 144px;
@@ -955,11 +945,6 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
     word-break: break-word;
 }
 
-.plugin-preview-description {
-    font-size: 14px;
-    margin-top: 4px;
-}
-
 .plugin-preview-details {
     padding-bottom: 0;
 }
@@ -977,12 +962,6 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
 .plugin-previews {
     grid-row-gap: 20px;
     row-gap: 20px;
-}
-
-.preview-filter-link {
-    padding: 12px 15px;
-    margin: 8px 12px 8px 0;
-    border-radius: 8px;
 }
 
 .preview-link-icon {
@@ -1004,15 +983,15 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
     font-weight: 400;
 }
 
-.preview-filter-link.active, .router-link-exact-active {
+.sidebar-active {
     background-color: var(--background-soft-darkened);
 }
 
-.preview-filter-link.active .preview-link-icon > *, .router-link-exact-active .preview-link-icon > * {
+.sidebar-active .preview-link-icon > * {
     fill: #000;
 }
 
-.preview-filter-link.active .preview-link-title, .router-link-exact-active .preview-link-title {
+.sidebar-active .preview-link-title {
     color: #000;
     font-weight: 600;
 }
@@ -2375,7 +2354,7 @@ select {
         padding-right: 0;
     }
 
-    .sidebar-right-margin, .preview-filter-link {
+    .sidebar-right-margin {
         margin-right: 0;
     }
 
