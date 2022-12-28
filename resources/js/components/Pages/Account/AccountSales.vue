@@ -122,7 +122,7 @@ export default {
                     curve: 'smooth'
                 },
                 xaxis: {
-                    categories: new Array(7).fill(null).map((v, i) => DateService.formatDay(DateService.offset(i-6)))
+                    categories: new Array(7).fill(null).map((v, i) => DateService.formatDate(DateService.offset(i-6)))
                 },
                 fill: {
                     type: 'gradient',

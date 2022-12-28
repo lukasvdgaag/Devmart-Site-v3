@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PluginsController
 {
@@ -45,18 +46,29 @@ class PluginsController
 
         if ($query !== '') {
             $plugins = $plugins->whereNested(function ($q) use ($query) {
-                $q->where('title', 'LIKE', "%$query%")
-                    ->orWhere('description', 'LIKE', "%$query%");
+                $q->where('plugins.title', 'LIKE', "%$query%")
+                    ->orWhere('plugins.description', 'LIKE', "%$query%");
             });
         }
 
         $plugins = $plugins->join('users', 'users.id', '=', 'plugins.author')
             ->addSelect(DB::raw('plugins.*, users.username AS author_username'))
             ->orderBy('last_updated', 'desc');
+        $plugins = $plugins->leftJoinSub('SELECT plugin, SUM(downloads) AS downloads FROM plugin_updates GROUP BY plugin', 'downloads', function ($join) {
+            $join->on('plugins.id', '=', 'downloads.plugin');
+        })->addSelect(DB::raw('SUM(downloads.downloads) AS downloads'))
+        ->groupBy('plugins.id');
 
-        $plugins = new Collection($plugins->paginate($perPage)->items());
-        $plugins = $plugins->makeHidden(['features'])->all();
-        return response()->json($plugins);
+        Log::error($plugins->toSql());
+
+        $paginated = $plugins->paginate($perPage);
+        $plugins = new Collection($paginated->items());
+        return response()->json([
+            'total' => $paginated->total(),
+            'currentPage' => $paginated->currentPage(),
+            'pages' => $paginated->lastPage(),
+            'plugins' => $plugins
+        ]);
     }
 
     public function handlePluginSalesRetrieval(Request $request)

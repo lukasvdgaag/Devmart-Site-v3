@@ -43,9 +43,37 @@ export default {
      * @param {Date} date
      * @returns {string}
      */
-    formatDay(date) {
+    formatDate(date) {
         // format the date in format Month Day, e.g. January 1
-        return new Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric'}).format(date);
+        return new Intl.DateTimeFormat('en-US', {month: 'long', day: 'numeric'}).format(date);
     },
 
+    /**
+     * @param {Date} date
+     * @param {boolean} withTime
+     * @returns {string}
+     */
+    formatDateRelatively(date, withTime = false) {
+        // format the date relatively to today, including the time in 12h format.
+        // e.g. Today at 12:00 PM, Yesterday at 12:00 PM, August 24 at 12:00 PM, or when over a year: January 1, 2020 at 12:00 PM
+        const today = new Date();
+        const diff = this.diffInDays(date, today);
+        if (diff < 1) {
+            return `Today${withTime ? ' at ' + this.formatTime(date) : ''}`;
+        } else if (diff < 2) {
+            return `Yesterday${withTime ? ' at ' + this.formatTime(date) : ''}`;
+        } else if (diff < 365) {
+            return `${this.formatDate(date)}${withTime ? ' at ' + this.formatTime(date) : ''}`;
+        } else {
+            return `${this.formatDate(date)}, ${date.getFullYear()}${withTime ? ' at ' + this.formatTime(date) : ''}`;
+        }
+    },
+
+    /**
+     * @param {Date} date
+     */
+    formatTime(date) {
+        // format the time in 12h format, e.g. 12:00 PM
+        return new Intl.DateTimeFormat('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}).format(date);
+    }
 }

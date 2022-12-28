@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\PluginsController;
+use App\Http\Controllers\Api\UsersController;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,20 +21,20 @@ require __DIR__ . '/auth.php';
 
 Route::prefix('api')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/user', function (\Illuminate\Http\Request $request) {
-            return new \App\Http\Resources\UserResource($request->user());
+        Route::get('/user', function (Request $request) {
+            return new UserResource($request->user());
         });
 
         Route::prefix('/users')->group(function () {
-            Route::get('/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserSearch']);
-            Route::put('/{userId}', [\App\Http\Controllers\Api\UsersController::class, 'handleUserUpdate']);
+            Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
+            Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
 
-            Route::get('/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationRetrieval']);
-            Route::put('/{userId}/paypal', [\App\Http\Controllers\Api\UsersController::class, 'handleUserPayPalInformationUpdate']);
+            Route::get('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationRetrieval']);
+            Route::put('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationUpdate']);
         });
 
         Route::prefix('/plugins')->group(function () {
-            Route::get("", [\App\Http\Controllers\Api\PluginsController::class, 'handlePluginListRetrieval']);
+            Route::get("", [PluginsController::class, 'handlePluginListRetrieval']);
 
             /*
              * ?user=1
@@ -39,8 +43,8 @@ Route::prefix('api')->group(function () {
              * ?records=10
              * ?sum=1
              */
-            Route::get('/sales', [\App\Http\Controllers\Api\PluginsController::class, 'handlePluginSalesRetrieval']);
-            Route::get('/sales/daily', [\App\Http\Controllers\Api\PluginsController::class, 'handleDailyPluginSalesRetrieval']);
+            Route::get('/sales', [PluginsController::class, 'handlePluginSalesRetrieval']);
+            Route::get('/sales/daily', [PluginsController::class, 'handleDailyPluginSalesRetrieval']);
         });
 
 

@@ -10,9 +10,7 @@
                 <div class="preview-link-title">{{ item.label }}</div>
             </router-link>
         </template>
-
     </div>
-
 </template>
 
 <script>
@@ -27,6 +25,7 @@ export default {
             return this.links.filter(l => this.isActive(l,false)).length === 0;
         },
         isActive(item, checkForDefault=true) {
+            if (item.activeRequirements) return true;
             if (checkForDefault && this.isDefault(item)) return true;
 
             if ('name' in item.link && this.$route.matched.filter(i => i.name === item.link.name).length === 0) return false;

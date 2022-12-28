@@ -26,13 +26,17 @@
 
                 <Sidebar :links="sidebarLinks"/>
                 <div class="col-span-12 lg:col-span-9 w-full">
-                    <Searchbar placeholder="Find a plugin..." v-model="searchQuery" @submit="fetchPlugins"/>
+                    <Searchbar placeholder="Find a plugin..." v-model="searchQuery" @submit="updateSearch"/>
 
                     <div class="w-full col-gap-4 mt-2 text-xl font-bold">
-                        {{ plugins.length }} Plugins Found
+                        {{ totalPlugins }} Plugins Found <span v-if="currentPage > 1">- Page {{ currentPage }}</span>
                     </div>
 
-                    <PluginPreview v-for="plugin in plugins" :plugin="plugin" :key="plugin.id"/>
+                    <div class="flex gap-y-5 mt-2 flex-col">
+                        <PluginPreview v-for="plugin in plugins" :plugin="plugin" :key="plugin.id"/>
+                    </div>
+
+                    <!-- TODO: Add pagination -->
                 </div>
             </div>
         </div>
@@ -53,6 +57,8 @@ export default {
     components: {PluginPreview, Searchbar, Sidebar, Navbar},
 
     created() {
+        this.searchQuery = this.$route.query.query;
+
         Promise.all([
             this.fetchPlugins()
         ])
@@ -61,26 +67,56 @@ export default {
     data() {
         return {
             user: useAuth().user,
-            sidebarLinks: [
-                new SidebarItem({query: {filter: undefined}}, 'fa-compass', 'All', true, true),
-                new SidebarItem({query: {filter: 'purchased'}}, 'fa-cart-shopping', 'Purchased', useAuth().user != null),
-                new SidebarItem({query: {filter: 'premium'}}, 'fa-gem', 'Premium'),
-                new SidebarItem({query: {filter: 'free'}}, 'fa-bolt', 'Free'),
-            ],
             searchQuery: '',
-            plugins: []
+            plugins: [],
+            totalPlugins: 0,
+            pages: 0,
         }
+    },
+
+    watch: {
+      '$route.query.filter'() {
+          this.fetchPlugins();
+      }
     },
 
     computed: {
         selectedFilter() {
             return this.$route.query.filter ?? "all";
+        },
+        currentPage() {
+            return Math.max(1, this.$route.query.page ?? 1);
+        },
+        sidebarLinks() {
+            return [
+                new SidebarItem({query: this.getQuery(undefined)}, 'fa-compass', 'All', true, true),
+                new SidebarItem({query: this.getQuery('purchased')}, 'fa-cart-shopping', 'Purchased', useAuth().user != null, false, SidebarItem.isQueryParam('filter', 'purchased')),
+                new SidebarItem({query: this.getQuery('premium')}, 'fa-gem', 'Premium', true, false, SidebarItem.isQueryParam('filter', 'premium')),
+                new SidebarItem({query: this.getQuery('free')}, 'fa-bolt', 'Free', true, false, SidebarItem.isQueryParam('filter', 'free')),
+            ];
         }
     },
     methods: {
+        async updateSearch() {
+            this.$router.replace({
+                query: this.getQuery(this.selectedFilter)
+            });
+
+            await this.fetchPlugins();
+        },
         async fetchPlugins() {
-            const response = await PluginRepository.fetchPlugins(this.selectedFilter, this.searchQuery);
-            this.plugins = response.data;
+            const response = await PluginRepository.fetchPlugins(this.selectedFilter, this.searchQuery, this.currentPage);
+            this.plugins = response.data.plugins;
+            this.totalPlugins = response.data.total;
+            this.pages = response.data.pages;
+        },
+        getQuery(filter) {
+            return {
+                ...this.$route.query,
+                filter: filter,
+                page: undefined,
+                query: this.searchQuery
+            }
         },
     }
 }
