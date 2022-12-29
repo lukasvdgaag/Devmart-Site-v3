@@ -6,7 +6,7 @@ export const useAuth = defineStore({
     id: "authStore",
     state: () => ({
         user: null,
-        loading: false,
+        loaded: false,
         error: null,
     }),
 
@@ -28,16 +28,16 @@ export const useAuth = defineStore({
                 this.error = error;
             }
         },
-        async getAuthUser() {
+        async getAuthUser(force = false) {
+            if (!force && this.loaded) return this.user;
             try {
-                this.loading = true;
                 const res = await AuthService.getAuthUser();
                 this.user = res.data.data;
-                this.loading = false;
+                this.loaded = true;
                 return this.user;
             } catch (error) {
                 this.user = null;
-                this.loading = false;
+                this.loaded = true;
                 this.error = error;
                 return error;
             }

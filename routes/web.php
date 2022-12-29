@@ -34,7 +34,8 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/plugins')->group(function () {
-            Route::get("", [PluginsController::class, 'handlePluginListRetrieval']);
+            Route::get("", [PluginsController::class, 'handlePluginListRetrieval'])
+            ->withoutMiddleware('auth:sanctum');
 
             /*
              * ?user=1
