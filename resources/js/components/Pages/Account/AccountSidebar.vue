@@ -1,5 +1,5 @@
 <template>
-    <Sidebar :margin="true" :links="links"/>
+    <Sidebar :links="links"/>
 </template>
 
 <script>

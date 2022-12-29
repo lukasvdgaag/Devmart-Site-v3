@@ -1,5 +1,5 @@
 <template>
-    <div class="sticky top-6 h-fit left-0 col-span-3 mb-2" :class="{'ml-12': margin}">
+    <div class="lg:sticky lg:top-6 h-fit lg:left-0 col-span-12 lg:col-span-3 mb-2" :class="{'lg:ml-12': margin}">
         <template v-for="item in links">
             <router-link :to="item.link" :key="item.id" v-if="item.renderRequirements" active-class="" exact-active-class=""
                          class="py-3 px-4 my-2 lg:mr-3 rounded-lg flex flex-row align-items-center plain"

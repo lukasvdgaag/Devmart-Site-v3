@@ -26,10 +26,13 @@
 
                 <Sidebar :links="sidebarLinks"/>
                 <div class="col-span-12 lg:col-span-9 w-full">
-                    <Searchbar placeholder="Find a plugin..." v-model="searchQuery" @submit="updateSearch"/>
+                    <Searchbar placeholder="Find a plugin..."
+                               v-model="pluginsQueryable.query"
+                               :disabled="!pluginsQueryable.canRequest()"
+                               @submit="updateSearch"/>
 
                     <div class="w-full col-gap-4 mt-2 text-xl font-bold">
-                        {{ totalPlugins }} Plugins Found <span v-if="currentPage > 1">- Page {{ currentPage }}</span>
+                        {{ totalPlugins }} Plugins Found <span v-if="pluginsQueryable.page > 1">- Page {{ pluginsQueryable.page }}</span>
                     </div>
 
                     <div class="flex gap-y-5 mt-2 flex-col">
@@ -51,23 +54,27 @@ import Searchbar from "@/components/Common/Searchbar.vue";
 import SidebarItem from "@/models/SidebarItem";
 import PluginRepository from "@/services/PluginRepository";
 import PluginPreview from "@/components/Pages/Plugins/PluginPreview.vue";
+import PluginsFetchable from "@/models/PluginsFetchable";
 
 export default {
     name: "PluginsListPage",
     components: {PluginPreview, Searchbar, Sidebar, Navbar},
 
     created() {
-        this.searchQuery = this.$route.query.query;
-
         Promise.all([
-            this.fetchPlugins()
+            this.fetchPlugins(),
         ])
     },
 
     data() {
         return {
             user: useAuth().user,
-            searchQuery: '',
+            pluginsQueryable: new PluginsFetchable(
+                this.queryPlugins,
+                this.$route.query.query ?? "",
+                this.$route.query.page ?? '1',
+                this.$route.query.filter ?? 'all',
+            ),
             plugins: [],
             totalPlugins: 0,
             pages: 0,
@@ -75,18 +82,13 @@ export default {
     },
 
     watch: {
-      '$route.query.filter'() {
-          this.fetchPlugins();
-      }
+        '$route.query.filter'() {
+            this.pluginsQueryable.filter = this.$route.query.filter;
+            this.fetchPlugins();
+        }
     },
 
     computed: {
-        selectedFilter() {
-            return this.$route.query.filter ?? "all";
-        },
-        currentPage() {
-            return Math.max(1, this.$route.query.page ?? 1);
-        },
         sidebarLinks() {
             return [
                 new SidebarItem({query: this.getQuery(undefined)}, 'fa-compass', 'All', true, true),
@@ -99,13 +101,16 @@ export default {
     methods: {
         async updateSearch() {
             this.$router.replace({
-                query: this.getQuery(this.selectedFilter)
+                query: this.getQuery(this.pluginsQueryable.filter)
             });
 
             await this.fetchPlugins();
         },
         async fetchPlugins() {
-            const response = await PluginRepository.fetchPlugins(this.selectedFilter, this.searchQuery, this.currentPage);
+            await this.pluginsQueryable.fetch(this);
+        },
+        async queryPlugins() {
+            const response = await PluginRepository.fetchPlugins(this.pluginsQueryable.filter, this.pluginsQueryable.query, this.pluginsQueryable.page);
             this.plugins = response.data.plugins;
             this.totalPlugins = response.data.total;
             this.pages = response.data.pages;
@@ -115,7 +120,7 @@ export default {
                 ...this.$route.query,
                 filter: filter,
                 page: undefined,
-                query: this.searchQuery
+                query: this.pluginsQueryable.query
             }
         },
     }

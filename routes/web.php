@@ -35,17 +35,21 @@ Route::prefix('api')->group(function () {
 
         Route::prefix('/plugins')->group(function () {
             Route::get("", [PluginsController::class, 'handlePluginListRetrieval'])
-            ->withoutMiddleware('auth:sanctum');
+                ->withoutMiddleware('auth:sanctum');
 
             /*
              * ?user=1
              * ?from=2021-01-01
              * ?to=2021-01-01
-             * ?records=10
+             * ?perPage=10
              * ?sum=1
              */
             Route::get('/sales', [PluginsController::class, 'handlePluginSalesRetrieval']);
             Route::get('/sales/daily', [PluginsController::class, 'handleDailyPluginSalesRetrieval']);
+
+
+            Route::get("/{pluginId}", [PluginsController::class, 'handlePluginRetrieval'])
+                ->withoutMiddleware('auth:sanctum');
         });
 
 

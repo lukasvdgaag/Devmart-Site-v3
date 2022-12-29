@@ -7,15 +7,15 @@
                    :value="input"
                    @change="submit"
                    @input="updateInput($event.target.value)"
-                   :disabled="disabled"
             >
-            <div class="absolute top-3 right-4 h-6 w-6 cursor-pointer"
+            <div class="absolute top-3 right-4 h-6 w-6"
+                 :class="[inputEmpty ? 'cursor-not-allowed' : 'cursor-pointer']"
                  @click="clearInput">
-                <font-awesome-icon class="text-black h-full w-full" icon="circle-xmark"/>
+                <font-awesome-icon class="h-full w-full transition" :class="[!inputEmpty ? 'text-black' : 'text-gray-400']" icon="circle-xmark"/>
             </div>
         </div>
-        <div class="bg-primary h-full min-h-[48px] aspect-square rounded-lg ml-2.5 cursor-pointer flex items-center justify-center"
-             :class="{'bg-opacity-50': disabled}"
+        <div class="bg-primary h-full min-h-[48px] aspect-square transition rounded-lg ml-2.5 cursor-pointer flex items-center justify-center"
+             :class="{'bg-opacity-50': disabled, 'cursor-not-allowed': inputEmpty || disabled}"
              @click="submit">
             <font-awesome-icon class="text-white text-2xl" icon="magnifying-glass"/>
         </div>
@@ -31,6 +31,12 @@ export default {
         return {
             input: this.modelValue,
         }
+    },
+
+    computed: {
+      inputEmpty() {
+          return this.input.length === 0;
+      }
     },
 
     props: {
@@ -56,11 +62,12 @@ export default {
             this.$emit('update:modelValue', this.input);
         },
         clearInput() {
+            if (this.input === "") return;
             this.updateInput('');
-            this.submit();
+            this.submit(true);
         },
-        submit() {
-            if (this.disabled) return;
+        submit(force = false) {
+            if (!force && this.disabled) return;
             this.$emit('submit', this.input);
         }
     }

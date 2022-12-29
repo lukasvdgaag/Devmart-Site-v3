@@ -32,9 +32,9 @@
 
         <QuickLink label="Recent Sales" class="!col-span-12">
             <Searchbar placeholder="Search a purchase by email or user..."
-                       v-model="searchQuery"
-                       :disabled="loadingSearch"
-                       @submit="fetchRecentSales"/>
+                       v-model="transactionsFetchable.query"
+                       :disabled="!transactionsFetchable.canRequest()"
+                       @submit="loadRecentSales"/>
 
             <table>
                 <thead>
@@ -48,7 +48,7 @@
                 </thead>
                 <tbody class="sale-search-result">
 
-                <tr v-if="loadingSearch">
+                <tr v-if="transactionsFetchable.loading">
                     <td colspan="5" class="italic">
                         Loading search results...
                     </td>
@@ -61,7 +61,7 @@
                     <td v-if="recentSalesContainUser">{{ sale.userId }}</td>
                     <td>{{ StringService.formatMoney(sale.amount) }}</td>
                 </tr>
-                <tr v-if="!loadingSearch && recentSales.length === 0">
+                <tr v-if="!transactionsFetchable.loading && recentSales.length === 0">
                     <td colspan="5" class="text-red-500 font-medium">
                         No sales were found for your search query.
                     </td>
@@ -81,16 +81,15 @@ import StringService from "../../../services/StringService";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
 import DateService from "@/services/DateService";
+import Fetchable from "@/models/Fetchable";
 
 export default {
     name: "AccountSales",
     components: {GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
 
-
     async created() {
-        console.log(this.$route);
         await Promise.all([
-            this.fetchRecentSales(),
+            this.loadRecentSales(),
             this.loadTotalSales(),
             this.loadTotalSales30Days(),
             this.loadTotalSalesWeek(),
@@ -99,9 +98,7 @@ export default {
 
     data() {
         return {
-            lastSearchQuery: null,
-            searchQuery: '',
-            loadingSearch: false,
+            transactionsFetchable: new Fetchable(this.fetchRecentSales, this.$route.query.query ?? ''),
             recentSales: [],
             totalSales: "€ 0",
             total30Days: "€ 0",
@@ -154,17 +151,13 @@ export default {
     },
 
     methods: {
+        async loadRecentSales() {
+            console.log("loading...")
+            await this.transactionsFetchable.fetch(this);
+        },
         async fetchRecentSales() {
-            if (this.loadingSearch || this.lastSearchQuery === this.searchQuery) {
-                return;
-            }
-            this.loadingSearch = true;
-            this.lastSearchQuery = this.searchQuery;
-
-            const response = await PluginRepository.fetchSales(this.userId, this.searchQuery);
-            this.recentSales = response.data;
-
-            this.loadingSearch = false;
+            const response = await PluginRepository.fetchSales(this.userId, this.transactionsFetchable.query);
+            this.recentSales = response.data.transactions;
         },
         async loadTotalSales() {
             const response = await PluginRepository.fetchSalesSum(this.userId);

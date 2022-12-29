@@ -12,36 +12,52 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PluginsController
 {
+
+    public function handlePluginRetrieval(Request $request, string|int $pluginId)
+    {
+        $query = Plugin::query()->where('plugins.id', '=', $pluginId);
+        $query = $this->insertAuthorUsername($query);
+        $query = $this->insertTotalDownloads($query);
+
+        $plugin = $query->first();
+        if ($plugin == null) {
+            return response()->json([
+                'error' => 'Plugin not found.'
+            ], 404);
+        }
+
+        if ($plugin->custom && !$plugin->hasAccess($request->user())) {
+            return respones()->json([
+                'error' => 'You have no access to this plugin.'
+            ], 401);
+        }
+
+        return response()->json($plugin);
+    }
 
     public function handlePluginListRetrieval(Request $request)
     {
         $filter = $request->input('filter', 'all');
         $query = $request->input('query', '');
-        $page = (int)$request->input('page', '1');
-        $perPage = (int)$request->input('perPage', '10');
+        $perPage = min(20, max(1, $request->query('perPage', 10)));
 
         $user = $request->user();
         if ($user && $filter == 'purchased' && Auth::hasUser() && $user instanceof User) {
             $plugins = $user->getPlugins();
-            $filter = 'purchased';
         } else if ($filter == 'premium') {
             $plugins = Plugin::query()
                 ->where('price', '>', 0)
                 ->where('custom', '=', 0);
-            $filter = 'premium';
         } else if ($filter == 'free') {
             $plugins = Plugin::query()
                 ->where('price', '=', 0)
                 ->where('custom', '=', 0);
-            $filter = 'free';
         } else {
             $plugins = Plugin::query()
                 ->where('custom', 0);
-            $filter = 'all';
         }
 
         if ($query !== '') {
@@ -51,15 +67,9 @@ class PluginsController
             });
         }
 
-        $plugins = $plugins->join('users', 'users.id', '=', 'plugins.author')
-            ->addSelect(DB::raw('plugins.*, users.username AS author_username'))
-            ->orderBy('last_updated', 'desc');
-        $plugins = $plugins->leftJoinSub('SELECT plugin, SUM(downloads) AS downloads FROM plugin_updates GROUP BY plugin', 'downloads', function ($join) {
-            $join->on('plugins.id', '=', 'downloads.plugin');
-        })->addSelect(DB::raw('SUM(downloads.downloads) AS downloads'))
-        ->groupBy('plugins.id');
-
-        Log::error($plugins->toSql());
+        // including the username of the author for each plugin.
+        $plugins = $this->insertAuthorUsername($plugins);
+        $plugins = $this->insertTotalDownloads($plugins);
 
         $paginated = $plugins->paginate($perPage);
         $plugins = new Collection($paginated->items());
@@ -71,12 +81,30 @@ class PluginsController
         ]);
     }
 
+    public function insertAuthorUsername($plugins)
+    {
+        return $plugins->join('users', 'users.id', '=', 'plugins.author')
+            ->addSelect(DB::raw('plugins.*, users.username AS author_username'))
+            ->orderBy('last_updated', 'desc');
+    }
+
+    public function insertTotalDownloads($plugins)
+    {
+        return $plugins
+            ->leftJoinSub('SELECT plugin, SUM(downloads) AS downloads FROM plugin_updates GROUP BY plugin', 'downloads', function ($join) {
+                $join->on('plugins.id', '=', 'downloads.plugin');
+            })
+            ->addSelect(DB::raw('SUM(downloads.downloads) AS downloads'))
+            ->groupBy('plugins.id');
+    }
+
     public function handlePluginSalesRetrieval(Request $request)
     {
         $user = Controller::getUserOrRedirect($request, $request->user()->id ?? null);
         if (!($user instanceof \App\Models\User)) return $user;
 
         $transactions = $this->getTransactionsFromRequest($user, $request);
+        $perPage = min(50, max(1, $request->query('perPage', 10)));
 
         $sum = $request->query('sum', 0);
         if ($sum == '1') {
@@ -96,7 +124,8 @@ class PluginsController
             return response()->json(['total' => $sum]);
         }
 
-        $transactions = $transactions->get()->map(function ($transaction) {
+        $paginate = $transactions->paginate($perPage);
+        $transactions = (new Collection($paginate->items()))->map(function ($transaction) {
             return [
                 'id' => $transaction->id,
                 'plugin' => $transaction->plugin_id,
@@ -108,7 +137,12 @@ class PluginsController
             ];
         });
 
-        return response()->json($transactions);
+        return response()->json([
+            'total' => $paginate->total(),
+            'page' => $paginate->currentPage(),
+            'totalPages' => $paginate->lastPage(),
+            'transactions' => $transactions
+        ]);
     }
 
     public function handleDailyPluginSalesRetrieval(Request $request)
@@ -134,7 +168,7 @@ class PluginsController
         $userId = $this->getIdFromUser($user, $request);
         $from = $request->query('from');
         $to = $request->query('to');
-        $records = $request->query('records', 10);
+        $records = max(50, min(1, $request->query('perPage', 10)));
         $query = $request->query('query', '');
 
         return $this->getTransactions($userId, $from, $to, $query, $records);

@@ -6,7 +6,7 @@
             <div class="d-grid d-grid-12 mb-6 mt-4">
                 <AccountSidebar/>
 
-                <div class="content content-right-margin pt-2">
+                <div class="content pt-2">
                     <AdminEditingWarning v-if="!loading && isAdmin" :username="user.username"/>
 
                     <router-view :userLoading="loading" :user="user" :isAdmin="isAdmin" :userId="userId"/>
