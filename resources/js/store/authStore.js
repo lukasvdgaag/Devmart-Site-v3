@@ -13,6 +13,7 @@ export const useAuth = defineStore({
     actions: {
         async login(payload) {
             try {
+                this.loaded = false;
                 return await AuthService.login(payload);
             } catch (error) {
                 return error.response;

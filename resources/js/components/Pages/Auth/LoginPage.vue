@@ -105,7 +105,11 @@ export default {
             try {
                 const response = await this.authStore.login(this.data);
                 if (response.status === 200) {
-                    this.$router.push({name: "home"});
+                    if (this.$route.query.redirect) {
+                        this.$router.push(this.$route.query.redirect);
+                    } else {
+                        this.$router.push({name: "home"});
+                    }
                 } else {
                     this.errors = response.data.errors;
                 }

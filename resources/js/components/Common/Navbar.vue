@@ -12,7 +12,8 @@
                 <router-link active-class="active" :to="{name: 'paste'}" class="nav-link">Paste</router-link>
                 <router-link active-class="active" :to="{name: 'builds'}" class="nav-link">Builds</router-link>
                 <router-link active-class="active" :to="{name: 'wiki'}" class="nav-link">Wiki</router-link>
-                <router-link active-class="active" :to="{name: 'admin'}" v-if="this.user !== null && this.user.role === 'admin'" class="nav-link">Admin</router-link>
+                <router-link active-class="active" :to="{name: 'admin'}" v-if="this.user !== null && this.user.role === 'admin'" class="nav-link">Admin
+                </router-link>
             </div>
 
             <div class="nav-button nav-side">
@@ -33,7 +34,8 @@
                                     </label>
                                 </div>
                             </div>
-                            <router-link exact-active-class="lmWixQ" :to="{name: 'account'}" class="flex flex-row plain align-items-center gap-2 account-link account-popup-item">
+                            <router-link exact-active-class="lmWixQ" :to="{name: 'account'}"
+                                         class="flex flex-row plain align-items-center gap-2 account-link account-popup-item">
                                 <font-awesome-icon icon="gear" class="icon"/>
                                 <span>Settings</span>
                             </router-link>
@@ -46,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <router-link exact-active-class="lmWixQ" :to="{name: 'login'}" v-else class="nav-action">Login</router-link>
+                <router-link exact-active-class="lmWixQ" :to="loginLink" v-else class="nav-action">Login</router-link>
             </div>
         </nav>
     </header>
@@ -55,6 +57,7 @@
 <script>
 import Logo from "@/components/Common/Logo";
 import {useAuth} from "@/store/authStore";
+
 export default {
     name: "Navbar",
     components: {Logo},
@@ -62,6 +65,16 @@ export default {
         background: {
             type: Boolean,
             default: false
+        }
+    },
+
+    computed: {
+        loginLink() {
+            const uri = {name: 'login'};
+            if (this.$route.name !== 'home') {
+                uri.query = {redirect: this.$route.fullPath};
+            }
+            return uri;
         }
     },
 
