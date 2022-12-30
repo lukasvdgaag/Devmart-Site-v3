@@ -164,13 +164,6 @@ body {
     position: relative;
 }
 
-.flex {
-    display: flex;
-    flex-direction: column;
-    -ms-flex-direction: column;
-    -webkit-flex-direction: column;
-}
-
 .bg-white {
     background-color: #fff;
 }

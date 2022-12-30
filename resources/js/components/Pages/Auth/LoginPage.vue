@@ -1,11 +1,11 @@
 <template>
     <div class="flex flex-row h-100">
-        <div class="w-100 flex align-items-center m-0 p-0 h-100">
+        <div class="w-100 flex flex-col align-items-center m-0 p-0 h-100">
             <Navbar :background="true"/>
             <AuthCard class="w-100">
                 <form method="post" @submit.prevent="login">
                     <a href="/login-with-discord"
-                       class="button primary flex align-center plain p-3">
+                       class="button primary flex flex-col align-center plain p-3">
                         <div class="flex flex-row gap-2">
                             <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
                             <div class="size-18 bold">Log in with Discord</div>
@@ -54,7 +54,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end mt-4">
+                    <div class="flex flex-col items-center justify-end mt-4">
                         <button class="primary w-100 p-2" :disabled="loggingIn">
                             {{ loggingIn ? "Logging you in..." : "Log in" }}
                         </button>

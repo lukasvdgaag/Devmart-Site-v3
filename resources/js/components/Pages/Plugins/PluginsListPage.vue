@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row">
-        <div class="w-full flex items-center m-0 p-0">
+        <div class="w-full flex flex-col items-center m-0 p-0">
             <Navbar :background="true"/>
 
             <div class="d-grid !grid-cols-12 mb-6">
@@ -27,19 +27,24 @@
                 <Sidebar :links="sidebarLinks"/>
                 <div class="col-span-12 lg:col-span-9 w-full">
                     <Searchbar placeholder="Find a plugin..."
-                               v-model="pluginsQueryable.query"
-                               :disabled="!pluginsQueryable.canRequest()"
+                               v-model="pluginsFetchable.query"
+                               :disabled="!pluginsFetchable.canRequest()"
                                @submit="updateSearch"/>
 
                     <div class="w-full col-gap-4 mt-2 text-xl font-bold">
-                        {{ totalPlugins }} Plugins Found <span v-if="pluginsQueryable.page > 1">- Page {{ pluginsQueryable.page }}</span>
+                        {{ totalPlugins }} Plugins Found <span v-if="pluginsFetchable.page > 1">- Page {{ pluginsFetchable.page }}</span>
                     </div>
 
                     <div class="flex gap-y-5 mt-2 flex-col">
                         <PluginPreview v-for="plugin in plugins" :plugin="plugin" :key="plugin.id"/>
                     </div>
 
-                    <!-- TODO: Add pagination -->
+                    <Pagination
+                        :current-page="pluginsFetchable.page"
+                        :last-page="pages"
+                        :per-page="6"
+                        :total="totalPlugins"
+                    :fetchable="pluginsFetchable"/>
                 </div>
             </div>
         </div>
@@ -55,10 +60,11 @@ import SidebarItem from "@/models/SidebarItem";
 import PluginRepository from "@/services/PluginRepository";
 import PluginPreview from "@/components/Pages/Plugins/PluginPreview.vue";
 import PluginsFetchable from "@/models/PluginsFetchable";
+import Pagination from "@/components/Common/Pagination/Pagination.vue";
 
 export default {
     name: "PluginsListPage",
-    components: {PluginPreview, Searchbar, Sidebar, Navbar},
+    components: {Pagination, PluginPreview, Searchbar, Sidebar, Navbar},
 
     created() {
         Promise.all([
@@ -69,10 +75,10 @@ export default {
     data() {
         return {
             user: useAuth().user,
-            pluginsQueryable: new PluginsFetchable(
+            pluginsFetchable: new PluginsFetchable(
                 this.queryPlugins,
                 this.$route.query.query ?? "",
-                this.$route.query.page ?? '1',
+                Number.parseInt(this.$route.query.page ?? '1'),
                 this.$route.query.filter ?? 'all',
             ),
             plugins: [],
@@ -83,8 +89,12 @@ export default {
 
     watch: {
         '$route.query.filter'() {
-            this.pluginsQueryable.filter = this.$route.query.filter;
+            this.pluginsFetchable.filter = this.$route.query.filter;
             this.fetchPlugins();
+        },
+        '$route.query.page'() {
+            console.log(this.$route.query.page);
+            this.pluginsFetchable.page = Number.parseInt(this.$route.query.page ?? '1');
         }
     },
 
@@ -101,16 +111,16 @@ export default {
     methods: {
         async updateSearch() {
             this.$router.replace({
-                query: this.getQuery(this.pluginsQueryable.filter)
+                query: this.getQuery(this.pluginsFetchable.filter)
             });
 
             await this.fetchPlugins();
         },
         async fetchPlugins() {
-            await this.pluginsQueryable.fetch(this);
+            await this.pluginsFetchable.fetch(this);
         },
         async queryPlugins() {
-            const response = await PluginRepository.fetchPlugins(this.pluginsQueryable.filter, this.pluginsQueryable.query, this.pluginsQueryable.page);
+            const response = await PluginRepository.fetchPlugins(this.pluginsFetchable.filter, this.pluginsFetchable.query, this.pluginsFetchable.page);
             this.plugins = response.data.plugins;
             this.totalPlugins = response.data.total;
             this.pages = response.data.pages;
@@ -120,7 +130,7 @@ export default {
                 ...this.$route.query,
                 filter: filter,
                 page: undefined,
-                query: this.pluginsQueryable.query
+                query: this.pluginsFetchable.query
             }
         },
     }

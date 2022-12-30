@@ -8,12 +8,13 @@ export const client = axios.create({
     withCredentials: true
 });
 
-const loadParams = (user, query, from, to, perPage, sum, compareFrom = null, compareTo = null) => {
+const loadParams = (user, query, from, to, page, perPage, sum, compareFrom = null, compareTo = null) => {
     const params = {};
     if (query) params.query = query;
     if (user) params.user = user;
     if (from) params.from = from.toISOString();
     if (to) params.to = to.toISOString();
+    if (page) params.page = page;
     if (perPage) params.perPage = perPage;
     if (sum != null) params.sum = sum ? 1 : 0;
     if (compareFrom) params.compareFrom = compareFrom.toISOString();
@@ -24,17 +25,18 @@ const loadParams = (user, query, from, to, perPage, sum, compareFrom = null, com
 export default {
 
     /**
-     * @param {Number|null} user
-     * @param {String|null} query
+     * @param {number|null} user
+     * @param {string|null} query
+     * @param {number} page
      * @param {Date|null} from
      * @param {Date|null} to
-     * @param {Number|null} perPage
-     * @param {Boolean} sum
+     * @param {number|null} perPage
+     * @param {boolean|null} sum
      * @returns {Promise<AxiosResponse<any>>}
      */
-    async fetchSales(user = null, query = null, from = null, to = null, perPage = null, sum = null) {
+    async fetchSales(user = null, query = null, page = 1, from = null, to = null, perPage = null, sum = null) {
         return await client.get("/sales", {
-            params: loadParams(user, query, from, to, perPage, sum)
+            params: loadParams(user, query, from, to, page, perPage, sum)
         })
     },
 
@@ -48,7 +50,7 @@ export default {
      */
     async fetchSalesSum(user = null, from = null, to = null, compareFrom = null, compareTo = null) {
         return await client.get("/sales", {
-            params: loadParams(user, null, from, to, null, true, compareFrom, compareTo)
+            params: loadParams(user, null, from, to, null, null, true, compareFrom, compareTo)
         })
     },
 
@@ -62,7 +64,7 @@ export default {
      */
     async fetchDailySales(user = null, query = null, from = null, to = null, records = null) {
         return await client.get("/sales/daily", {
-            params: loadParams(user, query, from, to, records, false)
+            params: loadParams(user, query, from, to, records, null, null)
         })
     },
 

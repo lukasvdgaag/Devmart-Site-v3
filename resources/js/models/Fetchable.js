@@ -1,3 +1,5 @@
+import router from "@/router";
+
 export default class Fetchable {
 
     /**
@@ -63,13 +65,33 @@ export default class Fetchable {
     }
 
     /**
+     * Navigate to a specific page.
+     * @param {number} page
+     * @param thisArg
+     * @returns {Promise<void>}
+     */
+    async navigateToPage(page, thisArg = undefined) {
+        this.page = page;
+        if (!this.canRequest()) return;
+
+        router.replace({
+            query: {
+                ...router.currentRoute.query,
+                page
+            }
+        });
+
+        await this.fetch(thisArg);
+    }
+
+    /**
      * Perform the request.
      * @param thisArg
      * @returns {Promise<void>}
      */
     async fetch(thisArg) {
         if (this.start()) {
-            await this.fetcher.call(thisArg);
+            await this.fetcher.call(thisArg ?? this);
             this.finish();
         }
     }

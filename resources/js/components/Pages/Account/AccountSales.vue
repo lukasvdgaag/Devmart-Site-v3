@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="w-100 relative h-100 w-100">
-                <Vue3Apexcharts type="line" height="100%" :options="chartOptions" :series="chartSeries"/>
+                <Vue3Apexcharts type="line" height="100%" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0"/>
             </div>
         </QuickLink>
 
@@ -68,6 +68,14 @@
                 </tr>
                 </tbody>
             </table>
+
+            <Pagination
+                :last-page="recentSalesPages"
+                :current-page="transactionsFetchable.page"
+                :per-page="10"
+                :total="recentSalesTotal"
+                :fetchable="transactionsFetchable"
+            />
         </QuickLink>
     </div>
 </template>
@@ -82,10 +90,11 @@ import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
 import DateService from "@/services/DateService";
 import Fetchable from "@/models/Fetchable";
+import Pagination from "@/components/Common/Pagination/Pagination.vue";
 
 export default {
     name: "AccountSales",
-    components: {GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
+    components: {Pagination, GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
 
     async created() {
         await Promise.all([
@@ -98,8 +107,14 @@ export default {
 
     data() {
         return {
-            transactionsFetchable: new Fetchable(this.fetchRecentSales, this.$route.query.query ?? ''),
+            transactionsFetchable: new Fetchable(
+                this.fetchRecentSales,
+                this.$route.query.query ?? '',
+                Number.parseInt(this.$route.query.page ?? '1')
+            ),
             recentSales: [],
+            recentSalesTotal: 0,
+            recentSalesPages: 0,
             totalSales: "€ 0",
             total30Days: "€ 0",
             difference30Days: 0,
@@ -156,8 +171,10 @@ export default {
             await this.transactionsFetchable.fetch(this);
         },
         async fetchRecentSales() {
-            const response = await PluginRepository.fetchSales(this.userId, this.transactionsFetchable.query);
+            const response = await PluginRepository.fetchSales(this.userId, this.transactionsFetchable.query, this.transactionsFetchable.page);
             this.recentSales = response.data.transactions;
+            this.recentSalesTotal = response.data.total;
+            this.recentSalesPages = response.data.totalPages;
         },
         async loadTotalSales() {
             const response = await PluginRepository.fetchSalesSum(this.userId);

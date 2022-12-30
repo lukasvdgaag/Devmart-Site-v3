@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row">
-        <div class="w-full flex align-items-center m-0 p-0">
+        <div class="w-full flex flex-col align-items-center m-0 p-0">
             <Navbar :background="true"/>
 
             <div class="d-grid d-grid-12 mb-6 mt-4">

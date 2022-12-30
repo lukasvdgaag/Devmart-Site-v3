@@ -7,7 +7,7 @@
             <img :src="plugin.logo_url"
                  alt="Logo image"
                  class="resource-icon hide-big">
-            <div class="h-full lg:min-h-[9rem] flex">
+            <div class="h-full lg:min-h-[9rem] flex flex-col">
                 <div class="flex flex-row items-center">
                     <img :src="plugin.logo_url ?? 'img/logo.png'" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
                     <h2 class="text-base font-bold break-words">{{ plugin.title }}</h2>

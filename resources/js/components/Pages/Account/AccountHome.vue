@@ -146,7 +146,7 @@
             <input id="theme" type="hidden" :value="user.theme">
 
             <div v-for="type in AccountTheme()"
-                 class="flex gap-2 border-radius-small p-2 text-center pointer account-theme"
+                 class="flex flex-col gap-2 border-radius-small p-2 text-center pointer account-theme"
                  :class="{'selected': user.theme === type}"
                  @click="selectTheme(type)"
                  :value="type">
