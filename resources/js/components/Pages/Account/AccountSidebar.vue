@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Sidebar from "@/components/Common/Sidebar.vue";
+import Sidebar from "@/components/Common/SidebarLinks.vue";
 import SidebarItem from "@/models/SidebarItem";
 
 export default {

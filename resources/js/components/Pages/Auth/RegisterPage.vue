@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-row h-100">
-        <div class="w-100 flex flex-col align-items-center m-0 p-0 h-100">
+    <div class="flex flex-row h-full">
+        <div class="w-full flex flex-col align-items-center m-0 p-0 h-full">
             <Navbar :background="true"/>
-            <div class="flex flex-row h-100 w-100 justify-center items-center minus-header">
-                <div class="d-grid d-grid-12 mb-6 h-100">
+            <div class="flex flex-row h-full w-full justify-center items-center minus-header">
+                <div class="d-grid d-grid-12 mb-6 h-full">
                     <div class="grid-6 flex flex-col align-center grid-full-small">
                         <div class="w-full sm:max-w-md pb-3">
                             <h1 class="mb-6 text-center">Create An Account.</h1>
@@ -99,7 +99,7 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    <label for="accept_tos" class="inline-flex items-center h-100">
+                                    <label for="accept_tos" class="inline-flex items-center h-full">
                                         <Input id="accept_tos" type="checkbox"
                                                class="rounded"
                                                name="accept_tos" required/>
@@ -112,7 +112,7 @@
                                 </div>
 
                                 <div class="flex flex-col items-center justify-end mt-4">
-                                    <button class="primary w-100 p-2">
+                                    <button class="primary w-full p-2">
                                         Sign Up
                                     </button>
                                 </div>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="grid-6 flex flex-col hide-small align-center">
-                        <register-svg class="w-100"/>
+                        <register-svg class="w-full"/>
                     </div>
                 </div>
             </div>

@@ -25,7 +25,7 @@
                     <div class="muted">from previous week</div>
                 </div>
             </div>
-            <div class="w-100 relative h-100 w-100">
+            <div class="w-full relative h-full w-full">
                 <Vue3Apexcharts type="line" height="100%" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0"/>
             </div>
         </QuickLink>
@@ -85,7 +85,7 @@ import MutedText from "@/components/Common/MutedText.vue";
 import QuickLink from "@/components/Common/QuickLink.vue";
 import Searchbar from "@/components/Common/Searchbar.vue";
 import PluginRepository from "@/services/PluginRepository";
-import StringService from "../../../services/StringService";
+import StringService from "@/services/StringService";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
 import DateService from "@/services/DateService";
@@ -134,7 +134,7 @@ export default {
                     curve: 'smooth'
                 },
                 xaxis: {
-                    categories: new Array(7).fill(null).map((v, i) => DateService.formatDate(DateService.offset(i-6)))
+                    categories: new Array(7).fill(null).map((v, i) => DateService.formatDate(DateService.offset(i - 6)))
                 },
                 fill: {
                     type: 'gradient',

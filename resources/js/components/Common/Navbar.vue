@@ -24,7 +24,7 @@
                                 Hi, {{ this.user.username }} 👋
                             </div>
                             <div class="size-14 flex flex-row align-items-center justify-space-between account-popup-item">
-                                <label class="w-100 pointer color-inherit" for="dark_mode">Dark Mode</label>
+                                <label class="w-full pointer color-inherit" for="dark_mode">Dark Mode</label>
                                 <div>
                                     <label class="switch small mt-0">
                                         <input type="checkbox"

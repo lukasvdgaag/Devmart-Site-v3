@@ -8,6 +8,7 @@
 :root {
     --max-width: 1260px;
     --font-header: 'Roboto', 'Arial', sans-serif;
+    --font-poppins: Poppins, 'Roboto', 'Arial', sans-serif;
     --header-secondary: #4f5660;
     --border-color: rgba(6, 6, 7, .08);
     --border-light: 1px solid var(--border-color);
@@ -475,38 +476,13 @@ h1, h2, h3, h4, h5 {
     margin-left: auto;
 }
 
-.highlights {
-    padding-top: 26px;
-    border-bottom: var(--border-light);
-}
-
 hr {
     margin-top: 24px;
     border-top: 1px solid var(--border-color);
     margin-bottom: 24px;
 }
 
-.highlight {
-    margin-bottom: 24px;
-    grid-column: span 6;
-}
-
-.highlight-icon-container {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    min-height: 40px;
-    border-radius: 20px;
-    background-color: var(--background-soft);
-    color: var(--text-normal);
-}
-
-.highlight-icon-container > * {
-    width: 20px;
-    border-radius: 4px;
-}
-
-a:hover .highlight-icon-container {
+a:hover {
     background-color: var(--background-soft-darkened);
 }
 
@@ -835,7 +811,7 @@ p {
 }
 
 .nav-link {
-    font-family: var(--font-header);
+    font-family: var(--font-poppins);
     font-weight: 600;
     font-size: 16px;
     color: #fff;
@@ -1877,7 +1853,6 @@ input[type='password'] {
 
 .minus-header {
     margin-top: -80px;
-    padding-top: 80px;
 }
 
 .password-view-toggle {
@@ -2083,71 +2058,6 @@ section {
     border-width: 2px;
 }
 
-
-.mt-0 {
-    margin-top: 0 !important;
-}
-
-.mt-2 {
-    margin-top: 8px;
-}
-
-.mr-1 {
-    margin-right: 4px;
-}
-
-.mr-2 {
-    margin-right: 8px;
-}
-
-.mr-3 {
-    margin-right: 16px;
-}
-
-.ml-3 {
-    margin-left: 16px;
-}
-
-.mt-4 {
-    margin-top: 24px;
-}
-
-.mt-5 {
-    margin-top: 28px;
-}
-
-.pt-5 {
-    padding-top: 28px;
-}
-
-.pb-5 {
-    padding-bottom: 28px;
-}
-
-.mt-6 {
-    margin-top: 32px;
-}
-
-.mb-0 {
-    margin-bottom: 0;
-}
-
-.mb-1 {
-    margin-bottom: 4px;
-}
-
-.mb-2 {
-    margin-bottom: 8px;
-}
-
-.mb-3 {
-    margin-bottom: 16px;
-}
-
-.mb-6 {
-    margin-bottom: 32px;
-}
-
 select {
     padding-right: 28px;
 }
@@ -2305,7 +2215,7 @@ select {
         line-height: 16px;
     }
 
-    .grid-full-small, .highlight {
+    .grid-full-small {
         grid-column: span 12;
     }
 

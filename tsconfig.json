@@ -23,6 +23,7 @@
         }
     },
     "include": [
-        "resources/**/*"
+        "resources/**/*",
+        "resources/js/**/*"
     ]
 }

@@ -54,7 +54,7 @@
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
 import {useAuth} from "@/store/authStore";
-import Sidebar from "@/components/Common/Sidebar.vue";
+import Sidebar from "@/components/Common/SidebarLinks.vue";
 import Searchbar from "@/components/Common/Searchbar.vue";
 import SidebarItem from "@/models/SidebarItem";
 import PluginRepository from "@/services/PluginRepository";

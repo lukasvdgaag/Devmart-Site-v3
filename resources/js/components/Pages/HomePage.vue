@@ -1,9 +1,9 @@
 <template>
-    <div class="landing-page h-100 w-100">
-        <div class="h-100 w-100"
+    <div class="landing-page h-full w-full">
+        <div class="h-full w-full"
              style="background-color: #cf0063;background-image: linear-gradient(135deg, #dd1173, #350e47);">
             <div class="flex flex-col" style="height:100%">
-                <div class="w-100 flex flex-col align-items-center m-0 p-0">
+                <div class="w-full flex flex-col align-items-center m-0 p-0">
                     <Navbar/>
                 </div>
 
@@ -104,10 +104,10 @@
             <div class="d-grid d-grid-12">
                 <div class="grid-full flex align-items-center flex-row">
 
-                    <div class="w-100 h-100 flex flex-col align-center">
+                    <div class="w-full h-full flex flex-col align-center">
                         <img style="max-height: 80%" src="/assets/img/plugins-preview2.png" alt="Plugins preview">
                     </div>
-                    <div class="w-100 text-center flex flex-col align-center">
+                    <div class="w-full text-center flex flex-col align-center">
                         <div class="mw-767px">
                             <h2 class="size-42 bolder color-white">Minecraft Plugins.</h2>
                             <p class="size-18 mt-3">Professional free and premium Minecraft Server Plugins for everyone.

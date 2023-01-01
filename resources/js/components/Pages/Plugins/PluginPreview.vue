@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="`/plugins/{plugin.id}`" class="plain">
+    <router-link :to="{name: 'plugin-overview', params: {pluginId: plugin.id}}" class="plain">
         <div class="gap-x-4 w-full col-gap-4 flex flex-row">
             <img :src="plugin.banner_url ?? 'https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048'"
                  alt="Banner image"

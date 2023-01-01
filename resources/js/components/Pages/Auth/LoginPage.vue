@@ -1,8 +1,8 @@
 <template>
-    <div class="flex flex-row h-100">
-        <div class="w-100 flex flex-col align-items-center m-0 p-0 h-100">
+    <div class="flex flex-row h-full">
+        <div class="w-full flex flex-col align-items-center m-0 p-0 h-full">
             <Navbar :background="true"/>
-            <AuthCard class="w-100">
+            <AuthCard class="w-full">
                 <form method="post" @submit.prevent="login">
                     <a href="/login-with-discord"
                        class="button primary flex flex-col align-center plain p-3">
@@ -41,7 +41,7 @@
 
                     <div class="flex flex-row mt-2 center justify-space-between">
                         <div>
-                            <label for="remember_me" class="inline-flex items-center h-100">
+                            <label for="remember_me" class="inline-flex items-center h-full">
                                 <Input id="remember_me"
                                        v-model="data.remember"
                                        type="checkbox"/>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="flex flex-col items-center justify-end mt-4">
-                        <button class="primary w-100 p-2" :disabled="loggingIn">
+                        <button class="primary w-full p-2" :disabled="loggingIn">
                             {{ loggingIn ? "Logging you in..." : "Log in" }}
                         </button>
                     </div>

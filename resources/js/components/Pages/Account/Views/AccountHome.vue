@@ -165,7 +165,6 @@
 </template>
 
 <script>
-import {useAuth} from "@/store/authStore";
 import Label from "@/components/Common/Label.vue";
 import Input from "@/components/Common/Input.vue";
 import UserRepository from "@/services/UserRepository";
@@ -178,7 +177,7 @@ import ValidationError from "@/components/Common/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
-import StringService from "../../../services/StringService";
+import StringService from "@/services/StringService";
 import DateService from "@/services/DateService";
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-100 justify-center items-center minus-header pt-6 sm:pt-0">
+    <div class="flex flex-col h-full justify-center items-center minus-header pt-6 sm:pt-0">
         <h1>{{header}}</h1>
         <p>{{subheader}}</p>
 

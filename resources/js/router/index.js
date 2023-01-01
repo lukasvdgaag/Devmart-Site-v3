@@ -54,6 +54,18 @@ const routes = [
                 path: '',
                 name: 'plugin-overview',
                 component: PluginOverviewPage
+            }, {
+                path: 'edit',
+                name: 'edit-plugin',
+            }, {
+                path: 'update',
+                name: 'update-plugin',
+            },{
+                path: 'versions',
+                name: 'plugin-versions',
+            }, {
+                path: 'updates',
+                name: 'plugin-updates',
             }
         ]
     }, {
@@ -82,7 +94,7 @@ const routes = [
             }
         ]
     }, {
-        path: '/:pathMatch(.*)',
+        path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: PageNotFound
     }

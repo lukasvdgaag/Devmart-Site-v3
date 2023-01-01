@@ -8,7 +8,7 @@
                     </div>
                     <MutedText>{{ label }}</MutedText>
                 </div>
-                <div class="flex flex-col align-content-center mt-2 mb-2 w-100 bold size-24">
+                <div class="flex flex-col align-content-center mt-2 mb-2 w-full bold size-24">
                     <slot/>
                 </div>
             </template>
