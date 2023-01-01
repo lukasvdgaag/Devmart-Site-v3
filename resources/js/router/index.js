@@ -4,16 +4,19 @@ import LoginPage from "@/components/pages/auth/LoginPage";
 import RegisterPage from "@/components/pages/auth/RegisterPage";
 import {checkAuthenticated} from "@/middleware";
 import AccountLayout from "@/components/Pages/Account/AccountLayout.vue";
-import AccountHome from "@/components/Pages/Account/AccountHome.vue";
-import AccountBilling from "@/components/Pages/Account/AccountBilling.vue";
-import AccountSales from "@/components/Pages/Account/AccountSales.vue";
-import PluginsListPage from "@/components/Pages/Plugins/PluginsListPage.vue";
+import AccountHome from "@/components/Pages/Account/Views/AccountHome.vue";
+import AccountBilling from "@/components/Pages/Account/Views/AccountBilling.vue";
+import AccountSales from "@/components/Pages/Account/Views/AccountSales.vue";
+import PluginsListPage from "@/components/Pages/Plugins/Views/PluginsListPage.vue";
+import PluginPageLayout from "@/components/Pages/Plugins/PluginPageLayout.vue";
+import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
+import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
 
 const routes = [
     {
         path: '/',
         name: 'home',
-        component: HomePage
+        component: HomePage,
     }, {
         path: '/login',
         name: 'login',
@@ -41,10 +44,18 @@ const routes = [
     }, {
         path: '/plugins',
         name: 'plugins',
-        component: PluginsListPage
+        component: PluginsListPage,
     }, {
         path: '/plugins/:pluginId',
-        name: 'plugin-overview'
+        props: true,
+        component: PluginPageLayout,
+        children: [
+            {
+                path: '',
+                name: 'plugin-overview',
+                component: PluginOverviewPage
+            }
+        ]
     }, {
         path: '/account',
         component: AccountLayout,
@@ -70,6 +81,10 @@ const routes = [
                 component: AccountHome
             }
         ]
+    }, {
+        path: '/:pathMatch(.*)',
+        name: 'not-found',
+        component: PageNotFound
     }
 ];
 
