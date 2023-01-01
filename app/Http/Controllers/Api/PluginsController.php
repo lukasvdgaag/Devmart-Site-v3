@@ -18,9 +18,41 @@ class PluginsController
 
     public function handlePluginRetrieval(Request $request, string|int $pluginId)
     {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        return response()->json($plugin['plugin']);
+    }
+
+    public function handlePluginPermissionsRetrieval(Request $request, string|int $pluginId)
+    {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        $hasAccess = $plugin['hasAccess'];
+        $plugin = $plugin['plugin'];
+
+        return response()->json([
+            'modify' => $plugin->hasModifyAccess($request->user()),
+            'download' => $hasAccess,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string|int $pluginId
+     * @param bool $withExtraFields
+     * @return \Illuminate\Http\JsonResponse|array
+     */
+    private function getPluginOrRespond(Request $request, string|int $pluginId, bool $withExtraFields = false)
+    {
         $query = Plugin::query()->where('plugins.id', '=', $pluginId);
-        $query = $this->insertAuthorUsername($query);
-        $query = $this->insertTotalDownloads($query);
+        if ($withExtraFields) {
+            $query = $this->insertAuthorUsername($query);
+            $query = $this->insertTotalDownloads($query);
+        }
 
         $plugin = $query->first();
         if ($plugin == null) {
@@ -29,13 +61,13 @@ class PluginsController
             ], 404);
         }
 
-        if ($plugin->custom && !$plugin->hasAccess($request->user())) {
-            return respones()->json([
+        $hasAccess = $plugin->hasAccess($request->user());
+        if ($plugin->custom && !$hasAccess) {
+            return response()->json([
                 'error' => 'You have no access to this plugin.'
             ], 401);
         }
-
-        return response()->json($plugin);
+        return ["plugin" => $plugin, "hasAccess" => $hasAccess];
     }
 
     public function handlePluginListRetrieval(Request $request)

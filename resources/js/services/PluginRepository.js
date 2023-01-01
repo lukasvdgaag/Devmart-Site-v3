@@ -77,6 +77,19 @@ export default {
                 perPage
             }
         })
+    },
+
+    async fetchPlugin(id) {
+        return await client.get(`/${id}`);
+    },
+
+    /**
+     * Get the user's permissions for the requested plugin.
+     * @param pluginId
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    async fetchPluginPermissions(pluginId) {
+        return await client.get(`/${pluginId}/permissions`);
     }
 
 
