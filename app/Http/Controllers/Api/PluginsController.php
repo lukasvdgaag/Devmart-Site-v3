@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plugins\Plugin;
+use App\Models\Plugins\PluginUpdate;
 use App\Models\User;
 use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,6 +22,14 @@ class PluginsController
         $plugin = $this->getPluginOrRespond($request, $pluginId, true);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
+
+        $response = $plugin['plugin'];
+
+        $latestUpdate = $plugin['plugin']->getUpdates()->first();
+        $response['latest_update'] = $latestUpdate;
+        if ($latestUpdate != null) {
+            $response['latest_update']['file_size'] = $latestUpdate->getFileDetails();
+        }
 
         return response()->json($plugin['plugin']);
     }

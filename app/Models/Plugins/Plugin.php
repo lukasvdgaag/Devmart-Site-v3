@@ -2,13 +2,11 @@
 
 namespace App\Models\Plugins;
 
-use App\Classes\WebUtils;
 use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Plugin extends Model
 {
@@ -144,7 +142,7 @@ class Plugin extends Model
 
         $return['highlights'][] = [
             'title' => 'Last Updated',
-            'description' => $formattedDate,
+            'description' => $this->last_updated,
             'image' => asset('img/calendar.svg')
         ];
 

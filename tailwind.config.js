@@ -17,6 +17,11 @@ module.exports = {
             9: '2.25rem',
             10: '2.5rem',
         },
+        fontFamily: {
+            'roboto': ['Roboto', 'Arial', 'sans-serif'],
+            'mono': ['monospace', 'Arial', 'sans-serif'],
+            // 'sans': ['Nunito', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
+        },
 
         extend: {
             extend: {},
@@ -53,6 +58,7 @@ module.exports = {
 
                 gray: {
                     50: '#f9fafb',
+                    75: '#f8f9f9',
                     100: '#f3f4f6',
                     200: '#e5e7eb',
                     250: '#ececec',

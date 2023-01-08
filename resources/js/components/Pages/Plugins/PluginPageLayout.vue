@@ -15,29 +15,21 @@
 
                 <div class="plugin-content d-grid d-grid-12 mt-2 mt-4-small">
                     <div class="content content-left-margin flex">
-                        <div class="plugin-about">
+                        <div class="w-full">
                             <div class="flex flex-row">
                                 <img class="resource-icon hide-big" :src="plugin.logo_url" alt="Resource Icon">
                                 <div class="ml-3-small">
-                                    <router-link :to="{name: 'plugins', params: {pluginId: pluginId}}" class="plain">
+                                    <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
                                         <h1 class="plugin-header">{{ plugin.title }}</h1>
                                         <p class="plugin-description">{{ plugin.description }}</p>
                                     </router-link>
 
-                                    <Stats>
+                                    <Stats class="border-b border-b-gray-200 pb-2">
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
                                     </Stats>
                                 </div>
                             </div>
-
-                            <!--                            <template v-if="hasModifyAccess">-->
-                            <!--                                <router-link :to="{name: 'update-plugin', params: {pluginId: pluginId}}"-->
-                            <!--                                   class="hide-big action-button purple flex align-center"><span>Post Update</span></router-link>-->
-                            <!--                                <router-link :to="{name: 'update-edit', params: {pluginId: pluginId}}"-->
-                            <!--                                   class="hide-big action-button purple flex align-center"><span>Edit Plugin</span></router-link>-->
-                            <!--                            </template>-->
-
 
                             <Highlights>
                                 <Highlight title="Supported Versions" :description="supportedVersions" image="/assets/img/getbukkit.png"/>
@@ -76,8 +68,8 @@ export default {
 
     async created() {
         await Promise.all([
+            this.fetchPluginData(),
             this.fetchPermissions(),
-            this.fetchPluginData()
         ]);
     },
 

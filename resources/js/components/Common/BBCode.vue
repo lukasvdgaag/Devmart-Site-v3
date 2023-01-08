@@ -1,5 +1,5 @@
 <template>
-    <div class="bbcode markdown" v-html="BBCodeParser.parse(source, true)">
+    <div class="bbcode markdown" v-html="BBCodeParser.parse(source)">
     </div>
 </template>
 

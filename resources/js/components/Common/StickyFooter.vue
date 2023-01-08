@@ -1,12 +1,20 @@
 <template>
-    <div class="sticky download-button-small mt-6 flex align-center">
+    <div class="download-button-small mt-6 flex flex-col align-center"
+         :class="{sticky: !fixed, fixed: fixed}">
         <slot/>
     </div>
 </template>
 
 <script>
 export default {
-    name: "StickyFooter"
+    name: "StickyFooter",
+
+    props: {
+        fixed: {
+            type: Boolean,
+            default: false
+        }
+    }
 }
 </script>
 
