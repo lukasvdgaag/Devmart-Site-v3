@@ -110,7 +110,6 @@ export default {
                 this.$router.push({name: "not-found"});
             }
         }
-
     },
 
     props: {

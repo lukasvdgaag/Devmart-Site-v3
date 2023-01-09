@@ -21,7 +21,7 @@
         </router-link>
 
         <template v-if="canModify">
-            <hr class="lg:hidden">
+            <hr class="hidden md:block">
             <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
                          class="action-button purple flex-col align-center hidden lg:flex"><span>Post Update</span></router-link>
             <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"

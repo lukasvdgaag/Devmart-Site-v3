@@ -252,13 +252,17 @@ h1, h2, h3, h4, h5 {
 }
 
 .grid {
-    display: grid;
-    display: -moz-grid;
-    width: 100%;
-    grid-template-columns: repeat(8, 1fr);
     gap: 0 10px;
-    height: 100%;
 }
+
+/*.grid {*/
+/*    display: grid;*/
+/*    display: -moz-grid;*/
+/*    width: 100%;*/
+/*    grid-template-columns: repeat(8, 1fr);*/
+/*    gap: 0 10px;*/
+/*    height: 100%;*/
+/*}*/
 
 .grid-half {
     grid-column: span 4;

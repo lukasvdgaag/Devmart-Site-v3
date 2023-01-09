@@ -11,6 +11,7 @@ import PluginsListPage from "@/components/Pages/Plugins/Views/PluginsListPage.vu
 import PluginPageLayout from "@/components/Pages/Plugins/PluginPageLayout.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
+import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 
 const routes = [
     {
@@ -55,9 +56,6 @@ const routes = [
                 name: 'plugin-overview',
                 component: PluginOverviewPage
             }, {
-                path: 'edit',
-                name: 'edit-plugin',
-            }, {
                 path: 'update',
                 name: 'update-plugin',
             },{
@@ -68,6 +66,11 @@ const routes = [
                 name: 'plugin-updates',
             }
         ]
+    }, {
+        path: '/plugins/:pluginId/edit',
+        name: 'edit-plugin',
+        props: true,
+        component: EditPluginPage
     }, {
         path: '/account',
         component: AccountLayout,
