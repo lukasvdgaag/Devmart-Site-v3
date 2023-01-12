@@ -21,11 +21,15 @@
             </div>
             <div class="flex flex-col gap-2">
                 <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                    <div
-                        class="relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+                    <PaginationItem :page="currentPage-1"
+                                    :active="false"
+                                    :disabled="false"
+                                    @update="handleUpdate"
+                                    v-if="currentPage-1 >= 1"
+                                    class="rounded-none rounded-l-md px-2">
                         <span class="sr-only">Previous</span>
                         <font-awesome-icon icon="fa-chevron-left" class="text-sm w-5" aria-hidden="true"/>
-                    </div>
+                    </PaginationItem>
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
                     <PaginationItem
                         @update="handleUpdate"
@@ -33,11 +37,16 @@
                         :page="page.page"
                         :active="page.active"
                         :disabled="page.disabled"/>
-                    <div
-                        class="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20">
+
+                    <PaginationItem :page="currentPage+1"
+                                    :active="false"
+                                    :disabled="false"
+                                    @update="handleUpdate"
+                                    v-if="currentPage+1 <= lastPage"
+                                    class="rounded-none rounded-r-md px-2">
                         <span class="sr-only">Next</span>
                         <font-awesome-icon icon="fa-chevron-right" class="text-sm w-5" aria-hidden="true"/>
-                    </div>
+                    </PaginationItem>
                 </nav>
             </div>
         </div>
@@ -61,9 +70,7 @@ export default {
 
     methods: {
         handleUpdate(page) {
-            console.log(page);
             if (this.fetchable) {
-                console.log("fetchable");
                 this.fetchable.navigateToPage(page);
                 return;
             }
