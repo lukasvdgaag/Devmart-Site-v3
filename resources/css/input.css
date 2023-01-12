@@ -486,7 +486,7 @@ hr {
     margin-bottom: 24px;
 }
 
-a:hover {
+a:hover .highlight-icon-container {
     background-color: var(--background-soft-darkened);
 }
 

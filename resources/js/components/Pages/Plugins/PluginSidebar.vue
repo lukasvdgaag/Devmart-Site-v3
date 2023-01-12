@@ -1,5 +1,5 @@
 <template>
-    <Sidebar :left-side="false">
+    <Sidebar :left-side="false" class="mb-6 lg:mb-2">
         <StickyFooter :fixed="true" class="block lg:hidden">
             <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex flex-col gap-0 align-center">
                 <span>{{ downloadLabel }}</span>
@@ -21,7 +21,7 @@
         </router-link>
 
         <template v-if="canModify">
-            <hr class="hidden md:block">
+            <hr class="hidden lg:block">
             <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
                          class="action-button purple flex-col align-center hidden lg:flex"><span>Post Update</span></router-link>
             <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
@@ -130,7 +130,7 @@ export default {
             required: true,
         },
         permissions: {
-            type: Object,
+            type: [Object, null],
             required: true,
         }
     }

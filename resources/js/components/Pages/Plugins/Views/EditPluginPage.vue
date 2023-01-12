@@ -2,7 +2,7 @@
     <div class="w-full flex flex-col items-center m-0 p-0">
         <Navbar :background="true"/>
 
-        <div class="d-grid !grid-cols-12 mb-6 gap-0" >
+        <div class="d-grid !grid-cols-12 mb-6 gap-0" v-if="plugin">
             <div class="titled-header col-span-12 text-center">
                 <h1 class="page-title">Edit Plugin</h1>
                 <p class="page-subtitle">{{ plugin.name }}</p>

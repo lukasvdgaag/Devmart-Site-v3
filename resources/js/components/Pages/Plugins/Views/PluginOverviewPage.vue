@@ -16,7 +16,7 @@ export default {
             required: true,
         },
         pluginId: {
-            type: Number,
+            type: String,
             required: true,
         }
     }

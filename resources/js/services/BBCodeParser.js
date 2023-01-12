@@ -33,7 +33,7 @@ export default class BBCodeParser {
         },
         'size': {
             pattern: /\[size=([1-4|7])](.*?)\[\/size]/s,
-            replace: '<div class="d-inline-block md-size-$1">$2</div>',
+            replace: '<div class="md-size-$1">$2</div>',
             content: '$2',
         },
         'color': {

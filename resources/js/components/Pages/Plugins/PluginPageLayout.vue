@@ -16,7 +16,7 @@
                 <div class="plugin-content d-grid d-grid-12 mt-2 mt-4-small">
                     <div class="content content-left-margin flex">
                         <div class="w-full">
-                            <div class="flex flex-row">
+                            <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
                                 <img class="resource-icon hide-big" :src="plugin.logo_url" alt="Resource Icon">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
@@ -24,11 +24,18 @@
                                         <p class="plugin-description">{{ plugin.description }}</p>
                                     </router-link>
 
-                                    <Stats class="border-b border-b-gray-200 pb-2">
+                                    <Stats class="pb-2">
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
                                     </Stats>
                                 </div>
+                            </div>
+
+                            <div v-if="permissions?.modify" class="mt-2 border-b border-b-gray-200 ">
+                                <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
+                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
+                                <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
+                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
 
                             <Highlights>
