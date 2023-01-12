@@ -1,5 +1,14 @@
 <template>
-    <input :value="modelValue"
+    <textarea v-if="isTextarea"
+              v-model="modelValue"
+              class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full"
+              :class="[
+               hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
+               type === 'checkbox' ? 'p-2.5 rounded-md' : '',
+           ]"></textarea>
+
+    <input v-else
+           :value="modelValue"
            @change="onChange($event)"
            :type="type"
            @input="$emit('update:modelValue', $event.target.value)"
@@ -33,6 +42,10 @@ export default {
             required: false,
             default: 'text'
         },
+        isTextarea: {
+            type: Boolean,
+            default: false
+        }
     },
 
     computed: {

@@ -26,12 +26,7 @@
                             <div class="size-14 flex flex-row align-items-center justify-space-between account-popup-item">
                                 <label class="w-full pointer color-inherit" for="dark_mode">Dark Mode</label>
                                 <div>
-                                    <label class="switch small mt-0">
-                                        <input type="checkbox"
-                                               name="dark_mode"
-                                               id="dark_mode" :selected="this.user !== null && this.user.theme === 'dark-theme'">
-                                        <span class="slider"></span>
-                                    </label>
+                                    <SwitchInput :small="true" :selected="this.user?.theme === 'dark-theme'"/>
                                 </div>
                             </div>
                             <router-link exact-active-class="lmWixQ" :to="{name: 'account'}"
@@ -57,10 +52,11 @@
 <script>
 import Logo from "@/components/Common/Logo";
 import {useAuth} from "@/store/authStore";
+import SwitchInput from "@/components/Common/SwitchInput.vue";
 
 export default {
     name: "Navbar",
-    components: {Logo},
+    components: {SwitchInput, Logo},
     props: {
         background: {
             type: Boolean,
