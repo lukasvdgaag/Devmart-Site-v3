@@ -104,7 +104,6 @@ export default {
             try {
                 const res = await PluginRepository.fetchPlugin(this.pluginId);
                 this.plugin = res.data;
-                console.log(this.plugin)
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }
