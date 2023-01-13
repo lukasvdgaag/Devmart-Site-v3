@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plugins\Plugin;
-use App\Models\Plugins\PluginUpdate;
 use App\Models\User;
 use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PluginsController
 {
@@ -23,7 +24,7 @@ class PluginsController
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
 
-        $response = $plugin['plugin'];
+        $response = $plugin['plugin']->toArray();
 
         $latestUpdate = $plugin['plugin']->getUpdates()->first();
         $response['latest_update'] = $latestUpdate;
@@ -31,7 +32,9 @@ class PluginsController
             $response['latest_update']['file_size'] = $latestUpdate->getFileDetails();
         }
 
-        return response()->json($plugin['plugin']);
+        // Reformatting the sale section to be more readable.
+        $response = $this->formatSaleSection($response);
+        return response()->json($response);
     }
 
     public function handlePluginPermissionsRetrieval(Request $request, string|int $pluginId)
@@ -57,10 +60,11 @@ class PluginsController
      */
     private function getPluginOrRespond(Request $request, string|int $pluginId, bool $withExtraFields = false)
     {
-        $query = Plugin::query()->where('plugins.id', '=', $pluginId);
+        $query = Plugin::query()->select('plugins.*')->where('plugins.id', '=', $pluginId);
         if ($withExtraFields) {
             $query = $this->insertAuthorUsername($query);
             $query = $this->insertTotalDownloads($query);
+            $query = $this->insertSaleInformation($query);
         }
 
         $plugin = $query->first();
@@ -89,15 +93,15 @@ class PluginsController
         if ($user && $filter == 'purchased' && Auth::hasUser() && $user instanceof User) {
             $plugins = $user->getPlugins();
         } else if ($filter == 'premium') {
-            $plugins = Plugin::query()
+            $plugins = DB::query()->from('plugins')
                 ->where('price', '>', 0)
                 ->where('custom', '=', 0);
         } else if ($filter == 'free') {
-            $plugins = Plugin::query()
+            $plugins = DB::query()->from('plugins')
                 ->where('price', '=', 0)
                 ->where('custom', '=', 0);
         } else {
-            $plugins = Plugin::query()
+            $plugins = DB::query()->from('plugins')
                 ->where('custom', 0);
         }
 
@@ -108,12 +112,32 @@ class PluginsController
             });
         }
 
+        $plugins = $plugins->select(
+            'plugins.id',
+            'plugins.name',
+            'plugins.description',
+            'plugins.title',
+            'plugins.custom',
+            'plugins.price',
+            'plugins.created_at',
+            'plugins.last_updated',
+            'plugins.author',
+            'plugins.logo_url',
+            'plugins.banner_url',
+            'plugins.categories',
+        );
+
         // including the username of the author for each plugin.
         $plugins = $this->insertAuthorUsername($plugins);
         $plugins = $this->insertTotalDownloads($plugins);
+        $plugins = $this->insertSaleInformation($plugins);
 
         $paginated = $plugins->paginate($perPage);
-        $plugins = new Collection($paginated->items());
+        $plugins = (new Collection($paginated->items()))
+            ->map(function ($plugin) {
+                return $this->formatSaleSection(json_decode(json_encode($plugin), true));
+            });
+
         return response()->json([
             'total' => $paginated->total(),
             'currentPage' => $paginated->currentPage(),
@@ -125,8 +149,20 @@ class PluginsController
     public function insertAuthorUsername($plugins)
     {
         return $plugins->join('users', 'users.id', '=', 'plugins.author')
-            ->addSelect(DB::raw('plugins.*, users.username AS author_username'))
-            ->orderBy('last_updated', 'desc');
+            ->addSelect(DB::raw('users.username AS author_username'))
+            ->orderBy('plugins.last_updated', 'desc');
+    }
+
+    public function insertSaleInformation($plugins)
+    {
+        return $plugins->leftJoin('plugin_sale', function (JoinClause $join) {
+            $join->on('plugin_sale.plugin', '=', 'plugins.id')
+                ->whereRaw('CURRENT_TIMESTAMP() BETWEEN plugin_sale.start_date AND COALESCE(plugin_sale.end_date, (CURRENT_TIMESTAMP() + INTERVAL 1 SECOND))')
+                ->orderBy('plugin_sale.end_date', 'desc')
+                ->groupBy('plugin_sale.id')
+                ->limit(1);
+        })->addSelect(DB::raw('plugin_sale.percentage AS sale_percentage, plugin_sale.end_date AS sale_end_date, plugin_sale.start_date AS sale_start_date'))
+            ->groupBy('plugin_sale.id');
     }
 
     public function insertTotalDownloads($plugins)
@@ -136,7 +172,7 @@ class PluginsController
                 $join->on('plugins.id', '=', 'downloads.plugin');
             })
             ->addSelect(DB::raw('SUM(downloads.downloads) AS downloads'))
-            ->groupBy('plugins.id');
+            ->groupBy(DB::raw('plugins.id, plugins.last_updated'));
     }
 
     public function handlePluginSalesRetrieval(Request $request)
@@ -264,6 +300,28 @@ class PluginsController
     public function getIdFromUser(\App\Models\User $user, Request $request): mixed
     {
         return $user->role === "admin" ? $request->query('user', $user->id) : $user->id;
+    }
+
+    /**
+     * @param $response
+     * @return array|null
+     */
+    public function formatSaleSection($response): array|null
+    {
+        if ($response['sale_percentage'] != null) {
+            $response['sale'] = [
+                'percentage' => $response['sale_percentage'],
+                'start_date' => $response['sale_start_date'],
+                'end_date' => $response['sale_end_date']
+            ];
+        } else {
+            $response['sale'] = null;
+        }
+
+        unset($response['sale_percentage']);
+        unset($response['sale_start_date']);
+        unset($response['sale_end_date']);
+        return $response;
     }
 
 }
