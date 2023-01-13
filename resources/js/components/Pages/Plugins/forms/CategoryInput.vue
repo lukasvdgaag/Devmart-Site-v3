@@ -1,6 +1,6 @@
 <template>
     <div class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 w-full" multiple @click="$refs.catsInput.$el.focus()">
-        <div class="d-inline">
+        <div class="inline">
             <div v-for="category in categories" class="bg-primary rounded-md py-1 px-1.5 text-white uppercase w-fit h-6 inline-flex break-keep my-0.5 mr-1 items-center font-medium text-sm">
                 <span class="w-fit">{{category}}</span>
                 <font-awesome-icon @click="e => deleteCategory(e,category)" icon="fa-circle-xmark" class="h-full w-full ml-1 pointer"/>

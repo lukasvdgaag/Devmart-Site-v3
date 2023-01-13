@@ -5,27 +5,31 @@ module.exports = {
         "./resources/js/components/**/**/*.vue",
     ],
     theme: {
-        minWidth: {
-            1: '0.25rem',
-            2: '0.5rem',
-            3: '0.75rem',
-            4: '1rem',
-            5: '1.25rem',
-            6: '1.5rem',
-            7: '1.75rem',
-            8: '2rem',
-            9: '2.25rem',
-            10: '2.5rem',
-        },
-        fontFamily: {
-            'roboto': ['Roboto', 'Arial', 'sans-serif'],
-            'mono': ['monospace', 'Arial', 'sans-serif'],
-            'poppins': ['Poppins', 'Roboto', 'Arial', 'sans-serif'],
-            // 'sans': ['Nunito', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
-        },
-
         extend: {
-            extend: {},
+            width: {
+                '22': '5.5rem',
+            },
+            height: {
+                '22': '5.5rem',
+            },
+            fontFamily: {
+                'roboto': ['Roboto', 'Arial', 'sans-serif'],
+                'mono': ['monospace', 'Arial', 'sans-serif'],
+                'poppins': ['Poppins', 'Roboto', 'Arial', 'sans-serif'],
+                // 'sans': ['Nunito', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
+            },
+            minWidth: {
+                1: '0.25rem',
+                2: '0.5rem',
+                3: '0.75rem',
+                4: '1rem',
+                5: '1.25rem',
+                6: '1.5rem',
+                7: '1.75rem',
+                8: '2rem',
+                9: '2.25rem',
+                10: '2.5rem',
+            },
             colors: {
                 white: '#FFFFFF',
                 black: '#000000',

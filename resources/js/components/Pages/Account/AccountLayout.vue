@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-row">
-        <div class="w-full flex flex-col align-items-center m-0 p-0">
+        <div class="w-full flex flex-col items-center m-0 p-0">
             <Navbar :background="true"/>
 
-            <div class="d-grid d-grid-12 mb-6 mt-4">
+            <div class="d-grid mb-6 mt-4">
                 <AccountSidebar/>
 
-                <div class="content pt-2">
+                <div class="col-span-9 pt-2">
                     <AdminEditingWarning v-if="!loading && isAdmin" :username="user.username"/>
 
                     <router-view :userLoading="loading" :user="user" :isAdmin="isAdmin" :userId="userId"/>

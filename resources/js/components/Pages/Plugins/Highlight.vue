@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-6 col-span-12 lg:col-span-6 flex flex-row align-items-center">
+    <div class="mb-6 col-span-12 lg:col-span-6 flex flex-row items-center">
         <Icon :src="image"/>
         <div class="ml-4 flex flex-col justify-center content-center">
             <MutedText v-if="title" :margin-top="false">{{title}}</MutedText>

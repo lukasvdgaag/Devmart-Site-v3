@@ -1,5 +1,5 @@
 <template>
-    <Sidebar :left-side="false" class="mb-6 lg:mb-2">
+    <Sidebar :left-side="false" margin="true" class="mb-6 lg:mb-2">
         <StickyFooter :fixed="true" class="block lg:hidden">
             <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex flex-col gap-0 align-center">
                 <span>{{ downloadLabel }}</span>

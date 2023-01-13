@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100 flex flex-col align-items-center m-0 p-0">
+    <div class="w-full flex flex-col items-center m-0 p-0">
         <Navbar :background="true"/>
 
         <div class="h-screen w-full minus-header flex flex-col align-center gap-3">

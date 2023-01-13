@@ -2,9 +2,9 @@
     <Sidebar :margin="margin">
         <template v-for="item in links">
             <router-link :to="item.link" :key="item.id" v-if="item.renderRequirements" active-class="" exact-active-class=""
-                         class="py-3 px-4 my-2 lg:mr-3 rounded-lg flex flex-row align-items-center plain"
+                         class="py-3 px-4 my-2 lg:mr-3 rounded-lg flex flex-row items-center plain"
                          :class="{'sidebar-active': this.isActive(item)}">
-                <div v-if="item.icon" class="preview-link-icon flex justify-content-center">
+                <div v-if="item.icon" class="preview-link-icon flex justify-center">
                     <font-awesome-icon :icon="item.icon"/>
                 </div>
                 <div class="preview-link-title">{{ item.label }}</div>

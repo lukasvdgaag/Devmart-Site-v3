@@ -156,7 +156,7 @@
         </div>
 
         <StickyFooter>
-            <button class="primary w-50 p-2 mt-0"
+            <button class="primary w-full md:w-2/4 p-2 mt-0"
                     :disabled="loading"
                     type="submit">{{ loading ? "Updating..." : "Save Settings" }}
             </button>

@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row h-full">
-        <div class="w-full flex flex-col align-items-center m-0 p-0 h-full">
+        <div class="w-full flex flex-col items-center m-0 p-0 h-full">
             <Navbar :background="true"/>
             <AuthCard class="w-full">
                 <form method="post" @submit.prevent="login">
@@ -8,7 +8,7 @@
                        class="button primary flex flex-col align-center plain p-3">
                         <div class="flex flex-row gap-2">
                             <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
-                            <div class="size-18 bold">Log in with Discord</div>
+                            <div class="size-18 font-bold">Log in with Discord</div>
                         </div>
                     </a>
 
@@ -39,7 +39,7 @@
 
                     <ValidationError item="username" :errors="errors"/>
 
-                    <div class="flex flex-row mt-2 center justify-space-between">
+                    <div class="flex flex-row mt-2 center justify-between">
                         <div>
                             <label for="remember_me" class="inline-flex items-center h-full">
                                 <Input id="remember_me"

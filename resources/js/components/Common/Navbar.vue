@@ -1,7 +1,7 @@
 <template>
 
     <header :class="{'header-filled': this.background}" class="header-big d-grid">
-        <nav class="flex flex-row justify-space-between align-items-center">
+        <nav class="flex flex-row justify-between items-center">
             <router-link exact-active-class="lmWixQ" :to="{name: 'home'}" class="nav-side">
                 <Logo class="header-logo"/>
             </router-link>
@@ -20,21 +20,21 @@
                 <div v-if="this.user !== null" class="nav-action account-link pointer relative">Account
                     <div class="account-popup-container pt-1">
                         <div class="account-popup">
-                            <div class="size-14 bold account-popup-info cursor-default">
+                            <div class="size-14 font-bold account-popup-info cursor-default">
                                 Hi, {{ this.user.username }} 👋
                             </div>
-                            <div class="size-14 flex flex-row align-items-center justify-space-between account-popup-item">
-                                <label class="w-full pointer color-inherit" for="dark_mode">Dark Mode</label>
+                            <div class="size-14 flex flex-row items-center justify-between account-popup-item">
+                                <label class="w-full pointer text-inherit" for="dark_mode">Dark Mode</label>
                                 <div>
                                     <SwitchInput :small="true" :selected="this.user?.theme === 'dark-theme'"/>
                                 </div>
                             </div>
                             <router-link exact-active-class="lmWixQ" :to="{name: 'account'}"
-                                         class="flex flex-row plain align-items-center gap-2 account-link account-popup-item">
+                                         class="flex flex-row plain items-center gap-2 account-link account-popup-item">
                                 <font-awesome-icon icon="gear" class="icon"/>
                                 <span>Settings</span>
                             </router-link>
-                            <button class="flex flex-row plain align-items-center gap-2 logout-link border-radius-small-bottom account-popup-item"
+                            <button class="flex flex-row plain items-center gap-2 logout-link border-radius-small-bottom account-popup-item"
                                     type="submit"
                                     @click="this.logoutUser($event)">
                                 <font-awesome-icon icon="right-from-bracket" class="icon"/>

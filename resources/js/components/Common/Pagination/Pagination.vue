@@ -6,7 +6,7 @@
                     Previous
                 </PaginationItem>
             </div>
-            <div class="flex flex-row justify-content-end w-full">
+            <div class="flex flex-row justify-end w-full">
                 <PaginationItem v-if="currentPage+1 <= lastPage" @update="handleUpdate" :page="Math.min(lastPage, currentPage+1)">
                     Next
                 </PaginationItem>

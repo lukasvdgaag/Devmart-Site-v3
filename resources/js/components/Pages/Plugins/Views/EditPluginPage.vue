@@ -69,8 +69,43 @@
                         </FormRow>
 
                         <FormRow v-if="plugin.price > 0" label="Sale">
-                            <!-- TODO: insert sales here -->
-                            <button class="primary new-sale" type="button">New Sale</button>
+                            <button v-if="!plugin?.sale"
+                                    class="primary new-sale"
+                                    type="button"
+                                    @click="createNewSale()">New Sale
+                            </button>
+                            <div v-else>
+                                <div class="flex flex-row">
+                                    <div class="grid gap-0 md:gap-2 grid-cols-12 w-full">
+                                        <Input class="col-span-2 w-full rounded-r-none md:rounded-r-md"
+                                               v-model="plugin.sale.percentage"
+                                               type="number"
+                                               min="0"
+                                               max="100"
+                                               placeholder="%"
+                                               required/>
+                                        <Input class="col-span-5 w-full rounded-none md:rounded-md"
+                                               v-model="plugin.sale.start_date"
+                                               type="datetime-local"
+                                               placeholder="Start date"
+                                               required/>
+                                        <Input class="col-span-5 w-full rounded-l-none md:rounded-l-md"
+                                               v-model="plugin.sale.end_date"
+                                               type="datetime-local"
+                                               placeholder="End date"
+                                        />
+                                    </div>
+                                    <button class="text-lg h-12 w-12 flex align-center mt-0" type="button" @click.prevent="plugin.sale = null">
+                                        <font-awesome-icon icon="fa-circle-xmark" class="text-red-500 w-full h-full"/>
+                                    </button>
+                                </div>
+                                <MutedText>
+                                    This sale will result in the new total price being <span
+                                    class="font-bold">{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage), false) }}</span>
+                                    with {{ plugin.sale.percentage }}% off.<br>
+                                    <span class="italic">Leave the end date empty to make this sale last indefinitely. All dates are in CET.</span>
+                                </MutedText>
+                            </div>
                         </FormRow>
 
                         <FormRow v-if="plugin.price > 0" label="Custom">
@@ -84,10 +119,15 @@
                     </FormSection>
                     <FormSection>
                         <FormRow label="Supported Versions">
-                            <ul class="supported-versions">
-                                <li v-for="(selected, version) in minecraftVersions" :key="version">
-                                    <label>
-                                        <Input type="checkbox" @change="updateMinecraftVersion(version)" :checked="minecraftVersions[version]"/>
+                            <ul class="columns-2 md:columns-3 lg:columns-4 gap-x-4">
+                                <li v-for="(selected, version) in minecraftVersions"
+                                    :key="version"
+                                    class="list-none">
+                                    <label class="flex items-center mb-1">
+                                        <Input type="checkbox"
+                                               @change="updateMinecraftVersion(version)"
+                                               :checked="minecraftVersions[version]"
+                                        class="mr-2"/>
                                         {{ version }}
                                     </label>
                                 </li>
@@ -142,7 +182,7 @@
                     </FormSection>
 
                     <StickyFooter class="!mt-2">
-                        <button class="primary w-50 p-2 mt-0" type="submit">Save</button>
+                        <button class="primary w-full md:w-2/4 p-2 mt-0" type="submit">Save</button>
                     </StickyFooter>
                 </form>
             </div>
@@ -167,6 +207,11 @@ import StickyFooter from "@/components/Common/StickyFooter.vue";
 
 export default {
     name: "EditPluginPage",
+    computed: {
+        StringService() {
+            return StringService
+        }
+    },
     components: {StickyFooter, BBCodeEditor, SwitchInput, MutedText, FileInput, CategoryInput, Input, FormRow, FormSection, PluginPreview, Navbar},
 
     async created() {
@@ -182,6 +227,8 @@ export default {
 
         this.plugin = plugin;
         this.loadMinecraftVersions();
+        this.loadCategories();
+        this.loadSale();
         this.initialized = true;
     },
 
@@ -232,15 +279,33 @@ export default {
                 let v = `1.${i}`;
                 this.minecraftVersions[v] = versions.includes(v);
             }
-            console.log(this.minecraftVersions)
         },
         updateMinecraftVersion(version) {
             this.minecraftVersions[version] = !this.minecraftVersions[version];
-            console.log(this.minecraftVersions[version])
+        },
+        loadCategories() {
+            this.categories = this.plugin.categories.split(",");
+        },
+        loadSale() {
+            if (this.plugin.sale == null) return;
+
+            if (this.plugin.sale.start_date != null) {
+                this.plugin.sale.start_date = this.plugin.sale.start_date.substring(0, 16);
+            }
+            if (this.plugin.sale.end_date != null) {
+                this.plugin.sale.end_date = this.plugin.sale.end_date.substring(0, 16);
+            }
+        },
+        createNewSale() {
+            this.plugin.sale = {
+                start_date: '',
+                end_date: '',
+                percentage: '',
+            }
         },
         async savePlugin() {
             // TODO: Add logic for saving the plugin to the backend.
-        }
+        },
     }
 }
 </script>

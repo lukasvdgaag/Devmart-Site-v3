@@ -1,5 +1,5 @@
 <template>
-    <div class="wiki-quicklink grid-4 plain grid-half-small grid-full-smallest">
+    <div class="wiki-quicklink col-span-4 plain grid-half-small grid-full-smallest">
         <div class="flex flex-col justify-between w-full h-full">
             <template v-if="icon">
                 <div class="flex flex-col">
@@ -8,7 +8,7 @@
                     </div>
                     <MutedText>{{ label }}</MutedText>
                 </div>
-                <div class="flex flex-col align-content-center mt-2 mb-2 w-full bold size-24">
+                <div class="flex flex-col content-center mt-2 mb-2 w-full font-bold size-24">
                     <slot/>
                 </div>
             </template>

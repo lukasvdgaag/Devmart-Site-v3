@@ -123,7 +123,7 @@ export default class BBCodeParser {
                     <button type="button" class="spoiler-button" title="Click to hide or reveal the spoiler">
                         Spoiler: $1
                     </button>
-                    <div class="spoiler-content hide">$2</div>
+                    <div class="spoiler-content hidden">$2</div>
                 </div>`,
             content: '$2',
         },
@@ -133,7 +133,7 @@ export default class BBCodeParser {
                         <button type="button" class= "spoiler-button" title="Click to hide or reveal the spoiler">
                             Spoiler
                         </button>
-                        <div class="spoiler-content hide">$1</div>
+                        <div class="spoiler-content hidden">$1</div>
                     </div>`,
             content: '$1',
         },

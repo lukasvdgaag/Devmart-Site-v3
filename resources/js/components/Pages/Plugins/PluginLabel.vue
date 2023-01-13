@@ -1,5 +1,5 @@
 <template>
-    <div class="plugin-preview-label flex flex-row align-items-center">
+    <div class="plugin-preview-label flex flex-row items-center">
         <font-awesome-icon v-if="icon" :icon="icon" class="preview-label-icon"/>
         <span class="preview-label-text">{{ label}}</span>
     </div>

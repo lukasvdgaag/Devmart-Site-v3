@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-row h-full">
-        <div class="w-full flex flex-col align-items-center m-0 p-0 h-full">
+        <div class="w-full flex flex-col items-center m-0 p-0 h-full">
             <Navbar :background="true"/>
             <div class="flex flex-row h-full w-full justify-center items-center minus-header">
-                <div class="d-grid d-grid-12 mb-6 h-full">
-                    <div class="grid-6 flex flex-col align-center grid-full-small">
+                <div class="d-grid mb-6 h-full">
+                    <div class="col-span-6 flex flex-col align-center grid-full-small">
                         <div class="w-full sm:max-w-md pb-3">
                             <h1 class="mb-6 text-center">Create An Account.</h1>
 
@@ -12,7 +12,7 @@
                                          class="button primary flex flex-col align-center plain p-3">
                                 <div class="flex flex-row gap-2">
                                     <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
-                                    <div class="size-18 bold">Sign up with Discord</div>
+                                    <div class="size-18 font-bold">Sign up with Discord</div>
                                 </div>
                             </router-link>
 
@@ -123,7 +123,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="grid-6 flex flex-col hide-small align-center">
+                    <div class="col-span-6 flex flex-col hide-small align-center">
                         <register-svg class="w-full"/>
                     </div>
                 </div>

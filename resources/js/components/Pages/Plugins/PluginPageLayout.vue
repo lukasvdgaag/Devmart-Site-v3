@@ -3,18 +3,24 @@
         <Navbar :background="!plugin"/>
 
         <template v-if="plugin">
-            <div class="header-background"></div>
-            <div class="banner-container d-grid">
-                <img :src="plugin.banner_url  ?? 'https://www.gcnt.net/inc/img/default-plugin-banner.jpg'" alt="Banner"/>
+            <div class="absolute top-0 w-full min-h-[178px] lg:h-[320px] bg-primary max-h-[320px]"></div>
+            <div class="mt-10 w-full d-grid z-10">
+                <img :src="plugin.banner_url  ?? 'https://www.gcnt.net/inc/img/default-plugin-banner.jpg'"
+                     alt="Banner"
+                     class="bg-gray-75 col-span-12 w-full h-[218px] lg:h-[400px] object-cover rounded-2xl"
+                />
             </div>
 
             <div class="flex flex-col items-center">
-                <div class="icon-container d-grid hide-small">
-                    <img :src="plugin.logo_url" alt="Resource Icon">
+                <div class="mt-[-28px] lg:mt-[-52px] z-10 d-grid hide-small">
+                    <img :src="plugin.logo_url"
+                         alt="Resource Icon"
+                        class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white"
+                    >
                 </div>
 
-                <div class="plugin-content d-grid d-grid-12 mt-2 mt-4-small">
-                    <div class="content content-left-margin flex">
+                <div class="plugin-content d-grid mt-2 mt-4-small">
+                    <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
                             <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
                                 <img class="resource-icon hide-big" :src="plugin.logo_url" alt="Resource Icon">

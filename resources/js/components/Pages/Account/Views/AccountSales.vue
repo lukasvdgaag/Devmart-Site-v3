@@ -2,7 +2,7 @@
     <h1>Sales</h1>
     <hr>
 
-    <div class="grid d-grid-12 h-unset mt-2 gap-4">
+    <div class="grid col-span-12 h-unset mt-2 gap-4">
         <QuickLink icon="fa-sack-dollar" label="Total Sales">
             {{ totalSales }}
         </QuickLink>
@@ -10,16 +10,16 @@
                    label="Sales Last 30 Days"
                    class="md:row-start-2">
             <div>{{ total30Days }}</div>
-            <div class="up size-14 flex flex-row gap-1 align-items-end mt-1">
+            <div class="up size-14 flex flex-row gap-1 items-end mt-1">
                 <GraphIcon :percentage="difference30Days"/>
                 <div :class="[difference30Days >= 0 ? 'text-green-400' : 'text-red-400']">{{ difference30Days }}%</div>
                 <div class=" muted">from last month</div>
             </div>
         </QuickLink>
         <QuickLink label="Earnings This Week" class="md:row-span-2 lg:col-span-8 h-full">
-            <div class="flex align-content-center mt-2 mb-2 bold size-24 flex-row gap-2">
+            <div class="flex content-center mt-2 mb-2 font-bold size-24 flex-row gap-2">
                 <div>{{ totalWeek }}</div>
-                <div class="mt-1 ml-1 up size-14 flex flex-row gap-1 align-items-end justify-content-center">
+                <div class="mt-1 ml-1 up size-14 flex flex-row gap-1 items-end justify-center">
                     <GraphIcon :percentage="differenceLastWeek"/>
                     <div :class="[differenceLastWeek >= 0 ? 'text-green-400' : 'text-red-400']">{{ differenceLastWeek }}%</div>
                     <div class="muted">from previous week</div>
