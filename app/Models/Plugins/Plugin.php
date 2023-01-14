@@ -7,6 +7,7 @@ use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Plugin extends Model
 {
@@ -30,6 +31,7 @@ class Plugin extends Model
         'dependencies',
         'categories',
         'spigot_link',
+        'github_link',
         'donation_url',
         'minecraft_versions',
         'last_updated',
@@ -80,6 +82,7 @@ class Plugin extends Model
     public function getSales(): BelongsTo
     {
         return $this->belongsTo(PluginSale::class, 'id', 'plugin')
+            ->whereRaw('ISNULL(end_date) OR end_date >= CURRENT_TIMESTAMP()')
             ->orderBy('end_date', 'desc');
     }
 

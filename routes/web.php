@@ -43,6 +43,8 @@ Route::prefix('api')->group(function () {
 
             Route::get("/{pluginId}", [PluginsController::class, 'handlePluginRetrieval'])
                 ->withoutMiddleware('auth:sanctum');
+            Route::put('/{pluginId}', [PluginsController::class, 'handlePluginEdit']);
+            Route::get('/{pluginId}/sales', [PluginsController::class, 'handlePluginUpcomingSalesRetrieval']);
             Route::get("/{pluginId}/permissions", [PluginsController::class, 'handlePluginPermissionsRetrieval'])
                 ->withoutMiddleware('auth:sanctum');
         });

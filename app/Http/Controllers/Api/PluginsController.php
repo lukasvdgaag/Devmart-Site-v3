@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plugins\Plugin;
+use App\Models\Plugins\PluginSale;
 use App\Models\User;
 use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,13 +15,108 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class PluginsController
 {
 
+    public function handlePluginEdit(Request $request, string|int $pluginId)
+    {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @var Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+        if (!$plugin->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'description' => 'required|string|max:150',
+            'custom' => 'required|boolean',
+            'minecraft_versions' => 'required|array',
+            'price' => 'required|numeric|min:0',
+            'features' => 'required|string',
+            'dependencies' => 'nullable|string|max:255',
+            'spigot_link' => 'int|min:1',
+            'github_link' => 'nullable|string|max:100',
+            'donation_url' => 'nullable|url|max:255',
+            'sale' => 'array|nullable',
+        ]);
+
+        // Getting all necessary data from the request
+        // to convert it into the right format for the database.
+        // and save the plugin.
+        $json = $request->only(['title', 'description', 'custom', 'minecraft_versions', 'dependencies', 'price', 'features', 'spigot_link', 'github_link', 'donation_url', 'sale']);
+        if ($json['github_link'] && str_starts_with($json['github_link'], '/')) {
+            $json['github_link'] = substr($json['github_link'], 1);
+        }
+
+        if (!$json['dependencies']) $json['dependencies'] = "";
+        if (!$json['donation_url']) $json['donation_url'] = "https://www.devmart.net/donate";
+
+        $mcVersions = array();
+        foreach ($json['minecraft_versions'] as $key => $value) {
+            if (preg_match("/^\d+\.\d+$/", $key) && $value === true) {
+                $mcVersions[] = $key;
+            }
+        }
+        $json['minecraft_versions'] = implode(", ", $mcVersions);
+
+        $plugin->fill($json);
+        $plugin->save();
+
+        $sale = $plugin->getSales()->limit(1)->first();
+
+        if ($json['sale']) {
+            Validator::validate($json['sale'], [
+                'percentage' => 'required|numeric|min:0|max:100',
+                'start_date' => 'required|date',
+                'end_date' => 'nullable|date|after:start_date',
+            ]);
+
+            $startDate = Carbon::parse($json['sale']['start_date']);
+            $endDate = $json['sale']['end_date'] ? Carbon::parse($json['sale']['end_date']) : null;
+
+            if (!$sale) $sale = new PluginSale();
+
+            $sale->fill([
+                'plugin' => $plugin->id,
+                'percentage' => $json['sale']['percentage'],
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ]);
+            $sale->save();
+        } else {
+            $sale?->delete();
+        }
+
+        return response([]);
+    }
+
+    public function handlePluginUpcomingSalesRetrieval(Request $request, string|int $pluginId) {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        if (!$plugin['plugin']->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        return response()->json($plugin['plugin']->getSales()->get());
+    }
+
     public function handlePluginRetrieval(Request $request, string|int $pluginId)
     {
-        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true, true, true, true);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
 
@@ -39,7 +135,7 @@ class PluginsController
 
     public function handlePluginPermissionsRetrieval(Request $request, string|int $pluginId)
     {
-        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
 
@@ -58,14 +154,23 @@ class PluginsController
      * @param bool $withExtraFields
      * @return \Illuminate\Http\JsonResponse|array
      */
-    private function getPluginOrRespond(Request $request, string|int $pluginId, bool $withExtraFields = false)
+    private function getPluginOrRespond(Request    $request,
+                                        string|int $pluginId,
+                                        bool       $includeAllFields = true,
+                                        bool       $withAuthorField = false,
+                                        bool       $withTotalDownloadsField = false,
+                                        bool       $withSaleField = false)
     {
-        $query = Plugin::query()->select('plugins.*')->where('plugins.id', '=', $pluginId);
-        if ($withExtraFields) {
-            $query = $this->insertAuthorUsername($query);
-            $query = $this->insertTotalDownloads($query);
-            $query = $this->insertSaleInformation($query);
+        $query = Plugin::query()->where('plugins.id', '=', $pluginId);
+        if ($includeAllFields) {
+            $query = $query->select('plugins.*');
+        } else {
+            $query = $query->select('plugins.id', 'plugins.name', 'plugins.author');
         }
+
+        if ($withAuthorField) $query = $this->insertAuthorUsername($query);
+        if ($withTotalDownloadsField) $query = $this->insertTotalDownloads($query);
+        if ($withSaleField) $query = $this->insertSaleInformation($query);
 
         $plugin = $query->first();
         if ($plugin == null) {

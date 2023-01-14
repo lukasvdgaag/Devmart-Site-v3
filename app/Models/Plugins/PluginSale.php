@@ -12,6 +12,13 @@ class PluginSale extends Model
     protected $table = 'plugin_sale';
     public $timestamps = false;
 
+    protected $fillable = [
+        'plugin',
+        'percentage',
+        'start_date',
+        'end_date',
+    ];
+
     protected $casts = [
         'plugin' => 'int',
         'start_date' => 'datetime',
