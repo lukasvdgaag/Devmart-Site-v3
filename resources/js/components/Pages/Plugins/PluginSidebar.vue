@@ -47,23 +47,23 @@
 
         <PluginSidebarHeader class="mt-8 mb-2">Links</PluginSidebarHeader>
         <div class="flex flex-wrap gap-2">
-            <router-link v-if="plugin.spigot_link && plugin.spigot_link.toString().length > 0"
-                         :to="`https://www.spigotmc.org/resources/${plugin.spigot_link}`"
+            <a v-if="plugin.spigot_link && plugin.spigot_link.toString().length > 0"
+                         :href="`https://www.spigotmc.org/resources/${plugin.spigot_link}`"
                          target="_blank"
                          title="View this resource on SpigotMC">
                 <Icon src="/assets/img/spigot.png"/>
-            </router-link>
-            <router-link v-if="plugin.github_link && plugin.github_link.length > 0"
-                         :to="`https://github.com/${plugin.github_link}`"
+            </a>
+            <a v-if="plugin.github_link && plugin.github_link.length > 0"
+                         :href="`https://github.com/${plugin.github_link}`"
                          target="_blank"
                          title="View the source of this resource on GitHub">
                 <Icon src="/assets/img/github.svg"/>
-            </router-link>
-            <router-link :to="plugin.donation_url ?? 'https://www.gcnt.net/donate'"
+            </a>
+            <a :href="plugin.donation_url ?? 'https://www.gcnt.net/donate'"
                          target="_blank"
                          title="Support the author by donating">
                 <Icon src="/assets/img/paypal.png"/>
-            </router-link>
+            </a>
         </div>
 
     </Sidebar>

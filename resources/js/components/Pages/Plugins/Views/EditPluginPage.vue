@@ -127,7 +127,7 @@
                                         <Input type="checkbox"
                                                @change="updateMinecraftVersion(version)"
                                                :checked="minecraftVersions[version]"
-                                        class="mr-2"/>
+                                               class="mr-2"/>
                                         {{ version }}
                                     </label>
                                 </li>
@@ -286,8 +286,11 @@ export default {
         loadCategories() {
             this.categories = this.plugin.categories.split(",");
         },
-        loadSale() {
-            if (this.plugin.sale == null) return;
+        async loadSale() {
+            let res = await PluginRepository.fetchUpcomingSales(this.pluginId);
+
+            if (!res.data[0]) return;
+            this.plugin.sale = res.data[0];
 
             if (this.plugin.sale.start_date != null) {
                 this.plugin.sale.start_date = this.plugin.sale.start_date.substring(0, 16);
@@ -304,7 +307,19 @@ export default {
             }
         },
         async savePlugin() {
+            console.log("saving plugin")
+
+            this.plugin.minecraft_versions = this.minecraftVersions;
+
+
             // TODO: Add logic for saving the plugin to the backend.
+            console.log(this.plugin);
+            try {
+                await PluginRepository.editPlugin(this.pluginId, this.plugin);
+                this.$router.push({name: "plugin-overview", params: {pluginId: this.pluginId}});
+            } catch (e) {
+                console.error(e);
+            }
         },
     }
 }

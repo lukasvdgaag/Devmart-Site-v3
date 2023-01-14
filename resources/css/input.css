@@ -107,10 +107,6 @@ h1, h2, h3, h4, h5 {
     color: var(--text-header);
 }
 
-.grid {
-    gap: 0 10px;
-}
-
 .header-background.relative {
     position: relative;
     top: -80px;
@@ -865,16 +861,6 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
 .border-radius-small-bottom {
     border-bottom-right-radius: 8px;
     border-bottom-left-radius: 8px;
-}
-
-.form-section .form-row:not(.hidden):first-child dt, .border-radius-top {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
-
-.form-section .form-row:last-child dt, .border-radius-bottom {
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
 }
 
 .border-none {

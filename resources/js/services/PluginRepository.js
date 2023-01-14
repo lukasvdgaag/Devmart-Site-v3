@@ -90,7 +90,20 @@ export default {
      */
     async fetchPluginPermissions(pluginId) {
         return await client.get(`/${pluginId}/permissions`);
-    }
+    },
 
+    async fetchUpcomingSales(pluginId) {
+        return await client.get(`/${pluginId}/sales`);
+    },
+
+    /**
+     * Edit the plugin information.
+     * @param {string|number} id
+     * @param {Object} data
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    async editPlugin(id, data) {
+        return await client.put(`/${id}`, data);
+    }
 
 }
