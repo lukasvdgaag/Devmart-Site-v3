@@ -29,8 +29,8 @@ class Plugin extends Migration
             $table->dateTime('last_updated')->nullable(false);
             $table->integer('author')->unsigned()->nullable(false);
             $table->decimal('price', 4)->default(0);
-            $table->string('logo_url')->default('https://www.gcnt.net/inc/img/default-plugin-image.png');
-            $table->string("banner_url")->default('https://www.gcnt.net/inc/img/default-plugin-banner.jpg');
+            $table->string('logo_url')->nullable()->default(null);
+            $table->string("banner_url")->nullable()->default(null);
             $table->string('donation_url')->default('https://www.gcnt.net/donate');
 
             $table->foreign('author')->references('id')->on('users')->onDelete('no action')->onUpdate('cascade');
