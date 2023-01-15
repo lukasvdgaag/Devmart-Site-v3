@@ -53,7 +53,8 @@ class PluginsController
         // Getting all necessary data from the request
         // to convert it into the right format for the database.
         // and save the plugin.
-        $json = $request->only(['title', 'description', 'custom', 'minecraft_versions', 'dependencies', 'price', 'features', 'spigot_link', 'github_link', 'donation_url', 'sale']);
+        $json = $request->only(['title', 'description', 'custom', 'minecraft_versions', 'dependencies', 'price', 'features',
+            'spigot_link', 'github_link', 'donation_url', 'sale', 'logo_url', 'banner_url']);
         if ($json['github_link'] && str_starts_with($json['github_link'], '/')) {
             $json['github_link'] = substr($json['github_link'], 1);
         }
@@ -68,6 +69,26 @@ class PluginsController
             }
         }
         $json['minecraft_versions'] = implode(", ", $mcVersions);
+
+        if ($json['logo_url']) {
+            // uploading the new logo when it's not the default/old one.
+            if (filter_var($json['logo_url'], FILTER_VALIDATE_URL) === false) {
+                $logoUrl = Controller::saveBase64File($json['logo_url'], '/img/plugins/');
+                $json['logo_url'] = "/plugins/" . $logoUrl;
+            }
+        } else {
+            unset($json['logo_url']);
+        }
+
+        if ($json['banner_url']) {
+            // uploading the new logo when it's not the default/old one.
+            if (filter_var($json['banner_url'], FILTER_VALIDATE_URL) === false) {
+                $logoUrl = Controller::saveBase64File($json['banner_url'], '/img/plugins/');
+                $json['banner_url'] = "/plugins/" . $logoUrl;
+            }
+        } else {
+            unset($json['banner_url']);
+        }
 
         $plugin->fill($json);
         $plugin->save();

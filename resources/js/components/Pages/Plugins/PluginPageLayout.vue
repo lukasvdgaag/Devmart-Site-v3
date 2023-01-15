@@ -5,7 +5,7 @@
         <template v-if="plugin">
             <div class="absolute top-0 w-full min-h-[178px] lg:h-[320px] bg-primary max-h-[320px]"></div>
             <div class="mt-10 w-full d-grid z-10">
-                <img :src="plugin.banner_url  ?? 'https://www.gcnt.net/inc/img/default-plugin-banner.jpg'"
+                <img :src="bannerUrl"
                      alt="Banner"
                      class="bg-gray-75 col-span-12 w-full h-[218px] lg:h-[400px] object-cover rounded-2xl"
                 />
@@ -13,7 +13,7 @@
 
             <div class="flex flex-col items-center">
                 <div class="mt-[-28px] lg:mt-[-52px] z-10 d-grid hide-small">
-                    <img :src="plugin.logo_url"
+                    <img :src="`/assets/img/${this.plugin.logo_url}`"
                          alt="Resource Icon"
                         class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white"
                     >
@@ -95,6 +95,12 @@ export default {
         },
         formattedLastUpdated() {
             return DateService.formatDateRelatively(new Date(this.plugin.last_updated), true);
+        },
+        bannerUrl() {
+            if (this.plugin.banner_url) {
+                return `/assets/img/${this.plugin.banner_url}`;
+            }
+            return '/assets/img/default-plugin-banner.png'
         }
     },
 

@@ -42,12 +42,12 @@
 
                     <FormSection>
                         <FormRow label="Banner Image">
-                            <img :src="plugin.banner_url" alt="Banner image" class="plugin-preview-banner"/>
+                            <img :src="bannerUrl" alt="Banner image" class="plugin-preview-banner"/>
 
                             <FileInput @upload="updateBannerPreview" accept=".jpg,.jpeg,.png,.webp,.svg,.avif"/>
                         </FormRow>
                         <FormRow label="Logo Image">
-                            <img :src="plugin.logo_url" alt="Logo image" class="icon huge rounded-xl"/>
+                            <img :src="iconUrl" alt="Logo image" class="icon huge rounded-xl"/>
 
                             <FileInput @upload="updateLogoPreview" accept=".jpg,.jpeg,.png,.webp,.svg,.avif"/>
                         </FormRow>
@@ -204,13 +204,36 @@ import MutedText from "@/components/Common/MutedText.vue";
 import SwitchInput from "@/components/Common/SwitchInput.vue";
 import BBCodeEditor from "@/components/Common/BBCodeEditor.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
+import UploadService from "@/services/UploadService";
 
 export default {
     name: "EditPluginPage",
     computed: {
         StringService() {
             return StringService
-        }
+        },
+        bannerUrl() {
+            if (!this.plugin.banner_url) {
+                return '/assets/img/default-plugin-banner.png';
+            }
+
+            if (this.plugin.banner_url.startsWith('data:')) {
+                return this.plugin.banner_url;
+            } else {
+                return `/assets/img/${this.plugin.banner_url}`;
+            }
+        },
+        iconUrl() {
+            if (!this.plugin.logo_url) {
+                return 'img/logo.png';
+            }
+
+            if (this.plugin.logo_url.startsWith('data:')) {
+                return this.plugin.logo_url;
+            } else {
+                return `/assets/img/${this.plugin.logo_url}`;
+            }
+        },
     },
     components: {StickyFooter, BBCodeEditor, SwitchInput, MutedText, FileInput, CategoryInput, Input, FormRow, FormSection, PluginPreview, Navbar},
 
@@ -266,12 +289,16 @@ export default {
             }
         },
         async updateBannerPreview(file) {
+            let base64 = await UploadService.resizeImage(await StringService.getBase64(file), 1180, 664);
+
             this.plugin.banner_url = file == null ? "https://www.gcnt.net/inc/img/default-plugin-banner.jpg" :
-                await StringService.getBase64(file);
+                base64;
         },
         async updateLogoPreview(file) {
+            let base64 = await UploadService.resizeImage(await StringService.getBase64(file), 96, 96);
+
             this.plugin.logo_url = file == null ? "https://www.gcnt.net/inc/img/default-plugin-image.png" :
-                await StringService.getBase64(file);
+                base64;
         },
         loadMinecraftVersions() {
             const versions = this.plugin.minecraft_versions.split(", ");
@@ -307,13 +334,10 @@ export default {
             }
         },
         async savePlugin() {
-            console.log("saving plugin")
-
             this.plugin.minecraft_versions = this.minecraftVersions;
 
-
-            // TODO: Add logic for saving the plugin to the backend.
             console.log(this.plugin);
+
             try {
                 await PluginRepository.editPlugin(this.pluginId, this.plugin);
                 this.$router.push({name: "plugin-overview", params: {pluginId: this.pluginId}});

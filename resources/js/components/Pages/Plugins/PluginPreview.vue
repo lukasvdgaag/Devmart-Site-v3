@@ -1,15 +1,15 @@
 <template>
     <router-link :to="{name: 'plugin-overview', params: {pluginId: plugin.id}}" class="plain">
         <div class="gap-x-4 w-full col-gap-4 flex flex-row">
-            <img :src="plugin.banner_url ?? 'https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048'"
+            <img :src="bannerUrl"
                  alt="Banner image"
                  class="plugin-preview-banner hide-small">
-            <img :src="plugin.logo_url"
+            <img :src="iconUrl"
                  alt="Logo image"
                  class="resource-icon hide-big">
             <div class="h-full lg:min-h-[9rem] flex flex-col">
                 <div class="flex flex-row items-center">
-                    <img :src="plugin.logo_url ?? 'img/logo.png'" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
+                    <img :src="iconUrl" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
                     <h2 class="text-base font-bold break-words">{{ plugin.title }}</h2>
                 </div>
                 <div class="text-sm mt-1">{{ plugin.description }}</div>
@@ -49,7 +49,29 @@ export default {
         },
         formattedDate(){
             return DateService.formatDateRelatively(new Date(this.plugin.last_updated), true);
-        }
+        },
+        bannerUrl() {
+            if (!this.plugin.banner_url) {
+                return '/assets/img/default-plugin-banner.png';
+            }
+
+            if (this.plugin.banner_url.startsWith('data:')) {
+                return this.plugin.banner_url;
+            } else {
+                return `/assets/img/${this.plugin.banner_url}`;
+            }
+        },
+        iconUrl() {
+            if (!this.plugin.logo_url) {
+                return 'img/logo.png';
+            }
+
+            if (this.plugin.logo_url.startsWith('data:')) {
+                return this.plugin.logo_url;
+            } else {
+                return `/assets/img/${this.plugin.logo_url}`;
+            }
+        },
     },
 
     props: {
