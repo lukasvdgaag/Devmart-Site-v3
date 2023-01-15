@@ -8,7 +8,8 @@
         <BBCode v-if="showParsed" :source="parsedBBCode()" class="bbcode-preview"/>
         <Input v-else
                :is-textarea="true"
-               v-model="modelValue"
+               :value="modelValue"
+               @input="$emit('update:modelValue', $event.target.value)"
                class="bbcode-editor"
                :required="required"
                :placeholder="placeholder"/>

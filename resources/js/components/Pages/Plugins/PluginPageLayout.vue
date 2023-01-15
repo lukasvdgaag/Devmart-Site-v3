@@ -11,7 +11,7 @@
                 />
             </div>
 
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center w-full">
                 <div class="mt-[-28px] lg:mt-[-52px] z-10 d-grid hide-small">
                     <img :src="`/assets/img/${this.plugin.logo_url}`"
                          alt="Resource Icon"
@@ -23,7 +23,7 @@
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
                             <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
-                                <img class="resource-icon hide-big" :src="plugin.logo_url" alt="Resource Icon">
+                                <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
                                         <h1 class="plugin-header">{{ plugin.title }}</h1>

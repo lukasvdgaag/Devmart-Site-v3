@@ -1,6 +1,7 @@
 <template>
     <textarea v-if="isTextarea"
-              v-model="modelValue"
+              :value="modelValue"
+              @input="$emit('update:modelValue', $event.target.value)"
               class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full"
               :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
