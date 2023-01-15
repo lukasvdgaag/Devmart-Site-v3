@@ -5,7 +5,7 @@
                :id="id"
                @change="this.$emit('update:modelValue', $event.target.checked)"
                :value="modelValue"
-               :selected="selected">
+               :checked="checked">
         <span class="slider"></span>
     </label>
 </template>
@@ -18,7 +18,7 @@ export default {
             type: Boolean,
             default: false,
         },
-        selected: {
+        checked: {
             type: Boolean,
             default: false,
         },
