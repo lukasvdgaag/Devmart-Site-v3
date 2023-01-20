@@ -22,13 +22,13 @@
                 <div class="plugin-content d-grid mt-2 mt-4-small">
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
-                            <div class="mb-3 flex gap-1 flex-wrap">
-                                <div class="uppercase font-bold bg-red-500 px-2 py-1 text-white w-fit flex flex-col rounded">{{Number.parseInt(plugin.sale.percentage, 0)}}% sale</div>
-                                <div class="bg-red-500 px-2 py-1 text-white w-fit rounded">
-                                    Get now for only <span>{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage),false) }}</span>
+                            <div v-if="plugin?.sale" class="mb-3 flex gap-1 flex-wrap">
+                                <PluginSalePart class="uppercase font-bold">{{ Number.parseInt(plugin.sale.percentage, 0) }}% sale</PluginSalePart>
+                                <PluginSalePart>
+                                    New price: <span>{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage), false) }}</span>
                                     <span class="strikethrough ml-2 text-xs">{{ StringService.formatMoney(this.plugin.price, false) }}</span>
-                                </div>
-                                <div class="bg-red-500 px-2 py-1 text-white w-fit rounded">4 days left</div> <!-- TODO: Add relative date for sale -->
+                                </PluginSalePart>
+                                <PluginSalePart v-if="saleTimeLeft">{{ saleTimeLeft }}</PluginSalePart>
                             </div>
                             <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
                                 <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
@@ -39,7 +39,7 @@
                                     </router-link>
 
                                     <Stats class="pb-2">
-<!--                                        <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`" class="mr-2"/>-->
+                                        <!--                                        <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`" class="mr-2"/>-->
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
                                     </Stats>
@@ -86,16 +86,23 @@ import PluginSidebar from "@/components/Pages/Plugins/PluginSidebar.vue";
 import StringService from "@/services/StringService";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Alert from "@/components/Common/Alert.vue";
+import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
 
 export default {
     name: "PluginOverviewPage",
-    components: {Alert, PluginLabel, PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
+    components: {PluginSalePart, Alert, PluginLabel, PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
 
     async created() {
         await Promise.all([
             this.fetchPluginData(),
             this.fetchPermissions(),
         ]);
+    },
+
+    beforeMount() {
+        setInterval(() => {
+            this.saleTimeLeft = this?.plugin?.sale?.end_date ? DateService.formatTimeLeft(new Date(this.plugin.sale?.end_date)) : null;
+        }, 1000);
     },
 
     computed: {
@@ -119,13 +126,14 @@ export default {
                 return `/assets/img/${this.plugin.banner_url}`;
             }
             return '/assets/img/default-plugin-banner.png'
-        }
+        },
     },
 
     data() {
         return {
             plugin: null,
             permissions: null,
+            saleTimeLeft: null,
         }
     },
 

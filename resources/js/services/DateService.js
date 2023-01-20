@@ -48,6 +48,28 @@ export default {
         return new Intl.DateTimeFormat('en-US', {month: 'long', day: 'numeric'}).format(date);
     },
 
+    formatTimeLeft(date) {
+        const now = new Date();
+        const daysLeft = this.diffInDays(date, now);
+
+        // show in hh:mm:ss format
+        const diff = Math.abs(date.getTime() - now.getTime());
+        const days = Math.floor(diff / (1000 * 3600 * 24));
+        const hours = Math.floor((diff % (1000 * 3600 * 24)) / (1000 * 3600));
+        const minutes = Math.floor((diff % (1000 * 3600)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        if (days > 0) {
+            return `${days}d ${hours}h ${minutes}m ${seconds}s left`;
+        } else if (hours > 0) {
+            return `${hours}h ${minutes}m ${seconds}s left`;
+        } else if (minutes > 0) {
+            return `${minutes}m ${seconds}s left`;
+        } else {
+            return `${seconds}s left`;
+        }
+    },
+
     /**
      * @param {Date} date
      * @param {boolean} withTime
