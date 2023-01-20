@@ -18,7 +18,7 @@ export default class BBCodeParser {
         },
         'linethrough': {
             pattern: /\[s](.*?)\[\/s]/s,
-            replace: '<span class="strikethrough">$1</span>',
+            replace: '<span class="line-through">$1</span>',
             content: '$1',
         },
         'size-header-3': {

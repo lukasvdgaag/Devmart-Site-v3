@@ -26,7 +26,7 @@
                                 <PluginSalePart class="uppercase font-bold">{{ Number.parseInt(plugin.sale.percentage, 0) }}% sale</PluginSalePart>
                                 <PluginSalePart>
                                     New price: <span>{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage), false) }}</span>
-                                    <span class="strikethrough ml-2 text-xs">{{ StringService.formatMoney(this.plugin.price, false) }}</span>
+                                    <span class="line-through ml-2 text-xs">{{ StringService.formatMoney(this.plugin.price, false) }}</span>
                                 </PluginSalePart>
                                 <PluginSalePart v-if="saleTimeLeft">{{ saleTimeLeft }}</PluginSalePart>
                             </div>

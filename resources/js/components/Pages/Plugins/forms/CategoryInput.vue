@@ -59,11 +59,11 @@ export default {
             this.$emit('update:modelValue', this.categories);
         },
         addCategory(e) {
-            if (this.categories.length >= this.maxCategories) return;
-
             e.preventDefault();
             const value = this.currentCategory.trim();
+            console.log("adding category", value);
             if (value.length !== 0 && !this.categories.includes(value)) {
+                console.log('updated')
                 this.categories.push(value);
                 this.currentCategory = "";
                 this.$emit('update:modelValue', this.categories);

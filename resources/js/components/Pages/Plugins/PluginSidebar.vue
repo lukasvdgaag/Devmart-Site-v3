@@ -1,5 +1,5 @@
 <template>
-    <Sidebar :left-side="false" margin="true" class="mb-6 lg:mb-2">
+    <Sidebar :left-side="false" :margin="true" class="mb-6 lg:mb-2">
         <StickyFooter :fixed="true" class="block lg:hidden">
             <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex flex-col gap-0 align-center">
                 <span>{{ downloadLabel }}</span>
@@ -30,12 +30,18 @@
 
         <hr class="hidden lg:block"/>
 
+        <div v-if="plugin?.sale" class="flex mb-4 mt-[-0.5rem] gap-1 flex-wrap">
+            <PluginLabel :label="`${Number.parseInt(plugin?.sale?.percentage, 0)}% Sale`" :background="`bg-red-400`"/>
+        </div>
         <PluginSidebarHeader class="mt-2">Author</PluginSidebarHeader>
         <div>{{ plugin.author_username }}</div>
 
-        <template v-if="plugin.price > 0">
+        <template v-if="plugin?.price > 0">
             <PluginSidebarHeader class="mt-2">Price</PluginSidebarHeader>
-            <div>{{ StringService.formatMoney(plugin.price, false) }}</div>
+            <div>
+                {{ StringService.formatMoney(price, false) }}
+                <span v-if="plugin?.sale" class="ml-1 text-red-400 line-through">{{ StringService.formatMoney(plugin.price, false) }}</span>
+            </div>
         </template>
 
         <template v-if="categories.length > 0">
@@ -48,20 +54,20 @@
         <PluginSidebarHeader class="mt-8 mb-2">Links</PluginSidebarHeader>
         <div class="flex flex-wrap gap-2">
             <a v-if="plugin.spigot_link && plugin.spigot_link.toString().length > 0"
-                         :href="`https://www.spigotmc.org/resources/${plugin.spigot_link}`"
-                         target="_blank"
-                         title="View this resource on SpigotMC">
+               :href="`https://www.spigotmc.org/resources/${plugin.spigot_link}`"
+               target="_blank"
+               title="View this resource on SpigotMC">
                 <Icon src="/assets/img/spigot.png"/>
             </a>
             <a v-if="plugin.github_link && plugin.github_link.length > 0"
-                         :href="`https://github.com/${plugin.github_link}`"
-                         target="_blank"
-                         title="View the source of this resource on GitHub">
+               :href="`https://github.com/${plugin.github_link}`"
+               target="_blank"
+               title="View the source of this resource on GitHub">
                 <Icon src="/assets/img/github.svg"/>
             </a>
             <a :href="plugin.donation_url ?? 'https://www.gcnt.net/donate'"
-                         target="_blank"
-                         title="Support the author by donating">
+               target="_blank"
+               title="Support the author by donating">
                 <Icon src="/assets/img/paypal.png"/>
             </a>
         </div>
@@ -78,17 +84,18 @@ import StringService from "@/services/StringService";
 import PluginSidebarHeader from "@/components/Pages/Plugins/PluginSidebarHeader.vue";
 import PluginCategory from "@/components/Pages/Plugins/PluginCategory.vue";
 import Icon from "@/components/Common/Icon/Icon.vue";
+import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 
 export default {
     name: "PluginSidebar",
-    components: {Icon, PluginCategory, PluginSidebarHeader, StickyFooter, Sidebar},
+    components: {PluginLabel, Icon, PluginCategory, PluginSidebarHeader, StickyFooter, Sidebar},
 
     computed: {
         StringService() {
             return StringService
         },
         showDownloadLink() {
-            return this.canDownload || !this.plugin.custom || !this.plugin.price > 0;
+            return this.canDownload || !this.plugin.custom || !this.price > 0;
         },
         canDownload() {
             return this.permissions?.download;
@@ -99,7 +106,7 @@ export default {
         downloadLabel() {
             if (this.canDownload) return "Download";
 
-            const formattedPrice = StringService.formatMoney(this.plugin.price);
+            const formattedPrice = StringService.formatMoney(this.price);
             if (!useAuth().loggedIn) return "Login To Buy for " + formattedPrice;
             return "Buy for " + formattedPrice;
         },
@@ -121,7 +128,10 @@ export default {
         },
         categories() {
             return this.plugin?.categories?.split(',') ?? [];
-        }
+        },
+        price() {
+            return (this.plugin?.price / 100) * (100 - this.plugin?.sale?.percentage ?? 0);
+        },
     },
 
     props: {

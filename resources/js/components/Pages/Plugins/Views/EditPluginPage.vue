@@ -214,7 +214,7 @@ export default {
         },
         bannerUrl() {
             if (!this.plugin.banner_url) {
-                return '/assets/img/default-plugin-banner.png';
+                return this.originalBanner ?? '/assets/img/default-plugin-banner.png';
             }
 
             if (this.plugin.banner_url.startsWith('data:')) {
@@ -225,7 +225,7 @@ export default {
         },
         iconUrl() {
             if (!this.plugin.logo_url) {
-                return 'img/logo.png';
+                return this.originalIcon ?? 'img/logo.png';
             }
 
             if (this.plugin.logo_url.startsWith('data:')) {
@@ -249,6 +249,9 @@ export default {
         }
 
         this.plugin = plugin;
+        this.originalBanner = plugin.banner_url;
+        this.originalIcon = plugin.logo_url;
+
         this.loadMinecraftVersions();
         this.loadCategories();
         this.loadSale();
@@ -260,9 +263,16 @@ export default {
             plugin: null,
             categories: [],
             initialized: false,
-            bannerUpload: null,
+            originalBanner: null,
+            originalIcon: null,
             minecraftVersions: {},
         }
+    },
+
+    watch: {
+        categories(n) {
+            console.log("new", n)
+        },
     },
 
     props: {
@@ -335,8 +345,9 @@ export default {
         },
         async savePlugin() {
             this.plugin.minecraft_versions = this.minecraftVersions;
-
-            console.log(this.plugin);
+            this.plugin.logo_url = this.plugin.logo_url === this.originalIcon ? null : this.plugin.logo_url;
+            this.plugin.banner_url = this.plugin.banner_url === this.originalBanner ? null : this.plugin.banner_url;
+            this.plugin.categories = this.categories.join(',');
 
             try {
                 await PluginRepository.editPlugin(this.pluginId, this.plugin);

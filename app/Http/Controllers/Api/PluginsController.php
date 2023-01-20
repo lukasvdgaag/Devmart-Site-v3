@@ -54,7 +54,7 @@ class PluginsController
         // to convert it into the right format for the database.
         // and save the plugin.
         $json = $request->only(['title', 'description', 'custom', 'minecraft_versions', 'dependencies', 'price', 'features',
-            'spigot_link', 'github_link', 'donation_url', 'sale', 'logo_url', 'banner_url']);
+            'spigot_link', 'github_link', 'donation_url', 'sale', 'logo_url', 'banner_url', 'categories']);
         if ($json['github_link'] && str_starts_with($json['github_link'], '/')) {
             $json['github_link'] = substr($json['github_link'], 1);
         }

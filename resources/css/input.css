@@ -474,10 +474,6 @@ a.static:hover {
     font-style: italic;
 }
 
-.strikethrough {
-    text-decoration: line-through;
-}
-
 p {
     font-size: 16px;
     font-weight: 400;
