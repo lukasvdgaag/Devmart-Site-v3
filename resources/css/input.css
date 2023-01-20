@@ -732,18 +732,6 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
     word-break: keep-all;
 }
 
-.preview-label-icon {
-    height: 18px;
-    width: 18px;
-    margin-right: 8px;
-}
-
-.preview-label-text {
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-}
-
 .search-bar-container {
     grid-column: span 12;
     margin: 8px 0 20px;

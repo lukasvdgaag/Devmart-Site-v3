@@ -4,7 +4,7 @@
                  class="relative inline-flex items-center border px-4 py-2 text-sm font-medium plain"
                  :class="{
         'focus:z-20': disabled,
-        'z-10 border-indigo-500 bg-indigo-50 text-indigo-600': active,
+        'z-1 border-indigo-500 bg-indigo-50 text-indigo-600': active,
         'border-gray-300 bg-white text-gray-500': !active,
         'hover:bg-gray-50': !disabled && !active,
         'cursor-pointer': !disabled,

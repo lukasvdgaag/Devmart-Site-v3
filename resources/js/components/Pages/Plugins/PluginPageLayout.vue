@@ -4,7 +4,7 @@
 
         <template v-if="plugin">
             <div class="absolute top-0 w-full min-h-[178px] lg:h-[320px] bg-primary max-h-[320px]"></div>
-            <div class="mt-10 w-full d-grid z-10">
+            <div class="mt-10 w-full d-grid z-1">
                 <img :src="bannerUrl"
                      alt="Banner"
                      class="bg-gray-75 col-span-12 w-full h-[218px] lg:h-[400px] object-cover rounded-2xl"
@@ -12,16 +12,24 @@
             </div>
 
             <div class="flex flex-col items-center w-full">
-                <div class="mt-[-28px] lg:mt-[-52px] z-10 d-grid hide-small">
+                <div class="mt-[-28px] lg:mt-[-52px] z-1 d-grid hide-small">
                     <img :src="`/assets/img/${this.plugin.logo_url}`"
                          alt="Resource Icon"
-                        class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white"
+                         class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white"
                     >
                 </div>
 
                 <div class="plugin-content d-grid mt-2 mt-4-small">
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
+                            <div class="mb-3 flex gap-1 flex-wrap">
+                                <div class="uppercase font-bold bg-red-500 px-2 py-1 text-white w-fit flex flex-col rounded">{{Number.parseInt(plugin.sale.percentage, 0)}}% sale</div>
+                                <div class="bg-red-500 px-2 py-1 text-white w-fit rounded">
+                                    Get now for only <span>{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage),false) }}</span>
+                                    <span class="strikethrough ml-2 text-xs">{{ StringService.formatMoney(this.plugin.price, false) }}</span>
+                                </div>
+                                <div class="bg-red-500 px-2 py-1 text-white w-fit rounded">4 days left</div> <!-- TODO: Add relative date for sale -->
+                            </div>
                             <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
                                 <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
                                 <div class="ml-3-small">
@@ -31,6 +39,7 @@
                                     </router-link>
 
                                     <Stats class="pb-2">
+<!--                                        <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`" class="mr-2"/>-->
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
                                     </Stats>
@@ -74,10 +83,13 @@ import Highlights from "@/components/Pages/Plugins/Highlights.vue";
 import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
 import PluginSidebar from "@/components/Pages/Plugins/PluginSidebar.vue";
+import StringService from "@/services/StringService";
+import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
+import Alert from "@/components/Common/Alert.vue";
 
 export default {
     name: "PluginOverviewPage",
-    components: {PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
+    components: {Alert, PluginLabel, PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
 
     async created() {
         await Promise.all([
@@ -87,6 +99,12 @@ export default {
     },
 
     computed: {
+        DateService() {
+            return DateService
+        },
+        StringService() {
+            return StringService
+        },
         supportedVersions() {
             const versions = this.plugin.minecraft_versions;
             if (!versions || versions.length === 0) return "Not specified.";

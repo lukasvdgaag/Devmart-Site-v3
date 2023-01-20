@@ -2,10 +2,10 @@
     <h1>Account Settings</h1>
     <hr>
 
-    <Alert v-if="justUpdated" class="mb-4" icon="fa-circle-check" type="success">
+    <Alert v-if="justUpdated" class="mb-4 font-medium" icon="fa-circle-check" type="success">
         {{ isAdmin ? `You saved the account settings of ${user.username}` : "Your settings have been saved!" }}
     </Alert>
-    <Alert v-else-if="Object.keys(errors).length !== 0" class="mb-4" icon="fa-circle-xmark" type="error">
+    <Alert v-else-if="Object.keys(errors).length !== 0" class="mb-4 font-medium" icon="fa-circle-xmark" type="error">
         There was an error saving your settings. Please try again.
     </Alert>
 
