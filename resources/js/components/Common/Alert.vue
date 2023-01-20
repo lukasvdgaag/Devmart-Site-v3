@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row items-center gap-4 rounded-lg flex px-4 py-3 text-white font-medium"
+    <div class="flex flex-row items-center gap-4 rounded-lg flex px-4 py-3 text-white"
          :class="classes">
         <font-awesome-icon v-if="icon" size="2xl" :icon="icon"/>
         <slot/>
@@ -20,7 +20,7 @@ export default {
                 case "warning":
                     return ["bg-yellow-500"];
                 default:
-                    return ["bg-indigo-500"];
+                    return ["bg-primary"];
             }
         }
     },
