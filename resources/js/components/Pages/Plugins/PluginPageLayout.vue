@@ -93,10 +93,8 @@ export default {
     components: {PluginSalePart, Alert, PluginLabel, PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
 
     async created() {
-        await Promise.all([
-            this.fetchPluginData(),
-            this.fetchPermissions(),
-        ]);
+        await this.fetchPluginData();
+        this.fetchPermissions()
     },
 
     beforeMount() {

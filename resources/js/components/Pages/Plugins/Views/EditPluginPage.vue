@@ -243,14 +243,14 @@ export default {
             this.fetchPluginData()
         ]);
 
-        if (!perms || !perms?.modify) {
+        if (!plugin?.data || !perms?.data || !perms?.data?.modify) {
             this.$router.push({name: "plugin-overview", params: {pluginId: this.pluginId}});
             return;
         }
 
-        this.plugin = plugin;
-        this.originalBanner = plugin.banner_url;
-        this.originalIcon = plugin.logo_url;
+        this.plugin = plugin?.data;
+        this.originalBanner = this.plugin.banner_url;
+        this.originalIcon = this.plugin.logo_url;
 
         this.loadMinecraftVersions();
         this.loadCategories();
@@ -284,16 +284,14 @@ export default {
     methods: {
         async fetchPluginData() {
             try {
-                const res = await PluginRepository.fetchPlugin(this.pluginId);
-                return res.data;
+                return PluginRepository.fetchPlugin(this.pluginId);
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }
         },
         async fetchPermissions() {
             try {
-                const res = await PluginRepository.fetchPluginPermissions(this.pluginId);
-                return res.data;
+                return PluginRepository.fetchPluginPermissions(this.pluginId);
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }
