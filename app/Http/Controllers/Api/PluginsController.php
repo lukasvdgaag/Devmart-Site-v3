@@ -325,8 +325,6 @@ class PluginsController
         $plugins = $this->insertAuthorUsername($plugins);
         $plugins = $this->insertSaleInformation($plugins);
 
-        Log::error($plugins->toSql());
-
         $paginated = $plugins->paginate($perPage);
         $plugins = (new Collection($paginated->items()))
             ->map(function ($plugin) {

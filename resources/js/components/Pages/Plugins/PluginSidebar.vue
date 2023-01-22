@@ -109,7 +109,7 @@ export default {
         downloadLabel() {
             if (this.canDownload) return "Download";
 
-            const formattedPrice = StringService.formatMoney(this.price);
+            const formattedPrice = StringService.formatMoney(this.price, false);
             if (!useAuth().loggedIn) return "Login To Buy for " + formattedPrice;
             return "Buy for " + formattedPrice;
         },
@@ -133,7 +133,7 @@ export default {
             return this.plugin?.categories?.split(',') ?? [];
         },
         price() {
-            return (this.plugin?.price / 100) * (100 - this.plugin?.sale?.percentage ?? 0);
+            return (this.plugin?.price / 100) * (100 - (this.plugin?.sale?.percentage ?? 0));
         },
     },
 
