@@ -1,7 +1,7 @@
 <template>
     <textarea v-if="isTextarea"
               :value="modelValue"
-              @input="$emit('update:modelValue', $event.target.value)"
+              @input="onInput($event)"
               class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full"
               :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
@@ -12,7 +12,7 @@
            :value="modelValue"
            @change="onChange($event)"
            :type="type"
-           @input="$emit('update:modelValue', $event.target.value)"
+           @input="onInput($event)"
            class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600"
            :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
@@ -24,7 +24,7 @@
 <script>
 export default {
     name: "Input",
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'input'],
 
     props: {
         modelValue: {
@@ -58,6 +58,10 @@ export default {
     methods: {
         onChange(event) {
             if (event.target.type === "checkbox") this.$emit('update:modelValue', event.target.checked)
+        },
+        onInput(event) {
+            this.$emit('update:modelValue', event.target.value);
+            this.$emit('input', event);
         }
     }
 }

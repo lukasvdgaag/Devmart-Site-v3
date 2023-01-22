@@ -164,7 +164,7 @@
             </FormSection>
 
             <StickyFooter class="!mt-2">
-                <button class="primary w-full md:w-2/4 p-2 mt-0" type="submit">Save</button>
+                <button class="primary w-full md:w-2/4 p-2 mt-0" :class="{'bg-opacity-50':isSaving}" :disabled="isSaving" type="submit">{{ isSaving ? 'Saving...' : 'Save'}}</button>
             </StickyFooter>
         </form>
     </PluginActionPageLayout>
@@ -250,6 +250,7 @@ export default {
             originalBanner: null,
             originalIcon: null,
             minecraftVersions: {},
+            isSaving: false,
         }
     },
 
@@ -320,6 +321,7 @@ export default {
             }
         },
         async savePlugin() {
+            this.isSaving = true;
             this.plugin.minecraft_versions = this.minecraftVersions;
             this.plugin.logo_url = this.plugin.logo_url === this.originalIcon ? null : this.plugin.logo_url;
             this.plugin.banner_url = this.plugin.banner_url === this.originalBanner ? null : this.plugin.banner_url;
@@ -331,6 +333,7 @@ export default {
             } catch (e) {
                 console.error(e);
             }
+            this.isSaving = false;
         },
     }
 }

@@ -104,6 +104,14 @@ export default {
      */
     async editPlugin(id, data) {
         return await client.put(`/${id}`, data);
+    },
+
+    async updatePlugin(id, formData) {
+        return await client.post(`/${id}/update`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 
 }

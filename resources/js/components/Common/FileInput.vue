@@ -4,6 +4,8 @@
            type="file"
            :value="modelValue"
            :accept="accept"
+           :errors="errors"
+           :item="item"
            @input="uploadFile($event)"
     />
 </template>
@@ -24,6 +26,14 @@ export default {
             type: String,
             default: '*',
         },
+        errors: {
+            type: Object,
+            default: {},
+        },
+        item: {
+            type: String,
+            default: null,
+        }
     },
     emits: ['update:modelValue', 'upload'],
 
