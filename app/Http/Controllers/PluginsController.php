@@ -118,7 +118,7 @@ class PluginsController extends Controller
                     unlink($fullPath);
                 }
 
-                $file->move("/home/uploads/" . $found->id, $update->getFileName());
+                $file->move(env('DIR_UPLOADS') . $found->id, $update->getFileName());
 
                 $update->save();
 

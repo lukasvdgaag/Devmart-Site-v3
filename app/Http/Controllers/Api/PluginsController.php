@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Plugins\Plugin;
 use App\Models\Plugins\PluginSale;
+use App\Models\Plugins\PluginUpdate;
 use App\Models\User;
 use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class PluginsController
 {
@@ -121,7 +123,69 @@ class PluginsController
         return response([]);
     }
 
-    public function handlePluginUpcomingSalesRetrieval(Request $request, string|int $pluginId) {
+    public function handlePluginUpdate(Request $request, string|int $pluginId)
+    {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @var Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+        if (!$plugin->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        $request->validate([
+            'version' => 'required|string|max:255',
+            'beta_number' => 'nullable|int|min:0',
+            'title' => 'required|string|max:255',
+            'changelog' => 'required|string',
+            'short_changelog' => 'nullable|string',
+            'file' => ['required', File::types(['zip', 'jar', 'tar', 'sk', 'rar'])]
+        ]);
+
+        $attrs = $request->only(['version', 'beta_number', 'title', 'changelog', 'short_changelog']);
+
+        Log::error(implode(',',$attrs));
+
+        $file = $request->file('file');
+        $fileExt = $file->getClientOriginalExtension();
+
+        $update = new PluginUpdate();
+        $update->fill($attrs);
+        $update->file_extension = $fileExt;
+        $update->plugin = $plugin->id;
+
+        $fullPath = $update->getFilePath();
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+        }
+
+        try {
+            $file->move(env('DIR_UPLOADS') . $plugin->id, $update->getFileName());
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => [
+                    'general' => ['Failed to save the uploaded file.']
+                ]
+            ], 500);
+        }
+
+        $update->save();
+        $plugin->last_updated = Carbon::now();
+        $plugin->save();
+
+        return response()->json([
+            $update
+        ], 201);
+    }
+
+    public function handlePluginUpcomingSalesRetrieval(Request $request, string|int $pluginId)
+    {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;

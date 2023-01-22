@@ -24,6 +24,16 @@ class PluginUpdate extends Model
         'downloads' => 'int'
     ];
 
+    protected $fillable = [
+        'plugin',
+        'title',
+        'version',
+        'beta_number',
+        'changelog',
+        'downloads',
+        'file_extension'
+    ];
+
     public function getDisplayName(): string
     {
         if ($this->beta_number > 0) {
@@ -41,7 +51,7 @@ class PluginUpdate extends Model
     }
 
     public function getFilePath(): string {
-        return '/home/uploads/' . $this->plugin . '/' . $this->getFileName();
+        return env('DIR_UPLOADS') . $this->plugin . '/' . $this->getFileName();
     }
 
     public function getFileDetails(): string {
