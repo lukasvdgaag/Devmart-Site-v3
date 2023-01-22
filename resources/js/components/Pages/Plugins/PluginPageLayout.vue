@@ -34,7 +34,9 @@
                                 <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
-                                        <h1 class="plugin-header">{{ plugin.title }}</h1>
+                                        <h1 class="plugin-header">
+                                            {{ plugin.title }}
+                                        </h1>
                                         <p class="plugin-description">{{ plugin.description }}</p>
                                     </router-link>
 
@@ -42,6 +44,7 @@
                                         <!--                                        <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`" class="mr-2"/>-->
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
+                                        <Stat v-if="plugin?.latest_update?.version">Version: {{ plugin?.latest_update?.version }}</Stat>
                                     </Stats>
                                 </div>
                             </div>

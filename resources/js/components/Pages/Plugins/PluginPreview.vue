@@ -8,9 +8,12 @@
                  alt="Logo image"
                  class="resource-icon hide-big">
             <div class="h-full lg:min-h-[9rem] flex flex-col">
-                <div class="flex flex-row items-center">
+                <div class="flex flex-row">
                     <img :src="iconUrl" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
-                    <h2 class="text-base font-bold break-words">{{ plugin.title }}</h2>
+                    <h2 class="text-base font-bold break-words">
+                        {{ plugin.title }}
+                        <span v-if="plugin?.version" class="text-gray-400 font-normal ml-1">{{plugin?.version}}</span>
+                    </h2>
                 </div>
                 <div class="text-sm mt-1">{{ plugin.description }}</div>
                 <Stats>
@@ -49,7 +52,8 @@ export default {
             return DateService
         },
         formattedDate(){
-            return DateService.formatDateRelatively(new Date(this.plugin.last_updated), true);
+            let date = new Date(this.plugin.last_updated);
+            return DateService.formatDateRelatively(date, DateService.diffInDays(new Date(), date) <= 7);
         },
         bannerUrl() {
             if (!this.plugin.banner_url) {

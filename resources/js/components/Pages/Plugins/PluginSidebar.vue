@@ -44,6 +44,9 @@
             </div>
         </template>
 
+        <PluginSidebarHeader class="mt-2">Version</PluginSidebarHeader>
+        <div>{{ plugin?.latest_update?.version }}</div>
+
         <template v-if="categories.length > 0">
             <PluginSidebarHeader class="mt-8 mb-2">Categories</PluginSidebarHeader>
             <div class="flex flex-wrap gap-2">

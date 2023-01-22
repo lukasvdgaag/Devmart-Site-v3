@@ -150,7 +150,7 @@ class PluginsController
 
         $attrs = $request->only(['version', 'beta_number', 'title', 'changelog', 'short_changelog']);
 
-        Log::error(implode(',',$attrs));
+        Log::error(implode(',', $attrs));
 
         $file = $request->file('file');
         $fileExt = $file->getClientOriginalExtension();
@@ -315,17 +315,25 @@ class PluginsController
             'plugins.logo_url',
             'plugins.banner_url',
             'plugins.categories',
-        );
-
+            'updates.version',
+            'updates.beta_number',
+            'updates.downloads'
+        )->leftJoinSub('SELECT plugin, MAX(version) as version, MAX(beta_number) as beta_number, SUM(downloads) as downloads FROM plugin_updates GROUP BY plugin', 'updates', function (JoinClause $join) {
+            $join->on('updates.plugin', '=', 'plugins.id');
+        })->groupBy('plugins.id', 'plugins.last_updated', 'updates.version', 'updates.beta_number', 'updates.downloads');
         // including the username of the author for each plugin.
         $plugins = $this->insertAuthorUsername($plugins);
-        $plugins = $this->insertTotalDownloads($plugins);
         $plugins = $this->insertSaleInformation($plugins);
+
+        Log::error($plugins->toSql());
 
         $paginated = $plugins->paginate($perPage);
         $plugins = (new Collection($paginated->items()))
             ->map(function ($plugin) {
-                return $this->formatSaleSection(json_decode(json_encode($plugin), true));
+                $formatted = $this->formatSaleSection(json_decode(json_encode($plugin), true));
+                $formatted['version'] = PluginUpdate::getVersionDisplayName($plugin->version, $plugin->beta_number);
+                unset($formatted['beta_number']);
+                return $formatted;
             });
 
         return response()->json([
@@ -358,10 +366,10 @@ class PluginsController
     public function insertTotalDownloads($plugins)
     {
         return $plugins
-            ->leftJoinSub('SELECT plugin, SUM(downloads) AS downloads FROM plugin_updates GROUP BY plugin', 'downloads', function ($join) {
-                $join->on('plugins.id', '=', 'downloads.plugin');
+            ->leftJoinSub('SELECT plugin, SUM(downloads) AS downloads FROM plugin_updates GROUP BY plugin', 'dwnlds', function ($join) {
+                $join->on('plugins.id', '=', 'dwnlds.plugin');
             })
-            ->addSelect(DB::raw('SUM(downloads.downloads) AS downloads'))
+            ->addSelect(DB::raw('SUM(dwnlds.downloads) AS downloads'))
             ->groupBy(DB::raw('plugins.id, plugins.last_updated'));
     }
 

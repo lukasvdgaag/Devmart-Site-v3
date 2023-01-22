@@ -34,12 +34,16 @@ class PluginUpdate extends Model
         'file_extension'
     ];
 
+    public static function getVersionDisplayName($version, $betaNumber): string {
+        if ($betaNumber > 0) {
+            return $version . ' Beta ' . $betaNumber;
+        }
+        return $version;
+    }
+
     public function getDisplayName(): string
     {
-        if ($this->beta_number > 0) {
-            return $this->version . ' Beta ' . $this->beta_number;
-        }
-        return $this->version;
+        return PluginUpdate::getVersionDisplayName($this->version, $this->beta_number);
     }
 
     public function getFileName(): string
