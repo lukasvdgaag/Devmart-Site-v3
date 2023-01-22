@@ -38,7 +38,7 @@ class PluginUpdate extends Model
         if ($betaNumber > 0) {
             return $version . ' Beta ' . $betaNumber;
         }
-        return $version;
+        return $version ?? 'Unknown';
     }
 
     public function getDisplayName(): string
