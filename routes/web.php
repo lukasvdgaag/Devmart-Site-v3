@@ -45,6 +45,8 @@ Route::prefix('api')->group(function () {
                 ->withoutMiddleware('auth:sanctum');
             Route::put('/{pluginId}', [PluginsController::class, 'handlePluginEdit']);
             Route::post('/{pluginId}/update', [PluginsController::class, 'handlePluginUpdate']);
+            Route::get('/{pluginId}/updates', [PluginsController::class, 'handlePluginUpdatesRetrieval'])
+                ->withoutMiddleware('auth:sanctum');
             Route::get('/{pluginId}/sales', [PluginsController::class, 'handlePluginUpcomingSalesRetrieval']);
             Route::get("/{pluginId}/permissions", [PluginsController::class, 'handlePluginPermissionsRetrieval'])
                 ->withoutMiddleware('auth:sanctum');

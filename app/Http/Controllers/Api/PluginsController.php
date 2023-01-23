@@ -273,6 +273,23 @@ class PluginsController
         return ["plugin" => $plugin, "hasAccess" => $hasAccess];
     }
 
+    public function handlePluginUpdatesRetrieval(Request $request, string|int $pluginId) {
+        $pluginRes = $this->getPluginOrRespond($request, $pluginId, false);
+        if (!is_array($pluginRes)) return $pluginRes;
+
+        $plugin = $pluginRes['plugin'];
+
+        $perPage = min(20, max(1, $request->query('perPage', 10)));
+        $paginated = $plugin->getUpdates()->paginate($perPage);
+
+        return response()->json([
+            'total' => $paginated->total(),
+            'currentPage' => $paginated->currentPage(),
+            'pages' => $paginated->lastPage(),
+            'updates' => $paginated->items()
+        ]);
+    }
+
     public function handlePluginListRetrieval(Request $request)
     {
         $filter = $request->input('filter', 'all');
