@@ -465,6 +465,9 @@ a.static, .static-link {
 a.static:hover {
     color: var(--theme-color);
 }
+a {
+    cursor: pointer;
+}
 
 .underline {
     text-decoration: underline;

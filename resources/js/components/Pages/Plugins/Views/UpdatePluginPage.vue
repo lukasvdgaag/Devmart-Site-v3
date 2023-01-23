@@ -193,7 +193,7 @@ export default {
         },
         async fetchPluginData() {
             try {
-                return PluginRepository.fetchPlugin(this.pluginId);
+                return PluginRepository.fetchPlugin(this.pluginId, false);
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }

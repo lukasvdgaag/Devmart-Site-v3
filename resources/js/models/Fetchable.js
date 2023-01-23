@@ -52,7 +52,6 @@ export default class Fetchable {
      * @returns {boolean}
      */
     canRequest() {
-        console.log(this.query)
         return !this.loading && (this.isDifferentQuery() || this.isDifferentPage());
     }
 

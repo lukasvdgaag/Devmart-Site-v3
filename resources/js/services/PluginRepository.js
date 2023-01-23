@@ -79,8 +79,24 @@ export default {
         })
     },
 
-    async fetchPlugin(id) {
-        return await client.get(`/${id}`);
+    async fetchPluginUpdates(pluginId, page = 1, perPage = 10) {
+        return await client.get(`/${pluginId}/updates`, {
+            params: {
+                page,
+                perPage,
+            }
+        });
+    },
+
+    async fetchPlugin(id, featuresField = false, saleField = true, totalDownloadsField = true, authorNameField = true) {
+        return await client.get(`/${id}`, {
+            params: {
+                featuresField,
+                saleField,
+                totalDownloadsField,
+                authorNameField
+            }
+        });
     },
 
     /**

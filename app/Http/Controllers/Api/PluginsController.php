@@ -201,7 +201,15 @@ class PluginsController
 
     public function handlePluginRetrieval(Request $request, string|int $pluginId)
     {
-        $plugin = $this->getPluginOrRespond($request, $pluginId, true, true, true, true);
+        $withAuthorNameField = $request->query('authorNameField', true);
+        $withTotalDownloadsField = $request->query('totalDownloadsField', true);
+        $withSaleField = $request->query('saleField', true);
+        $withFeaturesField = $request->query('featuresField', true);
+
+        $plugin = $this->getPluginOrRespond(
+            $request, $pluginId, true,
+            $withAuthorNameField, $withTotalDownloadsField, $withSaleField, $withFeaturesField
+        );
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
 
@@ -244,11 +252,16 @@ class PluginsController
                                         bool       $includeAllFields = true,
                                         bool       $withAuthorField = false,
                                         bool       $withTotalDownloadsField = false,
-                                        bool       $withSaleField = false)
+                                        bool       $withSaleField = false,
+                                        bool       $withFeaturesField = false)
     {
         $query = Plugin::query()->where('plugins.id', '=', $pluginId);
         if ($includeAllFields) {
-            $query = $query->select('plugins.*');
+            if ($withFeaturesField) $query = $query->select('plugins.*');
+            else $query = $query->select('plugins.id', 'plugins.name', 'plugins.description', 'plugins.title', 'plugins.custom'
+                , 'plugins.spigot_link', 'plugins.github_link', 'plugins.minecraft_versions', 'plugins.dependencies', 'plugins.categories'
+                , 'plugins.last_updated', 'plugins.author', 'plugins.price', 'plugins.logo_url', 'plugins.banner_url', 'plugins.donation_url'
+                , 'plugins.created_at', 'plugins.updated_at');
         } else {
             $query = $query->select('plugins.id', 'plugins.name', 'plugins.author');
         }
@@ -273,7 +286,8 @@ class PluginsController
         return ["plugin" => $plugin, "hasAccess" => $hasAccess];
     }
 
-    public function handlePluginUpdatesRetrieval(Request $request, string|int $pluginId) {
+    public function handlePluginUpdatesRetrieval(Request $request, string|int $pluginId)
+    {
         $pluginRes = $this->getPluginOrRespond($request, $pluginId, false);
         if (!is_array($pluginRes)) return $pluginRes;
 

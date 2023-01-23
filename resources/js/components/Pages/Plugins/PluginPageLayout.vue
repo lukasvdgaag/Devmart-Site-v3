@@ -56,15 +56,6 @@
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
 
-                            <Highlights>
-                                <Highlight title="Supported Versions" :description="supportedVersions" image="/assets/img/getbukkit.png"/>
-                                <Highlight title="Last Updated" :description="formattedLastUpdated" image="/assets/img/calendar.svg"/>
-                                <Highlight v-if="plugin.dependencies.length > 0" title="(Soft) Dependencies" :description="plugin.dependencies"
-                                           image="/assets/img/download.svg"/>
-
-                                <Highlight v-for="highlight in plugin.highlights" :description="highlight" image=""></Highlight>
-                            </Highlights>
-
                             <router-view :plugin="plugin" :pluginId="pluginId"/>
                         </div>
                     </div>
@@ -90,6 +81,8 @@ import StringService from "@/services/StringService";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Alert from "@/components/Common/Alert.vue";
 import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
+import PluginVersionsPage from "@/components/Pages/Plugins/Views/PluginVersionsPage.vue";
+import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 
 export default {
     name: "PluginOverviewPage",
@@ -113,15 +106,6 @@ export default {
         StringService() {
             return StringService
         },
-        supportedVersions() {
-            const versions = this.plugin.minecraft_versions;
-            if (!versions || versions.length === 0) return "Not specified.";
-
-            return versions;
-        },
-        formattedLastUpdated() {
-            return DateService.formatDateRelatively(new Date(this.plugin.last_updated), true);
-        },
         bannerUrl() {
             if (this.plugin.banner_url) {
                 return `/assets/img/${this.plugin.banner_url}`;
@@ -141,7 +125,10 @@ export default {
     methods: {
         async fetchPluginData() {
             try {
-                const res = await PluginRepository.fetchPlugin(this.pluginId);
+                console.log(this.$route.matched);
+                let withFeaturesField = this.$route.matched.filter(r => r.components?.default === PluginOverviewPage).length > 0;
+
+                const res = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
                 this.plugin = res.data;
             } catch (e) {
                 this.$router.push({name: "not-found"});

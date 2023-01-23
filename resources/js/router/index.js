@@ -13,6 +13,8 @@ import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewP
 import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
 import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 import UpdatePluginPage from "@/components/Pages/Plugins/Views/UpdatePluginPage.vue";
+import PluginVersionsPage from "@/components/Pages/Plugins/Views/PluginVersionsPage.vue";
+import PluginUpdatesPage from "@/components/Pages/Plugins/Views/PluginUpdatesPage.vue";
 
 const routes = [
     {
@@ -57,14 +59,13 @@ const routes = [
                 name: 'plugin-overview',
                 component: PluginOverviewPage
             }, {
-                path: 'update',
-                name: 'update-plugin',
-            },{
                 path: 'versions',
                 name: 'plugin-versions',
+                component: PluginVersionsPage,
             }, {
                 path: 'updates',
                 name: 'plugin-updates',
+                component: PluginUpdatesPage
             }
         ]
     }, {

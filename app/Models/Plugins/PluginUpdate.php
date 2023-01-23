@@ -58,7 +58,7 @@ class PluginUpdate extends Model
         return env('DIR_UPLOADS') . $this->plugin . '/' . $this->getFileName();
     }
 
-    public function getFileDetails(): string {
+    public function getFileDetails($withFileExtension = true): string {
         $path = $this->getFilePath();
         if (file_exists($path)) {
             $size = round(filesize($path) / 1024);
@@ -68,7 +68,7 @@ class PluginUpdate extends Model
                 $res = round($size/1024,2) . " MB";
             }
 
-            $res .= " (." . $this->file_extension . ")";
+            if ($withFileExtension) $res .= " (." . $this->file_extension . ")";
             return $res;
         }
         return "No File Found";
@@ -77,6 +77,16 @@ class PluginUpdate extends Model
     public function getPlugin(): BelongsTo
     {
         return $this->belongsTo(Plugin::class, 'plugin');
+    }
+
+    public function toArray()
+    {
+        $arr = parent::toArray();
+        $arr['display_name'] = $this->getDisplayName();
+        $arr['file_size'] = $this->getFileDetails(false);
+        $arr['file_name'] = $this->getFileName();
+
+        return $arr;
     }
 
 }
