@@ -5,8 +5,8 @@
                 <span>{{ downloadLabel }}</span>
                 <span class="text-xs">{{ downloadInfo }}</span>
             </router-link>
-            <router-link :to="`/plugins/${plugin.id}/versions`"
-                         class="action-button gray-hollow flex flex-col align-center"><span>Other Versions</span>
+            <router-link :to="`/plugins/${plugin.id}/updates`"
+                         class="action-button gray-hollow flex flex-col align-center"><span>Updates</span>
             </router-link>
         </StickyFooter>
 
@@ -16,8 +16,8 @@
             <span>{{ downloadLabel }}</span>
             <span class="text-[10px]">{{ downloadInfo }}</span>
         </router-link>
-        <router-link :to="`/plugins/${plugin.id}/versions`"
-                     class="action-button gray-hollow flex-col align-center hidden lg:flex"><span>Other Versions</span>
+        <router-link :to="`/plugins/${plugin.id}/updates`"
+                     class="action-button gray-hollow flex-col align-center hidden lg:flex"><span>Updates</span>
         </router-link>
 
         <template v-if="canModify">
@@ -31,7 +31,7 @@
         <hr class="hidden lg:block"/>
 
         <div v-if="plugin?.sale" class="flex mb-4 mt-[-0.5rem] gap-1 flex-wrap">
-            <PluginLabel :label="`${Number.parseInt(plugin?.sale?.percentage, 0)}% Sale`" :background="`bg-red-400`"/>
+            <PluginLabel :label="`${plugin?.sale?.percentage.toFixed(0)}% Sale`" :background="`bg-red-400`"/>
         </div>
         <PluginSidebarHeader class="mt-2">Author</PluginSidebarHeader>
         <div>{{ plugin.author_username }}</div>

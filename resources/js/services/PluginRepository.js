@@ -2,6 +2,8 @@ import axios from "axios";
 import Plugin from "../models/rest/Plugin";
 import PluginListResponse from "../models/rest/response/PluginListResponse";
 import PluginPermissions from "../models/rest/PluginPermissions";
+import PluginUpdate from "@/models/rest/PluginUpdate";
+import PluginUpdatesResponse from "@/models/rest/response/PluginUpdatesResponse";
 
 export const client = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL + "/api/plugins",
@@ -72,12 +74,13 @@ export default {
     },
 
     /**
-     *
+     * Fetch a list of plugins, ordered by last updated.
      * @param filter
      * @param query
      * @param page
      * @param perPage
      * @returns {Promise<PluginListResponse>}
+     * @throws {Error} If the route could or an error occurred
      */
     async fetchPlugins(filter = "all", query = "", page = 1, perPage = 6) {
         const res = await client.get("/", {
@@ -97,13 +100,28 @@ export default {
         return new PluginListResponse(data.total, data.currentPage, data.pages, plugins);
     },
 
+    /**
+     * Fetches a list of updates for a specific plugin.
+     * @param pluginId Id of the plugin
+     * @param page Page number
+     * @param perPage Number of items per page
+     * @returns {Promise<PluginUpdatesResponse>} The requested versions.
+     * @throws {Error} If the plugin could not be found or the user does not have permission to view it
+     */
     async fetchPluginUpdates(pluginId, page = 1, perPage = 10) {
-        return await client.get(`/${pluginId}/updates`, {
+        const res = await client.get(`/${pluginId}/updates`, {
             params: {
                 page,
                 perPage,
             }
         });
+        const data = res.data;
+
+        let updates = [];
+        for (let update of res.data.updates) {
+            updates.push(PluginUpdate.fromJson(update));
+        }
+        return new PluginUpdatesResponse(data.total, data.currentPage, data.pages, updates);
     },
 
     /**

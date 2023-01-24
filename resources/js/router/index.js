@@ -8,15 +8,15 @@ import AccountHome from "@/components/Pages/Account/Views/AccountHome.vue";
 import AccountBilling from "@/components/Pages/Account/Views/AccountBilling.vue";
 import AccountSales from "@/components/Pages/Account/Views/AccountSales.vue";
 import PluginsListPage from "@/components/Pages/Plugins/Views/PluginsListPage.vue";
-import PluginPageLayout from "@/components/Pages/Plugins/PluginPageLayout.vue";
+import PluginPageLayout from "@/components/Pages/Plugins/Layouts/PluginPageLayout.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
 import UpdatePluginPage from "@/components/Pages/Plugins/Views/UpdatePluginPage.vue";
 import PluginVersionsPage from "@/components/Pages/Plugins/Views/PluginVersionsPage.vue";
 import PluginUpdatesPage from "@/components/Pages/Plugins/Views/PluginUpdatesPage.vue";
-import PluginActionPageLayout from "@/components/Pages/Plugins/PluginActionPageLayout.vue";
+import PluginActionPageLayout from "@/components/Pages/Plugins/Layouts/PluginActionPageLayout.vue";
 import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
-import PluginVersionsLayout from "@/components/Pages/Plugins/PluginVersionsLayout.vue";
+import PluginVersionsLayout from "@/components/Pages/Plugins/Layouts/PluginVersionsLayout.vue";
 
 const routes = [
     {

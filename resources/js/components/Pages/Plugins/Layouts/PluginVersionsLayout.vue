@@ -45,9 +45,9 @@ export default {
         async fetchVersions() {
             try {
                 const res = await PluginRepository.fetchPluginUpdates(this.pluginId, this.updatesFetchable.page);
-                this.updates = res.data.updates;
-                this.pageCount = res.data.pages;
-                this.updateCount = res.data.total;
+                this.updates = res.updates;
+                this.pageCount = res.pages;
+                this.updateCount = res.total;
             } catch (e) {
                 this.$route.push({name: 'not-found'});
             }

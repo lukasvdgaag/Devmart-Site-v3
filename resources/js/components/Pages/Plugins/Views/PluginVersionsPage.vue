@@ -17,7 +17,7 @@
         </tr>
 
         <tr v-for="version in updates" :key="version.id">
-            <td>{{ version.display_name }}</td>
+            <td>{{ version.effective_version }}</td>
             <td>{{ DateService.formatDateRelatively(new Date(version.created_at), true) }}</td>
             <td class="hidden md:table-cell">{{ version.file_size }}</td>
             <td>{{ StringService.formatNumber(version.downloads) }}</td>

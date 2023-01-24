@@ -82,7 +82,7 @@ class PluginUpdate extends Model
     public function toArray()
     {
         $arr = parent::toArray();
-        $arr['display_name'] = $this->getDisplayName();
+        $arr['effective_version'] = $this->getDisplayName();
         $arr['file_size'] = $this->getFileDetails(false);
         $arr['file_name'] = $this->getFileName();
 

@@ -11,7 +11,7 @@ export default class PluginUpdate {
     file_extension;
     file_size;
     file_name;
-    display_name;
+    effective_version;
 
     static fromJson(json) {
         if (!json) return null;
