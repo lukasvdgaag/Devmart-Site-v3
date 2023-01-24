@@ -81,6 +81,9 @@ export default {
                 Number.parseInt(this.$route.query.page ?? '1'),
                 this.$route.query.filter ?? 'all',
             ),
+            /**
+             * @type {Plugin[]}
+             */
             plugins: [],
             totalPlugins: 0,
             pages: 0,
@@ -121,9 +124,9 @@ export default {
         },
         async queryPlugins() {
             const response = await PluginRepository.fetchPlugins(this.pluginsFetchable.filter, this.pluginsFetchable.query, this.pluginsFetchable.page);
-            this.plugins = response.data.plugins;
-            this.totalPlugins = response.data.total;
-            this.pages = response.data.pages;
+            this.plugins = response.plugins;
+            this.totalPlugins = response.total;
+            this.pages = response.pages;
         },
         getQuery(filter) {
             return {

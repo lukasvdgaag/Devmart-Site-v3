@@ -23,7 +23,7 @@
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
                             <div v-if="plugin?.sale" class="mb-3 flex gap-1 flex-wrap">
-                                <PluginSalePart class="uppercase font-bold">{{ Number.parseInt(plugin.sale.percentage, 0) }}% sale</PluginSalePart>
+                                <PluginSalePart class="uppercase font-bold">{{ plugin.sale.percentage.toFixed(0) }}% sale</PluginSalePart>
                                 <PluginSalePart>
                                     New price: <span>{{ StringService.formatMoney((plugin.price / 100) * (100 - plugin.sale.percentage), false) }}</span>
                                     <span class="line-through ml-2 text-xs">{{ StringService.formatMoney(this.plugin.price, false) }}</span>
@@ -41,7 +41,6 @@
                                     </router-link>
 
                                     <Stats class="pb-2">
-                                        <!--                                        <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`" class="mr-2"/>-->
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
                                         <Stat>By {{ plugin.author_username }}</Stat>
                                         <Stat v-if="plugin?.latest_update?.version">Version: {{ plugin?.latest_update?.version }}</Stat>
@@ -56,7 +55,7 @@
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
 
-                            <router-view :plugin="plugin" :pluginId="pluginId"/>
+                            <router-view :plugin="plugin" :pluginId="pluginId" :permissions="permissions"/>
                         </div>
                     </div>
 
@@ -73,24 +72,21 @@ import Navbar from "@/components/Common/Navbar.vue";
 import PluginRepository from "@/services/PluginRepository";
 import Stats from "@/components/Common/Stats.vue";
 import Stat from "@/components/Common/Stat.vue";
-import Highlights from "@/components/Pages/Plugins/Highlights.vue";
-import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
 import PluginSidebar from "@/components/Pages/Plugins/PluginSidebar.vue";
 import StringService from "@/services/StringService";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Alert from "@/components/Common/Alert.vue";
 import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
-import PluginVersionsPage from "@/components/Pages/Plugins/Views/PluginVersionsPage.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 
 export default {
     name: "PluginOverviewPage",
-    components: {PluginSalePart, Alert, PluginLabel, PluginSidebar, Highlight, Highlights, Stat, Stats, Navbar},
+    components: {PluginSalePart, Alert, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
 
-    async created() {
-        await this.fetchPluginData();
-        this.fetchPermissions()
+    created() {
+        this.fetchPluginData();
+        this.fetchPermissions();
     },
 
     beforeMount() {
@@ -116,7 +112,13 @@ export default {
 
     data() {
         return {
+            /**
+             * @type {Plugin}
+             */
             plugin: null,
+            /**
+             * @type {PluginPermissions}
+             */
             permissions: null,
             saleTimeLeft: null,
         }
@@ -125,19 +127,16 @@ export default {
     methods: {
         async fetchPluginData() {
             try {
-                console.log(this.$route.matched);
                 let withFeaturesField = this.$route.matched.filter(r => r.components?.default === PluginOverviewPage).length > 0;
 
-                const res = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
-                this.plugin = res.data;
+                this.plugin = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }
         },
         async fetchPermissions() {
             try {
-                const res = await PluginRepository.fetchPluginPermissions(this.pluginId);
-                this.permissions = res.data;
+                this.permissions = await PluginRepository.fetchPluginPermissions(this.pluginId);
             } catch (e) {
                 this.$router.push({name: "not-found"});
             }

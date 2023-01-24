@@ -6,7 +6,7 @@
         <tr>
             <th>Version</th>
             <th>Release Date</th>
-            <th>File Size</th>
+            <th class="hidden md:table-cell">File Size</th>
             <th>Downloads</th>
             <th v-if="permissions?.download"></th>
         </tr>
@@ -19,10 +19,10 @@
         <tr v-for="version in versions" :key="version.id">
             <td>{{ version.display_name }}</td>
             <td>{{ DateService.formatDateRelatively(new Date(version.created_at), true) }}</td>
-            <td>{{ version.file_size }}</td>
+            <td class="hidden md:table-cell">{{ version.file_size }}</td>
             <td>{{ StringService.formatNumber(version.downloads) }}</td>
             <td class="text-right" v-if="permissions?.download">
-                <a :href="`/plugins/${pluginId}/download/${version.file_name}`" class="static">
+                <a :href="`/plugins/${pluginId}/download/${version.file_name}`" target="_blank" class="static">
                     Download
                 </a>
             </td>
@@ -39,6 +39,9 @@ import Fetchable from "@/models/Fetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 import DateService from "../../../../services/DateService";
 import StringService from "../../../../services/StringService";
+import PluginPermissions from "@/models/rest/PluginPermissions";
+import Plugin from "@/models/rest/Plugin";
+import PluginUpdate from "@/models/rest/PluginUpdate";
 
 export default {
     name: "PluginVersionsPage",
@@ -54,10 +57,12 @@ export default {
 
     data() {
         return {
+            /**
+             * @type {PluginUpdate[]}
+             */
             versions: [],
             pageCount: 0,
             versionCount: 0,
-            permissions: null,
             versionsFetchable: new Fetchable(
                 this.fetchVersions,
                 '',
@@ -81,14 +86,6 @@ export default {
                 this.$route.push({name: 'not-found'});
             }
         },
-        async fetchPermissions() {
-            try {
-                const res = await PluginRepository.fetchPluginPermissions(this.pluginId);
-                this.permissions = res.data;
-            } catch (e) {
-                this.$route.push({name: 'not-found'});
-            }
-        },
     },
 
     props: {
@@ -96,7 +93,11 @@ export default {
             required: true,
         },
         plugin: {
-            type: Object,
+            type: Plugin,
+            required: true,
+        },
+        permissions: {
+            type: [PluginPermissions, null],
             required: true,
         }
     }

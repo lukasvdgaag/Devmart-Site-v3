@@ -4,8 +4,6 @@
         <Highlight title="Last Updated" :description="formattedLastUpdated" image="/assets/img/calendar.svg"/>
         <Highlight v-if="plugin.dependencies.length > 0" title="(Soft) Dependencies" :description="plugin.dependencies"
                    image="/assets/img/download.svg"/>
-
-        <Highlight v-for="highlight in plugin.highlights" :description="highlight" image=""></Highlight>
     </Highlights>
 
     <BBCode :source="plugin.features">
@@ -17,6 +15,8 @@ import BBCode from "@/components/Common/BBCode.vue";
 import Highlights from "@/components/Pages/Plugins/Highlights.vue";
 import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
+import Plugin from "@/models/rest/Plugin";
+import PluginPermissions from "@/models/rest/PluginPermissions";
 
 export default {
     name: "PluginOverviewPage",
@@ -36,17 +36,17 @@ export default {
 
     props: {
         plugin: {
-            type: Object,
+            type: Plugin,
             required: true,
         },
         pluginId: {
             type: String,
             required: true,
+        },
+        permissions: {
+            type: [PluginPermissions, null],
+            required: true,
         }
     }
 }
 </script>
-
-<style scoped>
-
-</style>

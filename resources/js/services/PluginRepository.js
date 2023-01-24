@@ -1,4 +1,7 @@
 import axios from "axios";
+import Plugin from "../models/rest/Plugin";
+import PluginListResponse from "../models/rest/response/PluginListResponse";
+import PluginPermissions from "../models/rest/PluginPermissions";
 
 export const client = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL + "/api/plugins",
@@ -68,15 +71,30 @@ export default {
         })
     },
 
+    /**
+     *
+     * @param filter
+     * @param query
+     * @param page
+     * @param perPage
+     * @returns {Promise<PluginListResponse>}
+     */
     async fetchPlugins(filter = "all", query = "", page = 1, perPage = 6) {
-        return await client.get("/", {
+        const res = await client.get("/", {
             params: {
                 filter,
                 query,
                 page,
                 perPage
             }
-        })
+        });
+        const data = res.data;
+
+        let plugins = [];
+        for (let plugin of data.plugins) {
+            plugins.push(Plugin.fromJson(plugin));
+        }
+        return new PluginListResponse(data.total, data.currentPage, data.pages, plugins);
     },
 
     async fetchPluginUpdates(pluginId, page = 1, perPage = 10) {
@@ -88,8 +106,18 @@ export default {
         });
     },
 
+    /**
+     * Fetches a plugin by its ID
+     * @param {number|string} id Id of the plugin
+     * @param {boolean} featuresField Whether to include the features field
+     * @param {boolean} saleField Whether to include the sale field
+     * @param {boolean} totalDownloadsField Whether to include the totalDownloads field
+     * @param {boolean} authorNameField Whether to include the authorName field
+     * @returns {Promise<Plugin>} The requested plugin.
+     * @throws {Error} If the plugin could not be found or the user does not have permission to view it
+     */
     async fetchPlugin(id, featuresField = false, saleField = true, totalDownloadsField = true, authorNameField = true) {
-        return await client.get(`/${id}`, {
+        const res = await client.get(`/${id}`, {
             params: {
                 featuresField,
                 saleField,
@@ -97,15 +125,18 @@ export default {
                 authorNameField
             }
         });
+        return Plugin.fromJson(res.data);
     },
 
     /**
      * Get the user's permissions for the requested plugin.
-     * @param pluginId
-     * @returns {Promise<AxiosResponse<any>>}
+     * @param {number|string} pluginId Id of the plugin
+     * @returns {Promise<PluginPermissions>}
+     * @throws {Error} If the plugin could not be found or the user does not have permission to view it
      */
     async fetchPluginPermissions(pluginId) {
-        return await client.get(`/${pluginId}/permissions`);
+        const res = await client.get(`/${pluginId}/permissions`);
+        return PluginPermissions.fromJson(res.data);
     },
 
     async fetchUpcomingSales(pluginId) {

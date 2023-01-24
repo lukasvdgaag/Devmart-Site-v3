@@ -12,7 +12,7 @@
 
         <hr class="lg:hidden">
 
-        <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex">
+        <router-link v-if="showDownloadLink" :to="downloadLink" target="_blank" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex">
             <span>{{ downloadLabel }}</span>
             <span class="text-[10px]">{{ downloadInfo }}</span>
         </router-link>
@@ -88,6 +88,8 @@ import PluginSidebarHeader from "@/components/Pages/Plugins/PluginSidebarHeader.
 import PluginCategory from "@/components/Pages/Plugins/PluginCategory.vue";
 import Icon from "@/components/Common/Icon/Icon.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
+import PluginPermissions from "@/models/rest/PluginPermissions";
+import Plugin from "@/models/rest/Plugin";
 
 export default {
     name: "PluginSidebar",
@@ -120,7 +122,7 @@ export default {
             // when not logged in, return login link with redirect
             if (!useAuth().loggedIn) return {
                 name: 'login',
-                params: {redirect: this.$route.fullPath}
+                query: {redirect: this.$route.fullPath}
             }
 
             // otherwise return buy link
@@ -139,11 +141,11 @@ export default {
 
     props: {
         plugin: {
-            type: Object,
+            type: Plugin,
             required: true,
         },
         permissions: {
-            type: [Object, null],
+            type: [PluginPermissions, null],
             required: true,
         }
     }

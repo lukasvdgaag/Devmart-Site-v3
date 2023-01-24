@@ -11,10 +11,11 @@ import PluginsListPage from "@/components/Pages/Plugins/Views/PluginsListPage.vu
 import PluginPageLayout from "@/components/Pages/Plugins/PluginPageLayout.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
-import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 import UpdatePluginPage from "@/components/Pages/Plugins/Views/UpdatePluginPage.vue";
 import PluginVersionsPage from "@/components/Pages/Plugins/Views/PluginVersionsPage.vue";
 import PluginUpdatesPage from "@/components/Pages/Plugins/Views/PluginUpdatesPage.vue";
+import PluginActionPageLayout from "@/components/Pages/Plugins/PluginActionPageLayout.vue";
+import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 
 const routes = [
     {
@@ -69,15 +70,29 @@ const routes = [
             }
         ]
     }, {
-        path: '/plugins/:pluginId/edit',
-        name: 'edit-plugin',
+        path: '/plugins/:pluginId',
         props: true,
-        component: EditPluginPage
-    }, {
-        path: '/plugins/:pluginId/update',
-        name: 'update-plugin',
-        props: true,
-        component: UpdatePluginPage
+        component: PluginActionPageLayout,
+        meta: {
+            requireAuth: true,
+        },
+        children: [
+            {
+                path: 'edit',
+                name: 'edit-plugin',
+                component: EditPluginPage,
+                meta: {
+                    title: 'Edit Plugin'
+                }
+            }, {
+                path: 'update',
+                name: 'update-plugin',
+                component: UpdatePluginPage,
+                meta: {
+                    title: 'Update Plugin'
+                }
+            }
+        ]
     }, {
         path: '/account',
         component: AccountLayout,

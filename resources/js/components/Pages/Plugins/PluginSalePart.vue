@@ -9,7 +9,3 @@ export default {
     name: "PluginSalePart"
 }
 </script>
-
-<style scoped>
-
-</style>

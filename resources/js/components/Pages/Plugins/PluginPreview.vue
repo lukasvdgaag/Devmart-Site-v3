@@ -12,7 +12,7 @@
                     <img :src="iconUrl" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
                     <h2 class="text-base font-bold break-words">
                         {{ plugin.title }}
-                        <span v-if="plugin?.version" class="text-gray-400 font-normal ml-1">{{plugin?.version}}</span>
+                        <span v-if="plugin?.version" class="text-gray-400 font-normal ml-1">{{ plugin?.version }}</span>
                     </h2>
                 </div>
                 <div class="text-sm mt-1">{{ plugin.description }}</div>
@@ -22,7 +22,7 @@
                     <Stat :small="true">Updated {{ formattedDate }}</Stat>
                 </Stats>
                 <div class="mt-1.5 lg:mt-auto gap-x-2 flex flex-row">
-                    <PluginLabel v-if="plugin.sale" :label="`${Number.parseInt(plugin.sale.percentage, 0)}% Sale`" :background="`bg-red-400`"/>
+                    <PluginLabel v-if="plugin.sale" :label="`${plugin.sale.percentage.toFixed(0)}% Sale`" :background="`bg-red-400`"/>
                     <PluginLabel v-if="plugin.custom" label="Custom"/>
                     <PluginLabel v-if="plugin.price > 0" label="Paid"/>
                     <PluginLabel v-if="DateService.isAfter(new Date(plugin.last_updated), DateService.offset(-7))" label="Recently Updated"
@@ -39,6 +39,7 @@ import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Stats from "@/components/Common/Stats.vue";
 import Stat from "@/components/Common/Stat.vue";
 import StringService from "../../../services/StringService";
+import Plugin from "@/models/rest/Plugin";
 
 export default {
     name: "PluginPreview",
@@ -51,7 +52,7 @@ export default {
         DateService() {
             return DateService
         },
-        formattedDate(){
+        formattedDate() {
             let date = new Date(this.plugin.last_updated);
             return DateService.formatDateRelatively(date, DateService.diffInDays(new Date(), date) <= 7);
         },
@@ -81,7 +82,7 @@ export default {
 
     props: {
         plugin: {
-            type: Object,
+            type: Plugin,
             required: true
         }
     }
