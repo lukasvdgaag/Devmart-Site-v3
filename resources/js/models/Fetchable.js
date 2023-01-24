@@ -73,9 +73,10 @@ export default class Fetchable {
         this.page = page;
         if (!this.canRequest()) return;
 
-        router.replace({
+        await router.isReady();
+        await router.replace({
             query: {
-                ...router.currentRoute.query,
+                ...router.currentRoute.value.query,
                 page
             }
         });
