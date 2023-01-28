@@ -125,6 +125,16 @@ export default {
     },
 
     /**
+     * Fetches a specific plugin update.
+     * @param {number|string} updateId Id of the update
+     * @returns {Promise<PluginUpdate>}
+     */
+    async fetchPluginUpdate(updateId) {
+        const res = await client.get(`/updates/${updateId}`);
+        return PluginUpdate.fromJson(res.data);
+    },
+
+    /**
      * Fetches a plugin by its ID
      * @param {number|string} id Id of the plugin
      * @param {boolean} featuresField Whether to include the features field

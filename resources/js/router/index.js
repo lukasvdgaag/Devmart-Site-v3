@@ -17,6 +17,7 @@ import PluginUpdatesPage from "@/components/Pages/Plugins/Views/PluginUpdatesPag
 import PluginActionPageLayout from "@/components/Pages/Plugins/Layouts/PluginActionPageLayout.vue";
 import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 import PluginVersionsLayout from "@/components/Pages/Plugins/Layouts/PluginVersionsLayout.vue";
+import PluginUpdateInfoPage from "@/components/Pages/Plugins/Views/PluginUpdateInfoPage.vue";
 
 const routes = [
     {
@@ -79,9 +80,14 @@ const routes = [
                         path: '',
                         name: 'plugin-updates',
                         component: PluginUpdatesPage,
-                    }
+                    },
                 ],
-            }
+            }, {
+                path: 'updates/:updateId',
+                name: 'plugin-update',
+                props: true,
+                component: PluginUpdateInfoPage,
+            },
         ]
     }, {
         path: '/plugins/:pluginId',

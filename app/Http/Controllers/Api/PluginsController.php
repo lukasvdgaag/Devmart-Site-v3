@@ -270,8 +270,6 @@ class PluginsController
         if ($withTotalDownloadsField) $query = $this->insertTotalDownloads($query);
         if ($withSaleField) $query = $this->insertSaleInformation($query);
 
-        Log::error($query->toSql());
-
         $plugin = $query->first();
         if ($plugin == null) {
             return response()->json([
@@ -304,6 +302,20 @@ class PluginsController
             'pages' => $paginated->lastPage(),
             'updates' => $paginated->items()
         ]);
+    }
+
+    public function handlePluginUpdateRetrieval(Request $request, string|int $versionId) {
+        $updateRes = PluginUpdate::query()->whereKey($versionId)->first();
+        if (!$updateRes) {
+            return response()->json([
+                'error' => 'Plugin update not found.'
+            ], 404);
+        }
+
+        $pluginRes = $this->getPluginOrRespond($request, $updateRes->plugin, false);
+        if (!is_array($pluginRes)) return $pluginRes;
+
+        return response()->json($updateRes);
     }
 
     public function handlePluginListRetrieval(Request $request)

@@ -44,10 +44,17 @@ export default {
     methods: {
         async fetchVersions() {
             try {
-                const res = await PluginRepository.fetchPluginUpdates(this.pluginId, this.updatesFetchable.page);
-                this.updates = res.updates;
-                this.pageCount = res.pages;
-                this.updateCount = res.total;
+                if (this.updateId) {
+                    let update = await PluginRepository.fetchPluginUpdate(this.updateId);
+                    this.updates = [update];
+                    this.pageCount = 1;
+                    this.updateCount = 1;
+                } else {
+                    const res = await PluginRepository.fetchPluginUpdates(this.pluginId, this.updatesFetchable.page);
+                    this.updates = res.updates;
+                    this.pageCount = res.pages;
+                    this.updateCount = res.total;
+                }
             } catch (e) {
                 this.$route.push({name: 'not-found'});
             }
@@ -65,6 +72,10 @@ export default {
         permissions: {
             type: [PluginPermissions, null],
             required: true,
+        },
+        updateId: {
+            type: String,
+            default: undefined,
         }
     }
 }

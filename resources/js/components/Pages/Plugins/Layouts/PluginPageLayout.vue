@@ -79,6 +79,7 @@ import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Alert from "@/components/Common/Alert.vue";
 import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
+import PluginUpdateInfoPage from "@/components/Pages/Plugins/Views/PluginUpdateInfoPage.vue";
 
 export default {
     name: "PluginOverviewPage",

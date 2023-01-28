@@ -40,6 +40,8 @@ Route::prefix('api')->group(function () {
             Route::get('/sales', [PluginsController::class, 'handlePluginSalesRetrieval']);
             Route::get('/sales/daily', [PluginsController::class, 'handleDailyPluginSalesRetrieval']);
 
+            Route::get('/updates/{updateId}', [PluginsController::class, 'handlePluginUpdateRetrieval'])
+                ->withoutMiddleware('auth:sanctum');
 
             Route::get("/{pluginId}", [PluginsController::class, 'handlePluginRetrieval'])
                 ->withoutMiddleware('auth:sanctum');
