@@ -255,7 +255,7 @@ class PluginsController
                                         bool       $withSaleField = false,
                                         bool       $withFeaturesField = false)
     {
-        $query = Plugin::query()->where('plugins.id', '=', $pluginId);
+        $query = Plugin::query()->whereKey($pluginId);
         if ($includeAllFields) {
             if ($withFeaturesField) $query = $query->select('plugins.*');
             else $query = $query->select('plugins.id', 'plugins.name', 'plugins.description', 'plugins.title', 'plugins.custom'
@@ -269,6 +269,8 @@ class PluginsController
         if ($withAuthorField) $query = $this->insertAuthorUsername($query);
         if ($withTotalDownloadsField) $query = $this->insertTotalDownloads($query);
         if ($withSaleField) $query = $this->insertSaleInformation($query);
+
+        Log::error($query->toSql());
 
         $plugin = $query->first();
         if ($plugin == null) {

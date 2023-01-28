@@ -51,7 +51,7 @@ class User extends Authenticatable
         'username_changed_at' => 'timestamp'
     ];
 
-    public function getPlugins(): Builder
+    public function getPlugins()
     {
         if ($this->role === "admin") {
             return Plugin::query()
@@ -60,8 +60,7 @@ class User extends Authenticatable
                         ->orWhere('price', '>', 0);
                 });
         }
-        return Plugin::query()->whereBelongsTo($this)
-            ->orWhere('author', '=', $this->id);
-//        return $this->belongsToMany(Plugin::class);
+        return $this->belongsToMany(Plugin::class, 'plugin_user', 'user_id', 'plugin_id')
+            ->orWhere('plugins.author', '=', $this->id);
     }
 }

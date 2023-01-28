@@ -67,7 +67,7 @@ class Plugin extends Model
         if ($this->price === 0 && !$this->custom) return true;
 
         if ($user instanceof User) {
-            return $this->hasModifyAccess($user) || $user->getPlugins()->where('id', '=', $this->id)->count() !== 0;
+            return $this->hasModifyAccess($user) || $user->getPlugins()->where('plugins.id', '=', $this->id)->count() !== 0;
         }
         return false;
     }
