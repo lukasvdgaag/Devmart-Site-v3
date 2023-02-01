@@ -20,7 +20,7 @@
                 </p>
             </div>
             <div class="flex flex-col gap-2">
-                <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                <nav class="group isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                     <PaginationItem :page="currentPage-1"
                                     :active="false"
                                     :disabled="false"
@@ -34,6 +34,7 @@
                     <PaginationItem
                         @update="handleUpdate"
                         v-for="page in pages"
+                        class="first:rounded-l-md last:rounded-r-md"
                         :page="page.page"
                         :active="page.active"
                         :disabled="page.disabled"/>
