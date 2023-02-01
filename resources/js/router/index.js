@@ -18,6 +18,7 @@ import PluginActionPageLayout from "@/components/Pages/Plugins/Layouts/PluginAct
 import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 import PluginVersionsLayout from "@/components/Pages/Plugins/Layouts/PluginVersionsLayout.vue";
 import PluginUpdateInfoPage from "@/components/Pages/Plugins/Views/PluginUpdateInfoPage.vue";
+import PastePageLayout from "@/components/Pages/Paste/PastePageLayout.vue";
 
 const routes = [
     {
@@ -35,6 +36,17 @@ const routes = [
     }, {
         path: '/paste',
         name: 'paste',
+        component: PastePageLayout,
+        children: [
+            {
+                path: '',
+                name: 'new-paste',
+            }, {
+                path: ':pasteId',
+                name: 'paste-info',
+                props: true,
+            }
+        ],
     }, {
         path: '/builds',
         name: 'builds',

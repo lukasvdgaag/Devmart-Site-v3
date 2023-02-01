@@ -1,6 +1,5 @@
 <template>
-
-    <header :class="{'header-filled': this.background}" class="header-big d-grid">
+    <header :class="{'header-filled': this.background}" class="header-big d-grid z-10">
         <nav class="flex flex-row justify-between items-center">
             <router-link exact-active-class="lmWixQ" :to="{name: 'home'}" class="nav-side">
                 <Logo class="header-logo"/>

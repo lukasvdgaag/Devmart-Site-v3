@@ -70,6 +70,38 @@ export default {
         }
     },
 
+    formatTimeAgo(date) {
+        const now = new Date();
+
+        const diff = Math.abs(now.getTime() - date.getTime());
+        const minutes = Math.floor((diff % (1000 * 3600)) / (1000 * 60));
+        const hours = Math.floor((diff % (1000 * 3600 * 24)) / (1000 * 3600));
+        const days = Math.floor(diff / (1000 * 3600 * 24));
+        const weeks = Math.floor(diff / (1000 * 3600 * 24 * 7));
+        const months = Math.floor(diff / (1000 * 3600 * 24 * 30));
+        const years = Math.floor(diff / (1000 * 3600 * 24 * 365));
+
+        if (minutes <= 2) {
+            return 'Just now';
+        }
+        if (hours <= 1) {
+            return `${minutes} minutes ago`;
+        }
+        if (days <= 1) {
+            return `${hours} hour${hours>1 ? 's' : ''} ago`;
+        }
+        if (weeks <= 1) {
+            return `${days} day${days>1 ? 's' : ''} ago`;
+        }
+        if (months <= 1) {
+            return `${weeks} week${weeks>1 ? 's' : ''} ago`;
+        }
+        if (years <= 1) {
+            return `${months} month${months>1 ? 's' : ''} ago`;
+        }
+        return `${years} year${years>1 ? 's' : ''} ago`;
+    },
+
     /**
      * @param {Date} date
      * @param {boolean} withTime
