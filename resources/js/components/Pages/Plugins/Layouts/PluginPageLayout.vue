@@ -30,6 +30,8 @@
                                 </PluginSalePart>
                                 <PluginSalePart v-if="saleTimeLeft">{{ saleTimeLeft }}</PluginSalePart>
                             </div>
+                            <PluginLabel v-if="plugin.isRecentlyUpdated()" label="Recently Updated"
+                                         icon="fa-calendar-days" class="mb-2"/>
                             <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
                                 <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
                                 <div class="ml-3-small">

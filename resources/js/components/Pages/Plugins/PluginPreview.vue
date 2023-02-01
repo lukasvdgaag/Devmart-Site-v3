@@ -25,7 +25,7 @@
                     <PluginLabel v-if="plugin.sale" :label="`${plugin.sale.percentage.toFixed(0)}% Sale`" :background="`bg-red-400`"/>
                     <PluginLabel v-if="plugin.custom" label="Custom"/>
                     <PluginLabel v-if="plugin.price > 0" label="Paid"/>
-                    <PluginLabel v-if="DateService.isAfter(new Date(plugin.last_updated), DateService.offset(-7))" label="Recently Updated"
+                    <PluginLabel v-if="plugin.isRecentlyUpdated()" label="Recently Updated"
                                  icon="fa-calendar-days"/>
                 </div>
             </div>

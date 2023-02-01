@@ -47,6 +47,9 @@
         <PluginSidebarHeader class="mt-2">Version</PluginSidebarHeader>
         <div>{{ plugin?.latest_update?.version }}</div>
 
+        <PluginSidebarHeader class="mt-2">Last Updated</PluginSidebarHeader>
+        <div>{{ DateService.formatDateRelatively(new Date(plugin.last_updated), true) }}</div>
+
         <template v-if="categories.length > 0">
             <PluginSidebarHeader class="mt-8 mb-2">Categories</PluginSidebarHeader>
             <div class="flex flex-wrap gap-2">
@@ -90,12 +93,16 @@ import Icon from "@/components/Common/Icon/Icon.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PluginPermissions from "@/models/rest/PluginPermissions";
 import Plugin from "@/models/rest/Plugin";
+import DateService from "../../../services/DateService";
 
 export default {
     name: "PluginSidebar",
     components: {PluginLabel, Icon, PluginCategory, PluginSidebarHeader, StickyFooter, Sidebar},
 
     computed: {
+        DateService() {
+            return DateService
+        },
         StringService() {
             return StringService
         },

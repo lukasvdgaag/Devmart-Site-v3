@@ -1,5 +1,6 @@
 import PluginUpdate from "@/models/rest/PluginUpdate";
 import Sale from "@/models/rest/Sale";
+import DateService from "@/services/DateService";
 
 export default class Plugin {
 
@@ -48,7 +49,7 @@ export default class Plugin {
      */
     categories;
     /**
-     * @type {Date}
+     * @type {string}
      */
     last_updated;
     /**
@@ -110,6 +111,13 @@ export default class Plugin {
             plugin[key] = json[key];
         }
         return plugin;
+    }
+
+    isRecentlyUpdated() {
+        return DateService.isAfter(
+            this.latest_update?.created_at ?? new Date(this.last_updated),
+            DateService.offset(-7)
+        );
     }
 
 }
