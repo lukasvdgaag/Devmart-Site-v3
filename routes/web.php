@@ -33,6 +33,11 @@ Route::prefix('api')->group(function () {
             Route::put('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationUpdate']);
         });
 
+        Route::prefix('/paste')->group(function() {
+            Route::get('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteListRetrieval'])
+            ->withoutMiddleware('auth:sanctum');
+        });
+
         Route::prefix('/plugins')->group(function () {
             Route::get("", [PluginsController::class, 'handlePluginListRetrieval'])
                 ->withoutMiddleware('auth:sanctum');

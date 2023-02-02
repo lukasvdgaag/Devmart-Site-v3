@@ -16,9 +16,9 @@
                 <hr>
                 <PluginSidebarHeader>Recent Pastes</PluginSidebarHeader>
 
-                <div class="flex gap-3">
-                    <router-link :to="{name: 'paste-view', params: {pasteId: paste.id}}" v-for="paste in recentPastes" :key="paste.id" target="_blank">
-                        <div class="text-sm bold">{{paste.title}}</div>
+                <div class="flex flex-col gap-3">
+                    <router-link :to="{name: 'paste-info', params: {pasteId: paste.id}}" v-for="paste in recentPastes" :key="paste.id" target="_blank" class="plain">
+                        <div class="text-sm font-semibold">{{paste.title}}</div>
                         <div class="text-xs">{{ DateService.formatTimeAgo(paste.updated_at)}} | by {{paste?.creator_username ?? 'anonymous'}}</div>
                     </router-link>
                 </div>
@@ -51,7 +51,7 @@ export default {
     components: {PluginSidebarHeader, Sidebar, HeaderBackground, Navbar},
 
     created() {
-
+        this.fetchRecentPastes();
     },
 
     data() {
