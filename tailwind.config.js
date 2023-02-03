@@ -2,8 +2,10 @@
 module.exports = {
     content: [
         "./resources/js/components/**/*.vue",
-        "./resources/js/components/**/**/*.vue",
+        "./resources/views/**/*.blade.php",
+        "./node_modules/flowbite/**/*.js",
     ],
+    darkMode: 'media',
     theme: {
         extend: {
             zIndex: {
@@ -133,5 +135,7 @@ module.exports = {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require('flowbite/plugin'),
+    ],
 }

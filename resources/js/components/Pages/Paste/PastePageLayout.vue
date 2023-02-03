@@ -1,15 +1,16 @@
 <template>
-    <div class="w-full flex flex-col items-center m-0 p-0 relative">
+    <div class="w-full flex flex-col items-center m-0 p-0 relative h-screen">
         <Navbar :background="false"/>
 
         <HeaderBackground title="Paste" subtitle="Easily share text."/>
 
-        <div class="d-grid mt-6">
-            <Sidebar :left-side="true" :margin="false" class="mb-6 lg:mb-2">
+        <div class="d-grid mt-6 h-full">
+            <Sidebar :left-side="true" :margin="false" class="mb-6 lg:mb-2 row-start-2 lg:row-start-1">
                 <router-link :to="{name: 'new-paste'}" target="_blank" class="action-button primary btn-text-full flex flex-col gap-0 align-center">
                     Create New Paste
                 </router-link>
-                <router-link v-if="useAuth().loggedIn" :to="{name: 'paste-list'}" class="action-button gray flex flex-col align-center">
+                <!-- :to="{name: 'paste-list'}" -->
+                <router-link v-if="useAuth().loggedIn" to="#" class="action-button gray flex flex-col align-center">
                     Your Pastes
                 </router-link>
 
@@ -23,8 +24,8 @@
                     </router-link>
                 </div>
             </Sidebar>
-            <div class="col-span-12 lg:col-span-9 flex">
-
+            <div class="col-span-12 lg:col-span-9 flex h-full">
+                <router-view/>
             </div>
         </div>
 
