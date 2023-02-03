@@ -2,7 +2,7 @@
     <textarea v-if="isTextarea"
               :value="modelValue"
               @input="onInput($event)"
-              class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full"
+              class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full  dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
               :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
                type === 'checkbox' ? 'p-2.5 rounded-md' : '',
@@ -13,7 +13,7 @@
            @change="onChange($event)"
            :type="type"
            @input="onInput($event)"
-           class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600"
+           class="!rounded-md shadow-sm focus:ring dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
            :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
                type === 'checkbox' ? 'p-2.5 rounded-md' : '',

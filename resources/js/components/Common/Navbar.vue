@@ -16,14 +16,14 @@
             </div>
 
             <div class="nav-button nav-side">
-                <div v-if="this.user !== null" class="nav-action account-link pointer relative">Account
+                <div v-if="this.user !== null" class="nav-action account-link cursor-pointer relative">Account
                     <div class="account-popup-container pt-1">
                         <div class="account-popup">
-                            <div class="size-14 font-bold account-popup-info cursor-default">
+                            <div class="text-sm font-bold account-popup-info cursor-default">
                                 Hi, {{ this.user.username }} 👋
                             </div>
-                            <div class="size-14 flex flex-row items-center justify-between account-popup-item">
-                                <label class="w-full pointer text-inherit" for="dark_mode">Dark Mode</label>
+                            <div class="text-sm flex flex-row items-center justify-between account-popup-item">
+                                <label class="w-full cursor-pointer text-inherit" for="dark_mode">Dark Mode</label>
                                 <div>
                                     <SwitchInput :small="true" :selected="this.user?.theme === 'dark-theme'"/>
                                 </div>
@@ -33,7 +33,7 @@
                                 <font-awesome-icon icon="gear" class="icon"/>
                                 <span>Settings</span>
                             </router-link>
-                            <button class="flex flex-row plain items-center gap-2 logout-link border-radius-small-bottom account-popup-item"
+                            <button class="flex flex-row plain items-center gap-2 logout-link rounded-b-sm account-popup-item"
                                     type="submit"
                                     @click="this.logoutUser($event)">
                                 <font-awesome-icon icon="right-from-bracket" class="icon"/>

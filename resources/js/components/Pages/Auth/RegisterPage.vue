@@ -12,7 +12,7 @@
                                          class="button primary flex flex-col align-center plain p-3">
                                 <div class="flex flex-row gap-2">
                                     <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
-                                    <div class="size-18 font-bold">Sign up with Discord</div>
+                                    <div class="text-base font-bold">Sign up with Discord</div>
                                 </div>
                             </router-link>
 
@@ -38,7 +38,7 @@
                                     />
 
                                     <div v-if="discordAuthenticated && discordUsername !== discordInfo.username"
-                                         class="size-16 text-warning mt-1">
+                                         class="text-base text-warning mt-1">
                                         Your Discord username didn't meet our standards, so we entered a modified
                                         version.
                                     </div>
@@ -88,7 +88,7 @@
                                                placeholder="Password"
                                                required autocomplete="new-password"/>
 
-                                        <p class="muted size-14 mt-1 italic">The password must be at least 8 characters
+                                        <p class="muted text-sm mt-1 italic">The password must be at least 8 characters
                                             long.</p>
 
 

@@ -9,7 +9,7 @@
                         <h1>404 - Page Not Found</h1>
                         <MutedText class="text-md">We were unable to find the page you requested.</MutedText>
 
-                        <router-link :to="{name:'home'}" class="block w-fit button !mt-4 primary p-2 plain size-20">Back to Home</router-link>
+                        <router-link :to="{name:'home'}" class="block w-fit button !mt-4 primary p-2 plain text-xl">Back to Home</router-link>
                     </div>
 
                     <img class="rounded-md mt-5 max-h-[250px]" :src="imageUrl"/>

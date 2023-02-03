@@ -27,7 +27,8 @@ import {
     faRightFromBracket,
     faSackDollar,
     faFileArrowDown,
-    faChevronUp
+    faChevronUp,
+    faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -38,7 +39,8 @@ import {createMetaManager} from "vue-meta";
 library.add(
     faGithub, faDiscord,
     faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation, faSackDollar,
-    faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem, faChevronLeft, faChevronRight,faChevronUp, faFileArrowDown
+    faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem, faChevronLeft, faChevronRight,faChevronUp, faFileArrowDown,
+    faChevronDown,
 );
 
 const pinia = createPinia().use(({store}) => {

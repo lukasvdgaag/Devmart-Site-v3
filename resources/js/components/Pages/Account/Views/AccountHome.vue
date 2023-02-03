@@ -146,12 +146,12 @@
             <input id="theme" type="hidden" :value="user.theme">
 
             <div v-for="type in AccountTheme()"
-                 class="flex flex-col gap-2 border-radius-small p-2 text-center pointer account-theme"
+                 class="flex flex-col gap-2 rounded-sm p-2 text-center cursor-pointer account-theme"
                  :class="{'selected': user.theme === type}"
                  @click="selectTheme(type)"
                  :value="type">
-                <img class="border-radius-small" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
-                <span class="text-medium font-bold">{{ StringService.capFirstLetter(type) }}</span>
+                <img class="rounded-sm" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
+                <span class="text-md font-bold">{{ StringService.capFirstLetter(type) }}</span>
             </div>
         </div>
 

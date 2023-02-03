@@ -1,5 +1,5 @@
 <template>
-    <div class="download-button-small mt-6 flex flex-col align-center"
+    <div class="download-button-small mt-6 flex flex-col align-center bg-white dark:bg-gray-900"
          :class="{sticky: !fixed, fixed: fixed}">
         <slot/>
     </div>
