@@ -5,7 +5,7 @@ module.exports = {
         "./resources/views/**/*.blade.php",
         "./node_modules/flowbite/**/*.js",
     ],
-    darkMode: 'media',
+    darkMode: 'class',
     theme: {
         extend: {
             zIndex: {

@@ -11,7 +11,7 @@
                         </div>
                     </a>
 
-                    <hr>
+                    <Hr/>
 
                     <div>
                         <Label for="username" value="Username or Email"/>
@@ -71,10 +71,11 @@ import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
 import {useAuth} from "@/store/authStore";
 import ValidationError from "@/components/Common/ValidationError.vue";
+import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "LoginPage",
-    components: {ValidationError, Input, Label, AuthCard, Navbar},
+    components: {Hr, ValidationError, Input, Label, AuthCard, Navbar},
 
     created() {
         let loggedIn = this.authStore.loggedIn;

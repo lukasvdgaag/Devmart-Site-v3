@@ -1,6 +1,6 @@
 <template>
     <h1>Account Settings</h1>
-    <hr>
+    <Hr/>
 
     <Alert v-if="justUpdated" class="mb-4 font-medium" icon="fa-circle-check" type="success">
         {{ isAdmin ? `You saved the account settings of ${user.username}` : "Your settings have been saved!" }}
@@ -80,13 +80,14 @@
 
         <div class="mt-3">
             <Label class="font-bold" value="Discord Suggestions Notifications"/>
-            <Select>
-                <option v-for="(desc, type) in DiscordSuggestionNotifications()"
-                        :value="type"
-                        :selected="user.discord_suggestion_notifications === type">
-                    {{ desc }}
-                </option>
-            </Select>
+            <DropdownSelect id="discord-sugs-dd"
+                            :items="discordSuggestionNotificationsSelect"
+                            placeholder="Select a notification type"
+                            header="Discord Suggestions Notifications"
+                            description="Type of notifications you want to receive from our Discord Bot regarding your suggestions."
+                            class="w-full mt-1"
+                            :full-width="true"
+                            v-model="selectedDSN"/>
 
             <MutedText>
                 Select what kind of notifications you want to receive from our Discord Bot regarding your
@@ -179,17 +180,36 @@ import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
 import StringService from "@/services/StringService";
 import DateService from "@/services/DateService";
+import Hr from "@/components/Common/Hr.vue";
+import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
+import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
+import {initDropdowns} from "flowbite";
 
 export default {
     name: "AccountHome",
-    components: {AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
+    components: {DropdownSelect, Hr, AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
 
     data() {
         return {
             errors: {},
             loading: false,
             justUpdated: false,
+            selectedDSN: null,
+            discordSuggestionNotificationsSelect: [
+                new DropdownSelectItemModel('All messages', 'Get a notification for every action that regards you.', 'ALL_MESSAGES'),
+                new DropdownSelectItemModel('Only staff reactions', 'Receive only notifications from staff reactions and responses.', 'ONLY_ADMINS'),
+                new DropdownSelectItemModel('Only responses', 'Receive only notifications from responses on your suggestions.', 'ONLY_RESPONSES'),
+                new DropdownSelectItemModel('None', 'Do not receive any notifications.', 'NONE'),
+            ],
         }
+    },
+
+    created() {
+        this.selectedDSN = this.discordSuggestionNotificationsSelect.filter(e => e.value === this.user.discord_suggestion_notifications)[0] ?? null;
+    },
+
+    mounted() {
+        initDropdowns();
     },
 
     computed: {
@@ -224,8 +244,10 @@ export default {
             this.justUpdated = false;
 
             try {
+                this.user.discord_suggestion_notifications = this.selectedDSN?.value ?? null;
                 const response = await UserRepository.updateUserById(this.user.id, this.user);
                 this.user = response.data.user;
+                this.selectedDSN = this.discordSuggestionNotificationsSelect.filter(e => e.value === this.user.discord_suggestion_notifications)[0] ?? null;
 
                 this.errors = {};
                 this.justUpdated = true;

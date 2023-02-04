@@ -1,6 +1,7 @@
 <template>
-    <button class="bg-white dark:bg-gray-800 cursor-pointer text-gray-900 dark:text-gray-400 px-4 py-2 rounded-md flex align-center border
+    <button class="bg-white dark:bg-gray-800 cursor-pointer text-gray-900 dark:text-gray-400 px-4 py-2 rounded-md flex items-center justify-between border
     border-gray-300 dark:border-gray-600 focus:ring focus:ring-opacity-50 focus:border focus:border-indigo-300 focus:ring-indigo-200"
+            :class="this.class"
             role="button"
             :data-dropdown-toggle="id" type="button">
         <span>{{ value?.text ?? placeholder }}</span>
@@ -8,7 +9,10 @@
     </button>
 
     <div :id="id"
-         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-60 dark:bg-gray-700 dark:divide-gray-600 absolute top-full left-0">
+         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute top-full left-0
+         w-[calc(100%-1.5rem)] border border-gray-200 dark:border-gray-600"
+         :class="{'md:w-60': !fullWidth}"
+    >
         <div v-if="(header && header.length > 0) || (description && description.length > 0)" class="px-4 py-3">
             <div v-if="header && header.length > 0" class="text-md font-medium dark:text-gray-200">{{ header }}</div>
             <p v-if="description && description.length > 0" class="border-none dark:text-gray-400 leading-tight">{{ description }}</p>
@@ -77,6 +81,16 @@ export default {
             type: String,
             required: false,
             default: '',
+        },
+        class: {
+            type: String,
+            required: false,
+            default: '',
+        },
+        fullWidth: {
+            type: Boolean,
+            required: false,
+            default: false,
         }
     }
 }

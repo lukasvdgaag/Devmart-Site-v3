@@ -20,7 +20,7 @@
     --background-soft-darkened: #ECECECFF;
     --background-soft-darkest: #e2e2e2;
     --box-shadow: 0 8px 15px rgb(0 0 0 / 20%);
-    --page-gutter: 40px;
+    --page-gutter: 2.5rem;
     --theme-color: #5162d5;
     --danger-color: #d55151;
     --theme-sharpened: #0c81ff;
@@ -741,15 +741,6 @@ form .form-section:not(:first-child) {
     margin-top: 0;
 }
 
-button, .button, select {
-    background-color: var(--theme-color);
-    color: #000;
-    padding: 4px 8px;
-    border-radius: 6px;
-    margin-top: 4px;
-    transition: all .2s ease-in-out;
-}
-
 button.large-padding {
     padding: 6px 20px;
 }
@@ -1045,10 +1036,6 @@ input:checked + .slider:before {
 .small input:checked + .slider:before {
     -ms-transform: translateX(20px);
     transform: translateX(20px);
-}
-
-input:disabled, .input.disabled {
-    background-color: var(--background-soft);
 }
 
 :disabled, .disabled {
@@ -1726,10 +1713,6 @@ select {
     .account-theme-selector > * {
         min-width: 200px;
         width: 200px;
-    }
-
-    form {
-        padding: 0 6px;
     }
 
     form .form-section:not(:first-child) {

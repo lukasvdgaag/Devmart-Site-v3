@@ -16,7 +16,7 @@
                                 </div>
                             </router-link>
 
-                            <hr>
+                            <Hr/>
 
                             <form method="POST">
                                 <div v-if="discordAuthenticated" class="alert-success">
@@ -137,10 +137,11 @@ import Navbar from "@/components/Common/Navbar";
 import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
 import RegisterSvg from "@/components/SVG/RegisterSvg";
+import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "RegisterPage",
-    components: {RegisterSvg, Input, Label, Navbar},
+    components: {Hr, RegisterSvg, Input, Label, Navbar},
 
     data() {
         return {
