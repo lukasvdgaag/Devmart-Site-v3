@@ -1,12 +1,13 @@
-import PluginUpdate from "@/models/rest/PluginUpdate";
-import Sale from "@/models/rest/Sale";
-
 export default class Paste {
 
     /**
      * @type {number}
      */
     id;
+    /**
+     * @type {string}
+     */
+    name;
     /**
      * @type {number}
      */
@@ -27,6 +28,10 @@ export default class Paste {
      * @type {string}
      */
     visibility;
+    /**
+     * @type {string}
+     */
+    lifetime;
     /**
      * @type {Date}
      */

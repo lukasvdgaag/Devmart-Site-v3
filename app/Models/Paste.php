@@ -14,15 +14,17 @@ class Paste extends Model
         'creator' => 0,
         'title' => 'Unknown Paste',
         'visibility' => 'PUBLIC',
-        'lifetime' => '3d'
+        'lifetime' => '7d'
     ];
 
     protected $fillable = [
-        'id',
+        'name',
         'creator',
         'visibility',
         'lifetime',
-        'title'
+        'title',
+        'expire_at',
+        'content'
     ];
 
     protected $casts = [
