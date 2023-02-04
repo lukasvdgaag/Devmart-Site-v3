@@ -21,7 +21,7 @@
                 <PluginSidebarHeader>Recent Pastes</PluginSidebarHeader>
 
                 <div class="flex flex-col gap-3">
-                    <router-link :to="{name: 'paste-info', params: {pasteId: paste.id}}" v-for="paste in recentPastes" :key="paste.id" target="_blank"
+                    <router-link :to="{name: 'paste-info', params: {pasteId: paste.name}}" v-for="paste in recentPastes" :key="paste.id" target="_blank"
                                  class="plain">
                         <div class="text-sm font-semibold">{{ paste.title }}</div>
                         <div class="text-xs dark:text-gray-400">{{ DateService.formatTimeAgo(paste.updated_at) }} | by

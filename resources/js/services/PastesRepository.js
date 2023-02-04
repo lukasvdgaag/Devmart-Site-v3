@@ -1,4 +1,4 @@
-import Paste from "@/models/rest/Paste";
+import Paste from "@/models/rest/paste/Paste";
 import PasteListResponse from "@/models/rest/response/PasteListResponse";
 
 export const client = axios.create({
@@ -27,6 +27,21 @@ export default {
             pastes.push(Paste.fromJson(paste));
         }
         return new PasteListResponse(res.data.total, res.data.currentPage, res.data.pages, pastes);
+    },
+
+    /**
+     * Create a new paste.
+     * @param {PasteCreateBody} body
+     * @returns {Promise<Paste>}
+     */
+    async createPaste(body) {
+        try {
+            const res = await client.post("/", body);
+
+            return Paste.fromJson(res.data);
+        } catch (e) {
+            throw e;
+        }
     }
 
 }

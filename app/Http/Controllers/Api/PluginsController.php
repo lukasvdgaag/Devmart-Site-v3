@@ -150,8 +150,6 @@ class PluginsController
 
         $attrs = $request->only(['version', 'beta_number', 'title', 'changelog', 'short_changelog']);
 
-        Log::error(implode(',', $attrs));
-
         $file = $request->file('file');
         $fileExt = $file->getClientOriginalExtension();
 

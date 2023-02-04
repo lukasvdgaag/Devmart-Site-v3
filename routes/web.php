@@ -36,6 +36,8 @@ Route::prefix('api')->group(function () {
         Route::prefix('/paste')->group(function() {
             Route::get('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteListRetrieval'])
             ->withoutMiddleware('auth:sanctum');
+            Route::post('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteCreation'])
+            ->withoutMiddleware('auth:sanctum');
         });
 
         Route::prefix('/plugins')->group(function () {

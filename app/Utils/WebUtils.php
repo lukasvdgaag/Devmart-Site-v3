@@ -74,4 +74,15 @@ class WebUtils
 
         return round($diff / (60 * 60 * 24));
     }
+
+    public static function generateRandomString(int $length = 10, string $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    {
+        $pieces = [];
+        $max = mb_strlen($chars, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $pieces []= $chars[rand(0, $max)];
+        }
+        return implode('', $pieces);
+    }
+
 }

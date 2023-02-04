@@ -9,8 +9,11 @@
                        tabindex="0"
                        placeholder="Paste title"
                        v-model="paste.title"
+                       :errors="errors"
+                       item="title"
                        required
                 />
+                <ValidationError item="title" :errors="errors" class="mt-0" />
             </div>
 
             <div class="flex flex-col-reverse flex-wrap md:flex-col md:flex-nowrap gap-2 mt-2">
@@ -54,15 +57,19 @@
                         </button>
                     </div>
                 </div>
-                <div>
+                <div class="lg:mb-6">
                     <Label class="uppercase text-md mb-1 md:hidden">Content</Label>
 
-                    <Input class="w-full min-h-[34rem] lg:h-full relative lg:mb-6"
+                    <Input class="w-full min-h-[34rem] lg:h-full relative"
                            :is-textarea="true"
                            placeholder="Start typing here..."
                            required
                            v-model="paste.content"
+                           :errors="errors"
+                           @update:modelValue="delete this.errors.content"
+                           item="content"
                     />
+                    <ValidationError item="content" :errors="errors" class="mt-0"/>
                 </div>
             </div>
         </form>
@@ -71,28 +78,67 @@
 
 <script>
 import Input from "@/components/Common/Input.vue";
-import Paste from "@/models/rest/Paste";
+import Paste from "@/models/rest/paste/Paste";
 import Label from "@/components/Common/Label.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
 import {initDropdowns} from "flowbite";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
+import PasteCreateBody from "@/models/rest/paste/PasteCreateBody";
+import PastesRepository from "@/services/PastesRepository";
+import ValidationError from "@/components/Common/ValidationError.vue";
 
 export default {
     name: "PasteCreatePage",
-    components: {DropdownSelect, StickyFooter, Label, Input},
+    components: {ValidationError, DropdownSelect, StickyFooter, Label, Input},
 
     mounted() {
         initDropdowns();
     },
 
     methods: {
+        checkForErrors() {
+            this.errors = {};
+
+            if (!this.paste.content || this.paste.content?.length === 0) {
+                this.errors.content = ["The content field is required."];
+            }
+
+            return Object.keys(this.errors)?.length === 0;
+        },
         async uploadPaste() {
             if (this.loading) return;
 
+            console.log('uploading paste...')
+
             this.loading = true;
+            if (!this.checkForErrors()) {
+                console.log('we have errors!', this.errors);
+                this.loading = false;
+                return;
+            }
 
+            console.log('we are good to go!')
 
+            const body = new PasteCreateBody(this.paste.title,
+                this.selectedStyle?.value,
+                this.selectedVisibility?.value,
+                this.selectedLifetime?.value,
+                this.paste.content
+            );
+
+            try {
+                const res = await PastesRepository.createPaste(body);
+                this.errors = {};
+                if (res) {
+                    this.$router.push({name: 'paste-info', params: {pasteId: res.name}});
+                }
+            } catch (e) {
+                console.error(e.response);
+                this.errors = e.response.data.errors;
+            } finally {
+                this.loading = false;
+            }
         },
     },
 
@@ -103,17 +149,18 @@ export default {
             selectedLifetime: null,
             selectedVisibility: null,
             selectedStyle: null,
+            errors: {},
             lifetimeSelectItems: [
                 new DropdownSelectItemModel('7 days', null, '7d'),
                 new DropdownSelectItemModel('2 weeks', null, '2w'),
                 new DropdownSelectItemModel('1 month', null, '1m'),
                 new DropdownSelectItemModel('3 months', null, '3m'),
-                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', 'unlimited')
+                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', null)
             ],
             visibilitySelectItems: [
-                new DropdownSelectItemModel('Public', 'Anyone can view this paste.', 'public'),
-                new DropdownSelectItemModel('Unlisted', 'Only people with the link can view this paste.', 'unlisted'),
-                new DropdownSelectItemModel('Private', 'Only you can view this paste.', 'private')
+                new DropdownSelectItemModel('Public', 'Anyone can view this paste.', 'PUBLIC'),
+                new DropdownSelectItemModel('Unlisted', 'Only people with the link can view this paste.', 'UNLISTED'),
+                new DropdownSelectItemModel('Private', 'Only you can view this paste.', 'PRIVATE')
             ],
             styleSelectItems: [
                 new DropdownSelectItemModel('Automatic', 'The style will be automatically detected.', 'automatic'),
