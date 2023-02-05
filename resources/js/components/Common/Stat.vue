@@ -1,5 +1,5 @@
 <template>
-    <div class="stat-dot" v-if="dot"></div>
+    <div class="rounded-full w-2 h-2 mr-2 flex-shrink-0 bg-gray-300" v-if="dot"></div>
     <div class="font-semibold text-gray-500" :class="{'text-sm mr-2': small, 'text-base mr-4': !small}">
         <slot></slot>
     </div>

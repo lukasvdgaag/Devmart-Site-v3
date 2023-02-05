@@ -8,6 +8,9 @@ module.exports = {
     darkMode: 'class',
     theme: {
         extend: {
+            borderWidth: {
+                '3': '3px',
+            },
             zIndex: {
                 '1': '1',
             },
@@ -36,6 +39,17 @@ module.exports = {
                 10: '2.5rem',
                 11: '2.75rem',
                 12: '3rem',
+                24: '6rem',
+            },
+            minHeight: {
+                'screen-1/2': '50vh',
+            },
+            listStyleType: {
+                'square': 'square',
+                'circle': 'circle',
+            },
+            textDecorationStyle: {
+                'none': 'none',
             },
             colors: {
                 white: '#FFFFFF',

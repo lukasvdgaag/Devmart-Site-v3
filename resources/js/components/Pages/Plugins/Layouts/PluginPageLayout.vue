@@ -19,7 +19,7 @@
                     >
                 </div>
 
-                <div class="plugin-content d-grid mt-2 mt-4-small">
+                <div class="d-grid mt-2 mt-4-small mb-32">
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
                             <div v-if="plugin?.sale" class="mb-3 flex gap-1 flex-wrap">
@@ -36,10 +36,10 @@
                                 <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
-                                        <h1 class="plugin-header">
+                                        <h1 class="font-black text-xl lg:text-4xl mb-1 lg:mb-2">
                                             {{ plugin.title }}
                                         </h1>
-                                        <p class="plugin-description">{{ plugin.description }}</p>
+                                        <p class="text-gray-600 text-xs lg:text-xl mb-3 lg:mb-6 font-roboto">{{ plugin.description }}</p>
                                     </router-link>
 
                                     <Stats class="pb-2">

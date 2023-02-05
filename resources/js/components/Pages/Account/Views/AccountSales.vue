@@ -202,8 +202,9 @@ export default {
             let prevDate = new Date();
             for (let i = 0; i < 14; i++) {
                 const obj = dates[i] ?? undefined;
-                let formattedPrevDate = `${prevDate.getFullYear()}-${prevDate.getMonth() + 1}-${prevDate.getDate()}`;
-                if (obj == null || obj.date !== formattedPrevDate) {
+                let formattedPrevDate = prevDate.toISOString().substring(0, 10);
+                console.log(obj.date, formattedPrevDate);
+                if (!obj || obj.date !== formattedPrevDate) {
                     dates.splice(i, 0, {
                         date: formattedPrevDate,
                         amount: 0,
@@ -215,6 +216,7 @@ export default {
 
             let thisWeekDates = dates.slice(0, 7);
 
+            console.log(thisWeekDates)
             this.chartSeries = [{
                 name: 'Earnings',
                 data: thisWeekDates.map(d => d.amount).reverse(),

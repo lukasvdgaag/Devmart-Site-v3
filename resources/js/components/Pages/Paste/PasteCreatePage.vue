@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2 w-full h-full">
-        <h2 class="dark:text-gray-100">{{pasteId ? 'Edit your Paste' : 'Create a new Paste'}}</h2>
+        <h2 class="dark:text-gray-100">{{ pasteId ? 'Edit your Paste' : 'Create a new Paste' }}</h2>
 
         <form class="h-full">
             <div class="flex flex-col gap-1">
@@ -104,7 +104,8 @@
             </div>
         </form>
     </div>
-    <ConfirmationModal id="confirm-delete-modal"
+    <ConfirmationModal v-if="pasteId"
+                       id="confirm-delete-modal"
                        title="Are you sure you want to delete this paste?"
                        @submit="deletePaste"/>
 </template>

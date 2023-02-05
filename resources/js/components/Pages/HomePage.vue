@@ -17,10 +17,10 @@
                 </div>
             </div>
         </div>
-        <section class="flex flex-col items-center vh-50 color-light" style="background: #131128">
+        <section class="flex flex-col items-center min-h-screen-1/2 text-gray-100" style="background: #131128">
             <div class="d-grid">
                 <div class="col-span-12 text-center mb-3">
-                    <div class="mw-767px">
+                    <div class="max-w-screen-md mx-auto">
                         <h2 class="text-4xl font-bold text-white">Go custom.</h2>
                         <p class="text-base mt-3">Order a custom-built Minecraft plugin, website, build or Discord bot
                             from
@@ -94,13 +94,13 @@
                 <div class="col-span-12 flex flex-col align-center pt-5">
                     <a href="/discord"
                        target="_blank"
-                       class="block button pink box-shadow p-3 plain mw-100 text-xl uppercase font-bold">
+                       class="block button pink box-shadow p-3 plain max-w-full text-xl uppercase font-bold">
                         Let's do this!
                     </a>
                 </div>
             </div>
         </section>
-        <section class="flex flex-col align-center color-light" style="background: #33335d">
+        <section class="flex flex-col align-center text-gray-100" style="background: #33335d">
             <div class="d-grid">
                 <div class="col-span-12 flex items-center flex-row">
 
@@ -108,7 +108,7 @@
                         <img style="max-height: 80%" src="/assets/img/plugins-preview2.png" alt="Plugins preview">
                     </div>
                     <div class="w-full text-center flex flex-col align-center">
-                        <div class="mw-767px">
+                        <div class="max-w-screen-md mx-auto">
                             <h2 class="text-4xl font-bold text-white">Minecraft Plugins.</h2>
                             <p class="text-base mt-3">Professional free and premium Minecraft Server Plugins for everyone.
                                 GCNT is the creator of popular projects such as SkyWarsReloaded, AdditionsPlus, and

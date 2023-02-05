@@ -4,8 +4,8 @@
 
         <div class="d-grid !grid-cols-12 gap-0" v-if="this.plugin && this.plugin?.name">
             <div class="titled-header col-span-12 text-center">
-                <h1 class="page-title">{{ title }}</h1>
-                <p class="page-subtitle">{{ plugin.name }}</p>
+                <h1>{{ title }}</h1>
+                <p class="text-lg">{{ plugin.name }}</p>
 
                 <div class="grid !grid-cols-12 gap-0">
                     <div class="col-span-12 lg:col-span-10 lg:col-start-2 rounded-xl py-9 md:px-5 text-left mt-2">
@@ -38,7 +38,7 @@ export default {
     components: {Navbar, PluginPreview},
 
     async created() {
-        this.title = this.$route?.matched[0]?.meta?.title;
+        this.title = this.$route?.matched[1]?.meta?.title;
 
         const [perms, plugin] = await Promise.all([
             this.fetchPermissions(),

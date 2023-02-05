@@ -63,6 +63,15 @@ export default {
         }
     },
 
+    created() {
+        if (useAuth().loggedIn) {
+            let theme = useAuth().user.theme;
+            if (theme === "dark") {
+                document.documentElement.classList.add("dark");
+            }
+        }
+    },
+
     computed: {
         loginLink() {
             const uri = {name: 'login'};

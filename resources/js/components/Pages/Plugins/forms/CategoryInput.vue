@@ -9,7 +9,7 @@
 
         <Input v-model="currentCategory"
                @keydown="e => handleInput(e)"
-               class="border-none shadow-none text-sm p-1"
+               class="border-none shadow-none text-sm p-1 bg-transparent"
                maxlength="20"
                type="text"
                ref="catsInput"

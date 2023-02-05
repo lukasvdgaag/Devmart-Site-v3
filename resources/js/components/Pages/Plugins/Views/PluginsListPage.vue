@@ -1,16 +1,13 @@
 <template>
     <div class="flex flex-row">
         <div class="w-full flex flex-col items-center m-0 p-0">
-            <Navbar :background="true"/>
+            <Navbar/>
 
-            <div class="d-grid !grid-cols-12 mb-6">
-                <div class="col-span-12 text-center">
-                    <h1 class="page-title">Plugins</h1>
-                    <p class="page-subtitle">Here you can find our selection of high quality plugins</p>
-                </div>
+            <HeaderBackground title="Plugins" subtitle="Our selection of high quality plugins"/>
 
+            <div class="d-grid !grid-cols-12 mb-6 mt-4">
                 <!-- Carousel -->
-                <div class="featured-plugins mb-4 col-span-12 text-center">
+                <div class="hidden featured-plugins mb-4 mt-2 col-span-12 text-center">
                     <div class="flex flex-row align-center">
                         <img src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048"
                              alt="Banner image"
@@ -40,11 +37,11 @@
                     </div>
 
                     <Pagination
-                        :current-page="pluginsFetchable.page"
+                        :current-page="pluginsFetchable?.page ?? 1"
                         :last-page="pages"
                         :per-page="6"
                         :total="totalPlugins"
-                    :fetchable="pluginsFetchable"/>
+                        :fetchable="pluginsFetchable"/>
                 </div>
             </div>
         </div>
@@ -61,10 +58,11 @@ import PluginRepository from "@/services/PluginRepository";
 import PluginPreview from "@/components/Pages/Plugins/PluginPreview.vue";
 import PluginsFetchable from "@/models/PluginsFetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
+import HeaderBackground from "@/components/Common/HeaderBackground.vue";
 
 export default {
     name: "PluginsListPage",
-    components: {Pagination, PluginPreview, Searchbar, Sidebar, Navbar},
+    components: {HeaderBackground, Pagination, PluginPreview, Searchbar, Sidebar, Navbar},
 
     created() {
         Promise.all([

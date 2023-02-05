@@ -3,9 +3,7 @@
         <div class="flex flex-col justify-between w-full h-full">
             <template v-if="icon">
                 <div class="flex flex-col">
-                    <div class="highlight-icon-container flex flex-col align-center">
-                        <font-awesome-icon :icon="icon"/>
-                    </div>
+                    <Icon :src="icon" isFontAwesome />
                     <MutedText>{{ label }}</MutedText>
                 </div>
                 <div class="flex flex-col content-center mt-2 mb-2 w-full font-bold text-2xl">
@@ -22,10 +20,11 @@
 
 <script>
 import MutedText from "@/components/Common/MutedText.vue";
+import Icon from "@/components/Common/Icon/Icon.vue";
 
 export default {
     name: "QuickLink",
-    components: {MutedText},
+    components: {Icon, MutedText},
 
     props: {
         label: {

@@ -29,7 +29,7 @@
                 </MutedText>
                 <MutedText v-else>
                     You recently changed your username.
-                    You can change it again in {{ this.getDaysTillNextUsernameChange() }} days.
+                    You can change it again in {{ getDaysTillNextUsernameChange }} days.
                 </MutedText>
             </template>
         </div>
@@ -116,7 +116,7 @@
         <h2 class="mt-4">Verification</h2>
         <div class="mt-2">
             <Label class="font-bold" value="Account ID"/>
-            <DisabledFormText>{{ user.id ?? '0'}}</DisabledFormText>
+            <DisabledFormText>{{ user.id ?? '0' }}</DisabledFormText>
 
             <MutedText v-if="isAdmin">
                 The account ID can be used to verify the GCNT account on any additional GCNT
@@ -143,17 +143,15 @@
         </div>
 
         <h2 class="mt-4">Appearance</h2>
-        <div class="flex flex-row gap-4 account-theme-selector">
-            <input id="theme" type="hidden" :value="user.theme">
-
-            <div v-for="type in AccountTheme()"
-                 class="flex flex-col gap-2 rounded-sm p-2 text-center cursor-pointer account-theme"
-                 :class="{'selected': user.theme === type}"
-                 @click="selectTheme(type)"
-                 :value="type">
-                <img class="rounded-sm" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
-                <span class="text-md font-bold">{{ StringService.capFirstLetter(type) }}</span>
-            </div>
+        <div class="flex flex-row gap-4 flex-wrap min-w-[200px]">
+            <button v-for="type in AccountTheme()"
+                    class="flex flex-col gap-2 rounded-md p-2 cursor-pointer"
+                    :class="[user.theme === type ? 'border-primary border-3' : 'border-gray-300 border-2']"
+                    type="button"
+                    @click="selectTheme(type)">
+                <img class="rounded-md" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
+                <span class="text-md font-bold capitalize w-full text-center select-none">{{ type }}</span>
+            </button>
         </div>
 
         <StickyFooter>
@@ -204,8 +202,9 @@ export default {
         }
     },
 
-    created() {
-        this.selectedDSN = this.discordSuggestionNotificationsSelect.filter(e => e.value === this.user.discord_suggestion_notifications)[0] ?? null;
+    async created() {
+        await this.user;
+        this.selectedDSN = this.discordSuggestionNotificationsSelect.find(e => e.value === this.user.discord_suggestion_notifications);
     },
 
     mounted() {
@@ -247,7 +246,7 @@ export default {
                 this.user.discord_suggestion_notifications = this.selectedDSN?.value ?? null;
                 const response = await UserRepository.updateUserById(this.user.id, this.user);
                 this.user = response.data.user;
-                this.selectedDSN = this.discordSuggestionNotificationsSelect.filter(e => e.value === this.user.discord_suggestion_notifications)[0] ?? null;
+                this.selectedDSN = this.discordSuggestionNotificationsSelect.find(e => e.value === this.user.discord_suggestion_notifications);
 
                 this.errors = {};
                 this.justUpdated = true;
@@ -284,4 +283,7 @@ export default {
 </script>
 
 <style scoped>
+.account-theme {
+
+}
 </style>
