@@ -49,7 +49,7 @@ export default {
             highlightedCode: "",
             codeLines: [],
             allowedLanguages: [
-                'javascript', 'java', 'yaml', 'less', 'json', 'html', 'css', 'php'
+                'javascript', 'java', 'yaml', 'less', 'json', 'html', 'css', 'php', 'xml'
             ],
         }
     },

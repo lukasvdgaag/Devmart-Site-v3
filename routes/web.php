@@ -41,6 +41,7 @@ Route::prefix('api')->group(function () {
                 Route::post('', [PasteController::class, 'handlePasteCreation']);
                 Route::get('/{pasteId}', [PasteController::class, 'handlePasteRetrieval']);
                 Route::put('/{pasteId}', [PasteController::class, 'handlePasteEdit']);
+                Route::delete('/{pasteId}', [PasteController::class, 'handlePasteDeletion']);
             });
 
         Route::prefix('/plugins')->group(function () {
@@ -67,6 +68,11 @@ Route::prefix('api')->group(function () {
 
     });
 });
+
+Route::get('/paste/{pasteId}/raw', [PasteController::class, 'handleRawPasteRetrieval'])
+    ->withoutMiddleware('auth:sanctum');
+Route::get('/paste/{pasteId}/download', [PasteController::class, 'handlePasteDownload'])
+    ->withoutMiddleware('auth:sanctum');
 
 Route::get('/account', function () {
     return view('welcome', ['title' => 'Devmart | Account']);

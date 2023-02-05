@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\Paste;
 use App\Utils\WebUtils;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rule;
@@ -45,8 +47,54 @@ class PasteController
                 'pastes.visibility', 'pastes.expire_at', 'pastes.created_at', 'pastes.updated_at');
     }
 
-    public function handlePasteRetrieval(Request $request, int|string $pasteId)
+    public function handleRawPasteRetrieval(Request $request, string $pasteId) {
+        $paste = $this->getPasteFromRequest($request, $pasteId);
+        if ($paste instanceof JsonResponse) return $paste;
+
+        return response($paste['content'])
+            ->header('Content-Type', 'text/plain; charset=utf-8');
+    }
+
+    public function handlePasteRetrieval(Request $request, string $pasteId)
     {
+        $paste = $this->getPasteFromRequest($request, $pasteId);
+        if ($paste instanceof JsonResponse) return $paste;
+
+        return response()->json($paste);
+    }
+
+    public function handlePasteDeletion(Request $request, string $pasteId) {
+        $checkPerms = $this->checkPasteEditPerms($request, $pasteId);
+        if ($checkPerms instanceof JsonResponse) return $checkPerms;
+
+        Paste::query()->where('name', '=', $pasteId)->delete();
+        return response('Paste deleted.', 200);
+    }
+
+    public function handlePasteDownload(Request $request, string $pasteId) {
+        $paste = $this->getPasteFromRequest($request, $pasteId);
+        if ($paste instanceof JsonResponse) return $paste;
+
+        $ext = match ($paste['style']) {
+            'java' => '.java',
+            'YAML' => '.yml',
+            'JSON' => '.json',
+            'HTML' => '.html',
+            'XML' => '.xml',
+            'CSS' => '.css',
+            'Markdown' => '.md',
+            'JavaScript' => '.js',
+            default => '.txt',
+        };
+
+        $fileName = $paste['title'] . (str_ends_with($paste['title'], $ext) ? '' : $ext);
+
+        return response($paste['content'])
+            ->header('Content-Type', 'text/plain; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName);
+    }
+
+    private function getPasteFromRequest(Request $request, string $pasteId): JsonResponse|Paste {
         $basicPasteInfo = Paste::query()
             ->select('pastes.creator', 'pastes.visibility')
             ->where('pastes.name', '=', $pasteId)
@@ -71,7 +119,7 @@ class PasteController
             ->where('pastes.name', '=', $pasteId)
             ->first();
         $paste->content = gzuncompress(utf8_decode($paste->content));
-        return response()->json($paste);
+        return $paste;
     }
 
     private function checkForRateLimit(Request $request) {
@@ -87,10 +135,7 @@ class PasteController
         return null;
     }
 
-    public function handlePasteEdit(Request $request, string $pasteId) {
-        $rateLimited = $this->checkForRateLimit($request);
-        if ($rateLimited) return $rateLimited;
-
+    private function checkPasteEditPerms(Request $request, string $pasteId) {
         $basicPasteInfo = Paste::query()
             ->select('pastes.creator')
             ->where('pastes.name', '=', $pasteId)
@@ -108,6 +153,15 @@ class PasteController
                 'error' => 'Not authorized to edit this paste.',
             ], 401);
         }
+        return true;
+    }
+
+    public function handlePasteEdit(Request $request, string $pasteId) {
+        $rateLimited = $this->checkForRateLimit($request);
+        if ($rateLimited) return $rateLimited;
+
+        $checkPerms = $this->checkPasteEditPerms($request, $pasteId);
+        if ($checkPerms instanceof JsonResponse) return $checkPerms;
 
         return $this->handlePasteCreation($request, $pasteId);
     }

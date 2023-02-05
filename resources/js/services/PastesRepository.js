@@ -53,9 +53,21 @@ export default {
     async updatePaste(pasteId, body) {
         try {
             const res = await client.put(`/${pasteId}`, body);
-            console.log(res);
-
             return Paste.fromJson(res.data);
+        } catch (e) {
+            throw e;
+        }
+    },
+
+    /**
+     * Delete an existing paste
+     * @param pasteId Paste ID
+     * @returns {Promise<boolean>}
+     */
+    async deletePaste(pasteId) {
+        try {
+            const res = await client.delete(`/${pasteId}`);
+            return res.status === 200;
         } catch (e) {
             throw e;
         }

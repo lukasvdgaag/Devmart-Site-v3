@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-2 w-full h-full">
-        <h2 class="dark:text-gray-100">Create a new Paste</h2>
+        <h2 class="dark:text-gray-100">{{pasteId ? 'Edit your Paste' : 'Create a new Paste'}}</h2>
 
         <form class="h-full">
             <div class="flex flex-col gap-1">
@@ -10,8 +10,8 @@
                        placeholder="Paste title"
                        v-model="paste.title"
                        :errors="errors"
+                       maxlength="50"
                        item="title"
-                       required
                 />
                 <ValidationError item="title" :errors="errors" class="mt-0"/>
             </div>
@@ -20,7 +20,7 @@
                 <div class="flex gap-1 justify-between items-end flex-wrap ">
                     <Label class="uppercase text-md md:hidden">Options</Label>
                     <Label class="uppercase text-md hidden md:block">Content</Label>
-                    <div class="flex gap-2 md:gap-1 w-full flex-wrap md:flex-nowrap ">
+                    <div class="flex gap-2 md:gap-1 w-full flex-wrap md:flex-nowrap">
                         <DropdownSelect
                             placeholder="Lifetime"
                             id="dd-lifetime"
@@ -48,32 +48,65 @@
                             v-model="selectedStyle"
                             class="w-full"
                         />
-                        <button class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2"
-                                :disabled="loading"
-                                @click.prevent="uploadPaste"
-                                type="submit">
-                            <font-awesome-icon icon="fa-solid fa-cloud-arrow-up" class="text-sm"/>
-                            <span class="break-keep">{{ loading ? "Uploading..." : this.pasteId ? "Update Paste" : "Upload Paste" }}</span>
+                        <button class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white hidden md:block"
+                                data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"
+                                type="button"
+                                v-if="pasteId">
+                            <font-awesome-icon icon="fa-solid fa-trash-can"/>
                         </button>
+                        <div class="flex gap-2 w-full">
+
+                            <button class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden"
+                                    data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"
+                                    type="button"
+                                    v-if="pasteId">
+                                <font-awesome-icon icon="fa-solid fa-trash-can"/>
+                                <span class="break-keep">Delete</span>
+                            </button>
+                            <button class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2"
+                                    :disabled="loading"
+                                    @click.prevent="uploadPaste"
+                                    type="submit">
+                                <font-awesome-icon icon="fa-solid fa-cloud-arrow-up" class="text-sm"/>
+                                <span class="break-keep">{{ loading ? "Uploading..." : this.pasteId ? "Update Paste" : "Upload Paste" }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="lg:mb-6">
                     <Label class="uppercase text-md mb-1 md:hidden">Content</Label>
 
-                    <Input class="w-full min-h-[34rem] lg:h-full relative"
-                           :is-textarea="true"
-                           placeholder="Start typing here..."
-                           required
-                           v-model="paste.content"
-                           :errors="errors"
-                           @update:modelValue="delete this.errors.content"
-                           item="content"
-                    />
-                    <ValidationError item="content" :errors="errors" class="mt-0"/>
+                    <div class="transition transition-all" :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']">
+                        <Input class="w-full min-h-[34rem] lg:h-full relative bg-gray-75"
+                               :class="{'!rounded-none h-full': fullScreen}"
+                               :is-textarea="true"
+                               placeholder="Start typing here..."
+                               required
+                               v-model="paste.content"
+                               :errors="errors"
+                               @update:modelValue="delete this.errors.content"
+                               item="content"
+                               wrap="off"
+                               ref="content"
+                        />
+                        <ValidationError item="content" :errors="errors" class="mt-0"/>
+
+                        <button class="top-2 absolute bg-gray-200 py-2 px-3 rounded-md cursor-pointer hover:bg-gray-300 transition select-none"
+                                :style="contentStyling"
+                                type="button"
+                                ref="fullScreenButton"
+                                @click="toggleFullScreen">
+                            <font-awesome-icon v-if="fullScreen" icon="fa-solid fa-down-left-and-up-right-to-center"/>
+                            <font-awesome-icon v-else icon="fa-solid fa-up-right-and-down-left-from-center"/>
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
+    <ConfirmationModal id="confirm-delete-modal"
+                       title="Are you sure you want to delete this paste?"
+                       @submit="deletePaste"/>
 </template>
 
 <script>
@@ -82,16 +115,17 @@ import Paste from "@/models/rest/paste/Paste";
 import Label from "@/components/Common/Label.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
-import {initDropdowns} from "flowbite";
+import {initDropdowns, initModals} from "flowbite";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import PasteCreateBody from "@/models/rest/paste/PasteCreateBody";
 import PastesRepository from "@/services/PastesRepository";
 import ValidationError from "@/components/Common/ValidationError.vue";
 import {useAuth} from "@/store/authStore";
+import ConfirmationModal from "@/components/Common/Modal/ConfirmationModal.vue";
 
 export default {
     name: "PasteCreatePage",
-    components: {ValidationError, DropdownSelect, StickyFooter, Label, Input},
+    components: {ConfirmationModal, ValidationError, DropdownSelect, StickyFooter, Label, Input},
 
     created() {
         if (this.pasteId) {
@@ -101,6 +135,21 @@ export default {
 
     mounted() {
         initDropdowns();
+        initModals();
+    },
+
+    computed: {
+        contentStyling() {
+            return {
+                right: this.fullScreenBtnRight,
+            };
+        }
+    },
+
+    watch: {
+        'paste.content'() {
+            this.onContentScroll();
+        }
     },
 
     methods: {
@@ -118,6 +167,7 @@ export default {
                 });
                 this.selectedLifetime = this.lifetimeSelectItems.find(item => item.value === this.paste.lifetime);
                 this.selectedStyle = this.styleSelectItems.find(item => item.value === this.paste.style);
+                setTimeout(this.onContentScroll, 10);
             } catch (e) {
                 return this.$router.push({name: 'paste'});
             }
@@ -153,7 +203,6 @@ export default {
                 const res = this.pasteId ? await PastesRepository.updatePaste(this.pasteId, body) : await PastesRepository.createPaste(body);
                 this.errors = {};
                 if (res) {
-                    console.log("res", res);
                     this.$router.push({name: 'paste-info', params: {pasteId: res.name}});
                 }
             } catch (e) {
@@ -163,11 +212,40 @@ export default {
                 this.loading = false;
             }
         },
+        async deletePaste() {
+            if (this.loading) return;
+
+            this.loading = true;
+            try {
+                if (await PastesRepository.deletePaste(this.pasteId)) {
+                    this.paste = new Paste();
+                    this.$router.push({name: 'paste'});
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                this.loading = false;
+            }
+        },
+        toggleFullScreen() {
+            this.fullScreen = !this.fullScreen;
+            setTimeout(this.onContentScroll, 10);
+        },
+        onContentScroll() {
+            if (this.$refs.content.$el.scrollHeight >= this.$refs.content.$el.clientHeight) {
+                const scrollBarWidth = this.$refs.content.$el.offsetWidth - this.$refs.content.$el.clientWidth;
+                this.fullScreenBtnRight = 'calc(0.5rem + ' + scrollBarWidth + 'px)';
+            } else {
+                this.fullScreenBtnRight = '0.5rem';
+            }
+        }
     },
 
     data() {
         return {
             paste: new Paste(),
+            fullScreenBtnRight: '0.5rem',
+            fullScreen: false,
             loading: false,
             selectedLifetime: null,
             selectedVisibility: null,
@@ -189,6 +267,7 @@ export default {
                 new DropdownSelectItemModel('Automatic', 'The style will be automatically detected.', null),
                 new DropdownSelectItemModel('Java', null, 'Java'),
                 new DropdownSelectItemModel('YAML', null, 'YAML'),
+                new DropdownSelectItemModel('XML', null, 'XML'),
                 new DropdownSelectItemModel('Error', null, 'less'),
                 new DropdownSelectItemModel('JSON', null, 'JSON'),
                 new DropdownSelectItemModel('HTML', null, 'HTML'),
