@@ -21,6 +21,7 @@ class Paste extends Model
         'name',
         'creator',
         'visibility',
+        'style',
         'lifetime',
         'title',
         'expire_at',

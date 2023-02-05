@@ -40,7 +40,7 @@ class PasteController
     public function getBasicPasteInformation(): \Illuminate\Database\Eloquent\Builder
     {
         return Paste::query()
-            ->select('pastes.id', 'pastes.name', 'pastes.creator', 'pastes.title', 'pastes.style',
+            ->select('pastes.id', 'pastes.name', 'pastes.creator', 'pastes.title', 'pastes.style', 'pastes.lifetime',
                 'pastes.visibility', 'pastes.expire_at', 'pastes.created_at', 'pastes.updated_at');
     }
 
