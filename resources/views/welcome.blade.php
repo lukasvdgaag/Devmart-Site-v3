@@ -10,6 +10,5 @@
 
 	@vite('resources/js/app.js')
     @vite('public/js/main.js')
-    @vite('node_modules/flowbite/dist/flowbite.min.js')
 </body>
 </html>

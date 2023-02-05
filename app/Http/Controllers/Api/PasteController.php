@@ -17,9 +17,7 @@ class PasteController
         // for public pastes only.
 
         $perPage = min(25, max(1, $request->input('perPage', 10)));
-        $pastes = $this->getBasicPasteInformation()
-            ->addSelect('users.username as creator_username')
-            ->leftJoin('users', 'users.id', '=', 'pastes.creator')
+        $pastes = $this->joinCreatorUsername($this->getBasicPasteInformation())
             ->where('visibility', '=', 'PUBLIC')
             ->orderBy('updated_at', 'desc');
 
@@ -33,11 +31,44 @@ class PasteController
         ]);
     }
 
+    public function joinCreatorUsername($builder)
+    {
+        return $builder->addSelect('users.username as creator_username')
+            ->leftJoin('users', 'users.id', '=', 'pastes.creator');
+    }
+
     public function getBasicPasteInformation(): \Illuminate\Database\Eloquent\Builder
     {
         return Paste::query()
             ->select('pastes.id', 'pastes.name', 'pastes.creator', 'pastes.title', 'pastes.style',
                 'pastes.visibility', 'pastes.expire_at', 'pastes.created_at', 'pastes.updated_at');
+    }
+
+    public function handlePasteRetrieval(Request $request, int|string $pasteId)
+    {
+        $basicPasteInfo = Paste::query()
+            ->select('pastes.creator', 'pastes.visibility')
+            ->where('pastes.name', '=', $pasteId)
+            ->first();
+
+        if (!$basicPasteInfo) {
+            return response()->json([
+                'error' => 'Paste not found.',
+            ], 404);
+        }
+
+        if ($basicPasteInfo->visibility === 'PRIVATE') {
+            $user = $request->user();
+            if (!$user || $user->id !== $basicPasteInfo->creator) {
+                return response()->json([
+                    'error' => 'Not authorized to view this paste.',
+                ], 401);
+            }
+        }
+
+        return response()->json($this->joinCreatorUsername(Paste::query()->select('pastes.*'))
+            ->where('pastes.name', '=', $pasteId)
+            ->first());
     }
 
     public function handlePasteCreation(Request $request)
@@ -69,12 +100,12 @@ class PasteController
         // when not logged in, default to 7 days.
         if (!$user) $selectedLifetime = '7d';
         else if ($user->role !== 'ADMIN') {
-            if (!in_array($selectedLifetime, ['7d','2w','1m', null])) {
+            if (!in_array($selectedLifetime, ['7d', '2w', '1m', null])) {
                 $selectedLifetime = '7d';
             }
         } else {
             // user is admin
-            if (!in_array($selectedLifetime, ['7d','2w','1m','3m','never'])) {
+            if (!in_array($selectedLifetime, ['7d', '2w', '1m', '3m', 'never'])) {
                 $selectedLifetime = '7d';
             }
         }

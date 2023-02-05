@@ -33,12 +33,13 @@ Route::prefix('api')->group(function () {
             Route::put('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationUpdate']);
         });
 
-        Route::prefix('/paste')->group(function() {
-            Route::get('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteListRetrieval'])
-            ->withoutMiddleware('auth:sanctum');
-            Route::post('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteCreation'])
-            ->withoutMiddleware('auth:sanctum');
-        });
+        Route::prefix('/paste')
+            ->withoutMiddleware('auth:sanctum')
+            ->group(function () {
+                Route::get('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteListRetrieval']);
+                Route::post('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteCreation']);
+                Route::get('/{pasteId}', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteRetrieval']);
+            });
 
         Route::prefix('/plugins')->group(function () {
             Route::get("", [PluginsController::class, 'handlePluginListRetrieval'])

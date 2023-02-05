@@ -30,10 +30,17 @@ import {
     faChevronUp,
     faChevronDown,
     faCloudArrowUp,
+    faShareNodes,
+    faDownload,
+    faAlignLeft,
+    faPen
 } from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {library} from "@fortawesome/fontawesome-svg-core";
+import 'highlight.js/lib/common';
+import 'highlight.js/styles/github.css';
+import hljsVuePlugin from "@highlightjs/vue-plugin";
 import {createPinia} from "pinia";
 import {createMetaManager} from "vue-meta";
 
@@ -41,7 +48,7 @@ library.add(
     faGithub, faDiscord,
     faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation, faSackDollar,
     faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem, faChevronLeft, faChevronRight,faChevronUp, faFileArrowDown, faCloudArrowUp,
-    faChevronDown,
+    faChevronDown, faShareNodes, faDownload, faAlignLeft, faPen
 );
 
 const pinia = createPinia().use(({store}) => {
@@ -51,6 +58,7 @@ const pinia = createPinia().use(({store}) => {
 createApp(App)
     .use(router)
     .use(pinia)
+    .use(hljsVuePlugin)
     .use(createMetaManager())
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount("#app");

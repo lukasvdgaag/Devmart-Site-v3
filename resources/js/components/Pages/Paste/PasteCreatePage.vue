@@ -109,16 +109,12 @@ export default {
         async uploadPaste() {
             if (this.loading) return;
 
-            console.log('uploading paste...')
-
             this.loading = true;
             if (!this.checkForErrors()) {
                 console.log('we have errors!', this.errors);
                 this.loading = false;
                 return;
             }
-
-            console.log('we are good to go!')
 
             const body = new PasteCreateBody(this.paste.title,
                 this.selectedStyle?.value,
@@ -134,7 +130,6 @@ export default {
                     this.$router.push({name: 'paste-info', params: {pasteId: res.name}});
                 }
             } catch (e) {
-                console.error(e.response);
                 this.errors = e.response.data.errors;
             } finally {
                 this.loading = false;
@@ -163,14 +158,14 @@ export default {
                 new DropdownSelectItemModel('Private', 'Only you can view this paste.', 'PRIVATE')
             ],
             styleSelectItems: [
-                new DropdownSelectItemModel('Automatic', 'The style will be automatically detected.', 'automatic'),
-                new DropdownSelectItemModel('Java', null, 'java'),
-                new DropdownSelectItemModel('YAML', null, 'yaml'),
+                new DropdownSelectItemModel('Automatic', 'The style will be automatically detected.', null),
+                new DropdownSelectItemModel('Java', null, 'Java'),
+                new DropdownSelectItemModel('YAML', null, 'YAML'),
                 new DropdownSelectItemModel('Error', null, 'less'),
-                new DropdownSelectItemModel('JSON', null, 'json'),
-                new DropdownSelectItemModel('HTML', null, 'html'),
-                new DropdownSelectItemModel('JavaScript', null, 'javascript'),
-                new DropdownSelectItemModel('PHP', null, 'php'),
+                new DropdownSelectItemModel('JSON', null, 'JSON'),
+                new DropdownSelectItemModel('HTML', null, 'HTML'),
+                new DropdownSelectItemModel('JavaScript', null, 'JavaScript'),
+                new DropdownSelectItemModel('PHP', null, 'PHP'),
                 new DropdownSelectItemModel('No Style', "Don't apply any styling.", 'none')
             ]
         }

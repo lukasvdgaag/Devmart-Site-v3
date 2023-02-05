@@ -42,6 +42,16 @@ export default {
         } catch (e) {
             throw e;
         }
+    },
+
+    /**
+     * Fetches a paste by its name
+     * @param {string} name Paste name
+     * @returns {Promise<Paste>}
+     */
+    async fetchPaste(name) {
+        const res = await client.get(`/${name}`);
+        return Paste.fromJson(res.data);
     }
 
 }
