@@ -59,7 +59,7 @@ class PasteController
 
         if ($basicPasteInfo->visibility === 'PRIVATE') {
             $user = $request->user();
-            if (!$user || $user->id !== $basicPasteInfo->creator) {
+            if (!$user || ($user->id !== $basicPasteInfo->creator && $user->role !== 'admin')) {
                 return response()->json([
                     'error' => 'Not authorized to view this paste.',
                 ], 401);
@@ -71,16 +71,49 @@ class PasteController
             ->first());
     }
 
-    public function handlePasteCreation(Request $request)
-    {
+    private function checkForRateLimit(Request $request) {
         if (RateLimiter::tooManyAttempts("paste-create:" . $request->ip(), $perMinute = 4)) {
             $seconds = RateLimiter::availableIn('paste-create:' . $request->ip());
 
             return response()->json([
                 'errors' => [
-                    'ratelimit' => "You are too fast! You may only create 4 pastes per minute. Create a new paste in $seconds seconds.",
+                    'ratelimit' => "You are too fast! You may only create/update 4 pastes per minute. Try again in $seconds seconds.",
                 ],
             ], 429);
+        }
+        return null;
+    }
+
+    public function handlePasteEdit(Request $request, string $pasteId) {
+        $rateLimited = $this->checkForRateLimit($request);
+        if ($rateLimited) return $rateLimited;
+
+        $basicPasteInfo = Paste::query()
+            ->select('pastes.creator')
+            ->where('pastes.name', '=', $pasteId)
+            ->first();
+
+        if (!$basicPasteInfo) {
+            return response()->json([
+                'error' => 'Paste not found.',
+            ], 404);
+        }
+
+        $user = $request->user();
+        if (!$user || ($user->id !== $basicPasteInfo->creator && $user->role !== 'admin')) {
+            return response()->json([
+                'error' => 'Not authorized to edit this paste.',
+            ], 401);
+        }
+
+        return $this->handlePasteCreation($request, $pasteId);
+    }
+
+    public function handlePasteCreation(Request $request, string $pasteId = null)
+    {
+        if (!$pasteId) {
+            $rateLimited = $this->checkForRateLimit($request);
+            if ($rateLimited) return $rateLimited;
         }
 
         $request->validate([
@@ -124,12 +157,15 @@ class PasteController
             $visibility = 'PUBLIC';
         }
 
-        do {
-            $id = WebUtils::generateRandomString();
-        } while (Paste::query()->where('id', '=', $id)->exists());
+        $newPaste = $pasteId == null;
+        if (!$pasteId) {
+            do {
+                $pasteId = WebUtils::generateRandomString();
+            } while (Paste::query()->where('id', '=', $pasteId)->exists());
+        }
 
-        $paste = Paste::query()->create([
-            'name' => $id,
+        $values = [
+            'name' => $pasteId,
             'title' => $title,
             'creator' => $user ? $user->id : null,
             'visibility' => $visibility,
@@ -137,9 +173,12 @@ class PasteController
             'content' => $content,
             'expire_at' => $expiryDate,
             'lifetime' => $selectedLifetime,
-        ]);
+        ];
 
-        return response()->json($paste, 201);
+        if ($pasteId) Paste::query()->where('name', '=', $pasteId)->update($values);
+        else Paste::query()->create($values);
+
+        return response()->json($values, $newPaste ? 201 : 200);
     }
 
 }

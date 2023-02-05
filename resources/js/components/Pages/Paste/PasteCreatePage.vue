@@ -13,7 +13,7 @@
                        item="title"
                        required
                 />
-                <ValidationError item="title" :errors="errors" class="mt-0" />
+                <ValidationError item="title" :errors="errors" class="mt-0"/>
             </div>
 
             <div class="flex flex-col-reverse flex-wrap md:flex-col md:flex-nowrap gap-2 mt-2">
@@ -53,7 +53,7 @@
                                 @click.prevent="uploadPaste"
                                 type="submit">
                             <font-awesome-icon icon="fa-solid fa-cloud-arrow-up" class="text-sm"/>
-                            <span class="break-keep">{{ loading ? "Uploading..." : "Upload Paste" }}</span>
+                            <span class="break-keep">{{ loading ? "Uploading..." : this.pasteId ? "Update Paste" : "Upload Paste" }}</span>
                         </button>
                     </div>
                 </div>
@@ -87,16 +87,41 @@ import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import PasteCreateBody from "@/models/rest/paste/PasteCreateBody";
 import PastesRepository from "@/services/PastesRepository";
 import ValidationError from "@/components/Common/ValidationError.vue";
+import {useAuth} from "@/store/authStore";
 
 export default {
     name: "PasteCreatePage",
     components: {ValidationError, DropdownSelect, StickyFooter, Label, Input},
+
+    created() {
+        if (this.pasteId) {
+            this.fetchPaste();
+        }
+    },
 
     mounted() {
         initDropdowns();
     },
 
     methods: {
+        async fetchPaste() {
+            try {
+                this.paste = await PastesRepository.fetchPaste(this.pasteId);
+                if ((!this.paste.creator || this.paste.creator !== useAuth().user.id) && useAuth().user.role !== 'admin') {
+                    this.paste = new Paste();
+                    return this.$router.push({name: 'paste'});
+                }
+
+                this.selectedVisibility = this.visibilitySelectItems.find(item => {
+                    console.log(item.value, this.paste.visibility);
+                    return item.value === this.paste.visibility
+                });
+                this.selectedLifetime = this.lifetimeSelectItems.find(item => item.value === this.paste.lifetime);
+                this.selectedStyle = this.styleSelectItems.find(item => item.value === this.paste.style);
+            } catch (e) {
+                console.error(e);
+            }
+        },
         checkForErrors() {
             this.errors = {};
 
@@ -111,12 +136,12 @@ export default {
 
             this.loading = true;
             if (!this.checkForErrors()) {
-                console.log('we have errors!', this.errors);
                 this.loading = false;
                 return;
             }
 
-            const body = new PasteCreateBody(this.paste.title,
+            const body = new PasteCreateBody(
+                this.paste.title,
                 this.selectedStyle?.value,
                 this.selectedVisibility?.value,
                 this.selectedLifetime?.value,
@@ -124,12 +149,15 @@ export default {
             );
 
             try {
-                const res = await PastesRepository.createPaste(body);
+                // updating when editing, creating new otherwise.
+                const res = this.pasteId ? await PastesRepository.updatePaste(this.pasteId, body) : await PastesRepository.createPaste(body);
                 this.errors = {};
                 if (res) {
+                    console.log("res", res);
                     this.$router.push({name: 'paste-info', params: {pasteId: res.name}});
                 }
             } catch (e) {
+                console.error(e);
                 this.errors = e.response.data.errors;
             } finally {
                 this.loading = false;
@@ -168,6 +196,13 @@ export default {
                 new DropdownSelectItemModel('PHP', null, 'PHP'),
                 new DropdownSelectItemModel('No Style', "Don't apply any styling.", 'none')
             ]
+        }
+    },
+
+    props: {
+        pasteId: {
+            type: [String, null],
+            required: false
         }
     }
 }

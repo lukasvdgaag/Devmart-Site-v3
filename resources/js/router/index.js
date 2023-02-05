@@ -48,6 +48,11 @@ const routes = [
                 name: 'paste-info',
                 component: PasteInformationPage,
                 props: true,
+            }, {
+                path: ':pasteId/edit',
+                name: 'paste-edit',
+                component: PasteCreatePage,
+                props: true,
             }
         ],
     }, {

@@ -45,6 +45,23 @@ export default {
     },
 
     /**
+     * Update an existing paste.
+     * @param pasteId Paste ID
+     * @param {PasteCreateBody} body Paste body
+     * @returns {Promise<*>}
+     */
+    async updatePaste(pasteId, body) {
+        try {
+            const res = await client.put(`/${pasteId}`, body);
+            console.log(res);
+
+            return Paste.fromJson(res.data);
+        } catch (e) {
+            throw e;
+        }
+    },
+
+    /**
      * Fetches a paste by its name
      * @param {string} name Paste name
      * @returns {Promise<Paste>}

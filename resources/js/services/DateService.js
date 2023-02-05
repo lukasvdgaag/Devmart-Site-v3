@@ -81,25 +81,25 @@ export default {
         const months = Math.floor(diff / (1000 * 3600 * 24 * 30));
         const years = Math.floor(diff / (1000 * 3600 * 24 * 365));
 
+        if (years >= 1) {
+            `${years} year${years > 1 ? 's' : ''} ago`
+        }
+        if (months >= 1) {
+            return `${months} month${months > 1 ? 's' : ''} ago`;
+        }
+        if (weeks >= 1) {
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+        if (days >= 1) {
+            return `${days} day${days > 1 ? 's' : ''} ago`;
+        }
+        if (hours >= 1) {
+            return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        }
         if (minutes <= 2) {
             return 'Just now';
         }
-        if (hours <= 1) {
-            return `${minutes} minutes ago`;
-        }
-        if (days <= 1) {
-            return `${hours} hour${hours>1 ? 's' : ''} ago`;
-        }
-        if (weeks <= 1) {
-            return `${days} day${days>1 ? 's' : ''} ago`;
-        }
-        if (months <= 1) {
-            return `${weeks} week${weeks>1 ? 's' : ''} ago`;
-        }
-        if (years <= 1) {
-            return `${months} month${months>1 ? 's' : ''} ago`;
-        }
-        return `${years} year${years>1 ? 's' : ''} ago`;
+        return `${minutes} minutes ago`;
     },
 
     /**
@@ -112,9 +112,9 @@ export default {
         // e.g. Today at 12:00 PM, Yesterday at 12:00 PM, August 24 at 12:00 PM, or when over a year: January 1, 2020 at 12:00 PM
         const today = new Date();
         const diff = this.diffInDays(date, today);
-        if (diff < 1) {
+        if (diff <= 1) {
             return `Today${withTime ? ' at ' + this.formatTime(date) : ''}`;
-        } else if (diff < 2) {
+        } else if (diff <= 2) {
             return `Yesterday${withTime ? ' at ' + this.formatTime(date) : ''}`;
         } else if (diff < 365) {
             return `${this.formatDate(date)}${withTime ? ' at ' + this.formatTime(date) : ''}`;

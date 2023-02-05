@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PasteController;
 use App\Http\Controllers\Api\PluginsController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Resources\UserResource;
@@ -36,9 +37,10 @@ Route::prefix('api')->group(function () {
         Route::prefix('/paste')
             ->withoutMiddleware('auth:sanctum')
             ->group(function () {
-                Route::get('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteListRetrieval']);
-                Route::post('', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteCreation']);
-                Route::get('/{pasteId}', [\App\Http\Controllers\Api\PasteController::class, 'handlePasteRetrieval']);
+                Route::get('', [PasteController::class, 'handlePasteListRetrieval']);
+                Route::post('', [PasteController::class, 'handlePasteCreation']);
+                Route::get('/{pasteId}', [PasteController::class, 'handlePasteRetrieval']);
+                Route::put('/{pasteId}', [PasteController::class, 'handlePasteEdit']);
             });
 
         Route::prefix('/plugins')->group(function () {

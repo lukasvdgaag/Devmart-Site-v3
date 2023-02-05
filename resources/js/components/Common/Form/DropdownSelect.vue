@@ -23,6 +23,7 @@
                 v-for="(item, i) in items"
                 :id="`${id}-${i}`"
                 :name="`${id}-input`"
+                :selected-value="value"
                 :item="item"
                 @change="handleInput"
                 :key="i"
@@ -51,6 +52,12 @@ export default {
         handleInput(value) {
             this.value = value;
             this.$emit('update:modelValue', value);
+        }
+    },
+
+    watch: {
+        modelValue(val) {
+            this.value = val;
         }
     },
 
