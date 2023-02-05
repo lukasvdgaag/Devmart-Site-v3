@@ -33,7 +33,8 @@ import {
     faShareNodes,
     faDownload,
     faAlignLeft,
-    faPen
+    faPen,
+    faClipboard
 } from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -48,7 +49,7 @@ library.add(
     faGithub, faDiscord,
     faGear, faRightFromBracket, faEye, faEyeSlash, faHouseUser, faMoneyBillTransfer, faPaste, faCircleCheck, faCircleXmark, faCircleExclamation, faSackDollar,
     faCalendarDays, faMagnifyingGlass, faCompass, faCartShopping, faBolt, faGem, faChevronLeft, faChevronRight,faChevronUp, faFileArrowDown, faCloudArrowUp,
-    faChevronDown, faShareNodes, faDownload, faAlignLeft, faPen
+    faChevronDown, faShareNodes, faDownload, faAlignLeft, faPen, faClipboard
 );
 
 const pinia = createPinia().use(({store}) => {

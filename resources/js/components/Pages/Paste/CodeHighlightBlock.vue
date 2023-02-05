@@ -60,7 +60,7 @@ export default {
             required: true,
         },
         language: {
-            type: String,
+            type: [String, null],
             required: true,
         },
     },

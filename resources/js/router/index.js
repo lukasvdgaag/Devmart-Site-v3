@@ -37,12 +37,11 @@ const routes = [
         component: RegisterPage
     }, {
         path: '/paste',
-        name: 'paste',
         component: PastePageLayout,
         children: [
             {
                 path: '',
-                name: 'new-paste',
+                name: 'paste',
                 component: PasteCreatePage,
             }, {
                 path: ':pasteId',

@@ -1,5 +1,5 @@
 <template>
-    <div role="status" class="animate-pulse w-full" v-if="!paste">
+    <div role="status" class="animate-pulse w-full" v-if="loading">
         <div class="h-10 bg-gray-200 rounded dark:bg-gray-700 w-1/2 mb-2"></div>
         <div class="h-5 bg-gray-300 rounded-full dark:bg-gray-600 w-60 mb-6"></div>
 
@@ -21,12 +21,13 @@
                 <PasteActionLink :href="`/paste/${pasteId}/edit`" icon="fa-solid fa-pen" text="Edit" smallIcon highlighted/>
 
                 <button class="primary w-fit px-4 py-2 rounded-md align-center gap-2 hidden lg:flex" @click="share">
-                    <font-awesome-icon icon="fa-solid fa-share-nodes"/>
-                    Share
+                    <font-awesome-icon :icon="shareIcons"/>
+                    {{shareText}}
                 </button>
             </div>
 
             <CodeHighlightBlock v-if="paste.content"
+                                ref="codeHighlightBlock"
                                 :language="paste.style"
                                 :code="paste.content ?? ''"
                                 class="mt-2"
@@ -61,14 +62,21 @@ export default {
              * @type {Paste}
              */
             paste: null,
+            loading: true,
+            sharing: false,
         }
     },
 
     computed: {
         formattedUpdatedAt() {
-
             if (!this.paste?.updated_at) return null;
             return DateService.formatDateRelatively(this.paste?.updated_at, true);
+        },
+        shareIcons() {
+            return this.sharing ? 'fa-solid fa-clipboard' : 'fa-solid fa-share-nodes';
+        },
+        shareText() {
+            return this.sharing ? 'Copied Link!' : 'Share';
         }
     },
 
@@ -76,17 +84,33 @@ export default {
         this.fetchPaste();
     },
 
+    watch: {
+        pasteId() {
+            this.fetchPaste();
+            this.$refs.codeHighlightBlock.highlight();
+        }
+    },
+
     methods: {
         async fetchPaste() {
+            this.loading = true;
             try {
                 this.paste = await PastesRepository.fetchPaste(this.pasteId);
             } catch (e) {
                 this.$router.push({name: 'not-found'});
             }
+            this.loading = false;
         },
         share() {
+            if (this.sharing) return;
+            this.sharing = true;
+
             // copy the url to the clipboard
             navigator.clipboard.writeText(window.location.href);
+
+            setTimeout(() => {
+                this.sharing = false;
+            }, 2500);
         }
     },
 
