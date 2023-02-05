@@ -6,6 +6,7 @@ use App\Models\Paste;
 use App\Utils\WebUtils;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\Rule;
 
@@ -66,9 +67,11 @@ class PasteController
             }
         }
 
-        return response()->json($this->joinCreatorUsername(Paste::query()->select('pastes.*'))
+        $paste = $this->joinCreatorUsername(Paste::query()->select('pastes.*'))
             ->where('pastes.name', '=', $pasteId)
-            ->first());
+            ->first();
+        $paste->content = gzuncompress(utf8_decode($paste->content));
+        return response()->json($paste);
     }
 
     private function checkForRateLimit(Request $request) {
@@ -170,14 +173,15 @@ class PasteController
             'creator' => $user ? $user->id : null,
             'visibility' => $visibility,
             'style' => $style,
-            'content' => $content,
+            'content' => utf8_encode(gzcompress($content)),
             'expire_at' => $expiryDate,
             'lifetime' => $selectedLifetime,
         ];
 
-        if ($pasteId) Paste::query()->where('name', '=', $pasteId)->update($values);
-        else Paste::query()->create($values);
+        if ($newPaste) Paste::query()->create($values);
+        else Paste::query()->where('name', '=', $pasteId)->update($values);
 
+        unset($values['content']);
         return response()->json($values, $newPaste ? 201 : 200);
     }
 

@@ -119,7 +119,7 @@ export default {
                 this.selectedLifetime = this.lifetimeSelectItems.find(item => item.value === this.paste.lifetime);
                 this.selectedStyle = this.styleSelectItems.find(item => item.value === this.paste.style);
             } catch (e) {
-                console.error(e);
+                return this.$router.push({name: 'paste'});
             }
         },
         checkForErrors() {

@@ -90,6 +90,13 @@ export default {
         }
     },
 
+    watch: {
+        '$route'() {
+            this.isCreatePage = this.$route.matched.some(r => r.components.default === PasteCreatePage);
+            this.fetchRecentPastes();
+        }
+    },
+
     methods: {
         useAuth,
         async fetchRecentPastes() {
