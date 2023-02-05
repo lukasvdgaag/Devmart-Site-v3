@@ -1,5 +1,5 @@
 <template>
-    <li>
+    <li v-if="item.display()">
         <div class="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
             <div class="flex items-center h-5">
                 <input :id="id" :name="name" type="radio" :value="item.value"
@@ -44,7 +44,7 @@ export default {
         selectedValue: {
             type: DropdownSelectItemModel,
             required: false,
-        }
+        },
     }
 }
 </script>

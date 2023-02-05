@@ -176,14 +176,14 @@ export default {
             lifetimeSelectItems: [
                 new DropdownSelectItemModel('7 days', null, '7d'),
                 new DropdownSelectItemModel('2 weeks', null, '2w'),
-                new DropdownSelectItemModel('1 month', null, '1m'),
-                new DropdownSelectItemModel('3 months', null, '3m'),
-                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', null)
+                new DropdownSelectItemModel('1 month', null, '1m', () => useAuth().loggedIn),
+                new DropdownSelectItemModel('3 months', null, '3m', () => useAuth().loggedIn && useAuth().user.role === 'admin'),
+                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', null, () => useAuth().loggedIn && useAuth().user.role === 'admin')
             ],
             visibilitySelectItems: [
                 new DropdownSelectItemModel('Public', 'Anyone can view this paste.', 'PUBLIC'),
-                new DropdownSelectItemModel('Unlisted', 'Only people with the link can view this paste.', 'UNLISTED'),
-                new DropdownSelectItemModel('Private', 'Only you can view this paste.', 'PRIVATE')
+                new DropdownSelectItemModel('Unlisted', 'Only people with the link can view this paste.', 'UNLISTED', () => useAuth().loggedIn),
+                new DropdownSelectItemModel('Private', 'Only you can view this paste.', 'PRIVATE', () => useAuth().loggedIn)
             ],
             styleSelectItems: [
                 new DropdownSelectItemModel('Automatic', 'The style will be automatically detected.', null),
