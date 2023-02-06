@@ -26,7 +26,8 @@ class User extends Authenticatable
         'password',
         'discord',
         'spigot',
-        'discord_suggestion_notifications'
+        'discord_suggestion_notifications',
+        'theme',
     ];
 
     /**
