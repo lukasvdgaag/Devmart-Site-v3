@@ -5,7 +5,7 @@
         <form class="h-full">
             <div class="flex flex-col gap-1">
                 <Label class="uppercase text-md">Title</Label>
-                <Input class="w-full bg-gray-75 px-4 text-base"
+                <Input class="w-full px-4 text-base"
                        tabindex="0"
                        placeholder="Paste title"
                        v-model="paste.title"
@@ -77,7 +77,7 @@
                     <Label class="uppercase text-md mb-1 md:hidden">Content</Label>
 
                     <div class="transition transition-all" :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']">
-                        <Input class="w-full min-h-[34rem] lg:h-full relative bg-gray-75"
+                        <Input class="w-full min-h-[34rem] lg:h-full relative"
                                :class="{'!rounded-none h-full': fullScreen}"
                                :is-textarea="true"
                                placeholder="Start typing here..."
@@ -91,13 +91,13 @@
                         />
                         <ValidationError item="content" :errors="errors" class="mt-0"/>
 
-                        <button class="top-2 absolute bg-gray-200 py-2 px-3 rounded-md cursor-pointer hover:bg-gray-300 transition select-none"
+                        <button class="top-2 absolute bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:bg-gray-600 py-2 px-3 rounded-md cursor-pointer transition select-none"
                                 :style="contentStyling"
                                 type="button"
                                 ref="fullScreenButton"
                                 @click="toggleFullScreen">
-                            <font-awesome-icon v-if="fullScreen" icon="fa-solid fa-down-left-and-up-right-to-center"/>
-                            <font-awesome-icon v-else icon="fa-solid fa-up-right-and-down-left-from-center"/>
+                            <font-awesome-icon v-if="fullScreen" icon="fa-solid fa-down-left-and-up-right-to-center" class="text-gray-900 dark:text-gray-300"/>
+                            <font-awesome-icon v-else icon="fa-solid fa-up-right-and-down-left-from-center" class="text-gray-900 dark:text-gray-300"/>
                         </button>
                     </div>
                 </div>
