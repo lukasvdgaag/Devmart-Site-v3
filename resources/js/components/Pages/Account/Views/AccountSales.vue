@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="w-full relative h-full w-full">
-                <Vue3Apexcharts type="line" height="100%" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0"/>
+                <Vue3Apexcharts ref="chart" type="line" height="100%" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0"/>
             </div>
         </QuickLink>
 
@@ -125,9 +125,13 @@ export default {
             chartSeries: [], // values here
             chartOptions: {
                 chart: {
+                    background: 'transparent',
                     toolbar: {
                         show: false,
                     },
+                },
+                theme: {
+                    mode: this.isDarkTheme() ? 'dark' : 'light',
                 },
                 colors: ['#5850EC'],
                 stroke: {
@@ -167,8 +171,10 @@ export default {
     },
 
     methods: {
+        isDarkTheme() {
+            return document.documentElement.classList.contains('dark');
+        },
         async loadRecentSales() {
-            console.log("loading...")
             await this.transactionsFetchable.fetch(this);
         },
         async fetchRecentSales() {
@@ -203,7 +209,6 @@ export default {
             for (let i = 0; i < 14; i++) {
                 const obj = dates[i] ?? undefined;
                 let formattedPrevDate = prevDate.toISOString().substring(0, 10);
-                console.log(obj.date, formattedPrevDate);
                 if (!obj || obj.date !== formattedPrevDate) {
                     dates.splice(i, 0, {
                         date: formattedPrevDate,

@@ -1,7 +1,7 @@
 <template>
     <div class="mt-2 my-0 mb-5 relative flex flex-row">
         <div class="relative w-full">
-            <input class="bg-gray-250 rounded-lg border-none px-4 text-base py-3 w-full"
+            <input class="bg-gray-250 dark:bg-gray-800 rounded-lg border-none px-4 text-base py-3 w-full"
                    type="text"
                    :placeholder="placeholder"
                    :value="input"
@@ -11,7 +11,7 @@
             <div class="absolute top-3 right-4 h-6 w-6"
                  :class="[inputEmpty ? 'cursor-not-allowed' : 'cursor-pointer']"
                  @click="clearInput">
-                <font-awesome-icon class="h-full w-full transition" :class="[!inputEmpty ? 'text-black' : 'text-gray-400']" icon="circle-xmark"/>
+                <font-awesome-icon class="h-full w-full transition" :class="[!inputEmpty ? 'text-black dark:text-gray-200' : 'text-gray-400']" icon="circle-xmark"/>
             </div>
         </div>
         <div class="bg-primary h-full min-h-[48px] aspect-square transition rounded-lg ml-2.5 cursor-pointer flex items-center justify-center"

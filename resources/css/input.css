@@ -82,11 +82,8 @@
 }
 
 body {
+    @apply min-h-screen h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200;
     word-break: break-word;
-    min-height: 100vh;
-    height: 100vh;
-    background-color: var(--background);
-    color: var(--text-normal);
 }
 
 .align-center {
@@ -115,7 +112,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .muted {
-    @apply text-gray-500 dark:text-gray-700;
+    @apply text-gray-500 dark:text-gray-500;
 }
 
 .markdown ul {
@@ -230,8 +227,15 @@ p a:not(.plain), span a:not(.plain) {
 }
 
 a.static, .static-link {
-    @apply text-primary-600 hover:text-primary font-semibold;
+    @apply text-primary-600 dark:text-primary-400 hover:text-primary font-semibold;
 }
+
+tbody {
+    @apply dark:text-gray-300;
+}
+/*.vue-apexcharts text {*/
+/*    @apply dark:fill-gray-400;*/
+/*}*/
 
 .fill-black {
     fill: var(--text-normal);
@@ -417,23 +421,15 @@ body:not(.dark-theme) header.header-filled .nav-action:hover {
 }
 
 .preview-link-title {
-    font-size: 16px;
-    color: #3f5660;
-    text-decoration: none !important;
-    font-weight: 400;
+    @apply text-base font-normal text-gray-700 dark:text-gray-400;
 }
 
 .sidebar-active {
-    background-color: var(--background-soft-darkened);
-}
-
-.sidebar-active .preview-link-icon > * {
-    fill: #000;
+    @apply bg-gray-200 dark:bg-gray-700;
 }
 
 .sidebar-active .preview-link-title {
-    color: #000;
-    font-weight: 600;
+    @apply text-gray-900 dark:text-gray-200 font-semibold;
 }
 
 .plugin-preview-label {
@@ -1085,14 +1081,7 @@ textarea {
 }
 
 .wiki-quicklink {
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    display: flex;
-    flex-direction: row;
-    padding: 15px 20px;
-    justify-content: space-between;
-    align-items: center;
-    transition: none !important;
+    @apply border border-gray-200 dark:border-gray-800 rounded-lg flex py-4 px-5 justify-between items-center transition-none;
 }
 
 .wiki-quicklink.gh:hover, .wiki-quicklink.sp:hover {

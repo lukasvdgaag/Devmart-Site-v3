@@ -1,5 +1,5 @@
 <template>
-    <div v-if="lastPage > 1" class="flex items-center mt-3 justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div v-if="lastPage > 1" class="flex items-center mt-3 justify-between border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6">
         <div class="flex flex-1 justify-between sm:hidden">
             <div class="flex flex-row justify-content-start w-full">
                 <PaginationItem v-if="currentPage-1 >= 1" @update="handleUpdate" :page="Math.max(1, currentPage-1)">
@@ -14,7 +14,7 @@
         </div>
         <div class="hidden sm:flex sm:flex-1 sm:flex-wrap gap-2 sm:items-center sm:justify-between">
             <div>
-                <p class="text-sm text-gray-700">
+                <p class="text-sm text-gray-700 dark:text-gray-400">
                     Showing <span class="font-medium">{{ start }}</span> to <span class="font-medium">{{ end }}</span> of <span
                     class="font-medium">{{ total }}</span> results
                 </p>

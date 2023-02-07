@@ -143,14 +143,14 @@
         </div>
 
         <h2 class="mt-4">Appearance</h2>
-        <div class="flex flex-row gap-4 flex-wrap min-w-[200px]">
+        <div class="flex flex-row gap-4 flex-wrap min-w-[200px] mt-2">
             <button v-for="type in AccountTheme()"
                     class="flex flex-col gap-2 rounded-md p-2 cursor-pointer"
-                    :class="[user.theme === type ? 'border-primary border-3' : 'border-gray-300 border-2']"
+                    :class="[user.theme === type ? 'border-primary border-3' : 'border-gray-300 dark:border-gray-600 border-2']"
                     type="button"
                     @click="selectTheme(type)">
                 <img class="rounded-md" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
-                <span class="text-md font-bold capitalize w-full text-center select-none">{{ type }}</span>
+                <span class="text-md font-bold capitalize w-full text-center select-none dark:text-gray-300">{{ type }}</span>
             </button>
         </div>
 
