@@ -16,33 +16,45 @@
             </div>
 
             <div class="nav-button nav-side">
-                <div v-if="this.user !== null" class="nav-action account-link cursor-pointer relative">Account
-                    <div class="account-popup-container pt-1">
-                        <div class="account-popup">
-                            <div class="text-sm font-bold account-popup-info cursor-default">
-                                Hi, {{ this.user.username }} 👋
-                            </div>
-                            <div class="text-sm flex flex-row items-center justify-between account-popup-item">
-                                <label class="w-full cursor-pointer text-inherit" for="dark_mode">Dark Mode</label>
-                                <div>
-                                    <SwitchInput :small="true" :selected="this.user?.theme === 'dark-theme'"/>
-                                </div>
-                            </div>
-                            <router-link exact-active-class="lmWixQ" :to="{name: 'account'}"
-                                         class="flex flex-row plain items-center gap-2 account-link account-popup-item">
-                                <font-awesome-icon icon="gear" class="icon"/>
-                                <span>Settings</span>
-                            </router-link>
-                            <button class="flex flex-row plain items-center gap-2 logout-link rounded-t-none rounded-b-md account-popup-item"
-                                    type="submit"
-                                    @click="this.logoutUser($event)">
-                                <font-awesome-icon icon="right-from-bracket" class="icon"/>
-                                <span>Log out</span>
-                            </button>
-                        </div>
-                    </div>
+                <div v-if="user" class="nav-action account-link cursor-pointer relative"
+                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-end">Account
                 </div>
                 <router-link exact-active-class="lmWixQ" :to="loginLink" v-else class="nav-action">Login</router-link>
+
+                <div v-if="user"
+                     class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                     id="user-dropdown">
+                    <div class="px-4 py-3">
+                        <span class="block text-sm text-gray-900 dark:text-white">Hi, {{ this.user.username }} 👋</span>
+                    </div>
+                    <ul class="py-2" aria-labelledby="user-menu-button">
+                        <li>
+                            <button href="#" class="block px-4 py-2 w-full rounded-none text-sm text-gray-700 hover:bg-gray-100 flex flex-row items-center gap-2
+                        dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" type="button" @click.prevent="switchTheme()">
+                                <label class="flex gap-2 items-center w-full cursor-pointer text-inherit" for="dark_mode">
+                                    <font-awesome-icon :icon="darkMode ? 'lightbulb' : 'moon'" class="text-xs min-w-3"/>
+                                    <span>{{ darkMode ? 'Switch to light mode' : 'Switch to dark mode' }}</span>
+                                </label>
+                            </button>
+                        </li>
+                        <li>
+                            <router-link :to="{name: 'account'}"
+                                         class="block flex gap-2 items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                <font-awesome-icon icon="gear" class="text-xs min-w-3"/>
+                                <span>Settings</span>
+                            </router-link>
+                        </li>
+                        <li>
+                            <button
+                                class="flex plain w-full rounded-none items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                type="submit"
+                                @click="this.logoutUser($event)">
+                                <font-awesome-icon icon="right-from-bracket" class="text-xs min-w-3"/>
+                                <span>Sign out</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
@@ -52,6 +64,7 @@
 import Logo from "@/components/Common/Logo";
 import {useAuth} from "@/store/authStore";
 import SwitchInput from "@/components/Common/SwitchInput.vue";
+import {initDropdowns} from "flowbite";
 
 export default {
     name: "Navbar",
@@ -70,6 +83,12 @@ export default {
                 document.documentElement.classList.add("dark");
             }
         }
+
+        this.darkMode = document.documentElement.classList.contains("dark");
+    },
+
+    mounted() {
+        initDropdowns();
     },
 
     computed: {
@@ -79,18 +98,23 @@ export default {
                 uri.query = {redirect: this.$route.fullPath};
             }
             return uri;
-        }
+        },
     },
 
     data() {
         return {
             user: useAuth().user,
+            darkMode: false,
         }
     },
 
     methods: {
         logoutUser() {
             useAuth().logout();
+        },
+        switchTheme() {
+            document.documentElement.classList.toggle("dark");
+            this.darkMode = !this.darkMode;
         }
     }
 }
