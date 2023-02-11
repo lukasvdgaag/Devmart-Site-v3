@@ -22,36 +22,24 @@
                 <router-link exact-active-class="lmWixQ" :to="loginLink" v-else class="nav-action">Login</router-link>
 
                 <div v-if="user"
-                     class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                     class="z-50 hidden my-4 text-base list-none divide-y rounded-lg shadow"
+                     :class="[!background ? 'bg-white divide-gray-100': 'bg-gray-700 divide-gray-600 dark:bg-white dark:divide-gray-100']"
                      id="user-dropdown">
                     <div class="px-4 py-3">
-                        <span class="block text-sm text-gray-900 dark:text-white">Hi, {{ this.user.username }} 👋</span>
+                        <span class="block text-sm" :class="[!background ? 'text-gray-900': 'text-gray-100 dark:text-black']">Hi, {{ this.user.username }} 👋</span>
                     </div>
                     <ul class="py-2" aria-labelledby="user-menu-button">
                         <li>
-                            <button href="#" class="block px-4 py-2 w-full rounded-none text-sm text-gray-700 hover:bg-gray-100 flex flex-row items-center gap-2
-                        dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" type="button" @click.prevent="switchTheme()">
-                                <label class="flex gap-2 items-center w-full cursor-pointer text-inherit" for="dark_mode">
-                                    <font-awesome-icon :icon="darkMode ? 'lightbulb' : 'moon'" class="text-xs min-w-3"/>
-                                    <span>{{ darkMode ? 'Switch to light mode' : 'Switch to dark mode' }}</span>
-                                </label>
-                            </button>
+                            <NavPopupItem :label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                                          :icon="darkMode ? 'lightbulb' : 'moon'"
+                                          @click.prevent="switchTheme()"
+                                          :background="background" />
                         </li>
                         <li>
-                            <router-link :to="{name: 'account'}"
-                                         class="block flex gap-2 items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-                                <font-awesome-icon icon="gear" class="text-xs min-w-3"/>
-                                <span>Settings</span>
-                            </router-link>
+                            <NavPopupItem label="Settings" icon="gear" :to="{name: 'account'}" type="link" :background="background" />
                         </li>
                         <li>
-                            <button
-                                class="flex plain w-full rounded-none items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                type="submit"
-                                @click="this.logoutUser($event)">
-                                <font-awesome-icon icon="right-from-bracket" class="text-xs min-w-3"/>
-                                <span>Sign out</span>
-                            </button>
+                            <NavPopupItem label="Sign out" icon="right-from-bracket" @click.prevent="this.logoutUser($event)" :background="background" />
                         </li>
                     </ul>
                 </div>
@@ -65,10 +53,11 @@ import Logo from "@/components/Common/Logo";
 import {useAuth} from "@/store/authStore";
 import SwitchInput from "@/components/Common/SwitchInput.vue";
 import {initDropdowns} from "flowbite";
+import NavPopupItem from "@/components/Common/NavPopupItem.vue";
 
 export default {
     name: "Navbar",
-    components: {SwitchInput, Logo},
+    components: {NavPopupItem, SwitchInput, Logo},
     props: {
         background: {
             type: Boolean,

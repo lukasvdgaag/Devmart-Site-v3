@@ -4,7 +4,7 @@
             <Navbar :background="true"/>
             <AuthCard class="w-full">
                 <form method="post" @submit.prevent="login">
-                    <a href="/login-with-discord" class="button primary flex flex-col align-center plain !p-3">
+                    <a href="/login-with-discord" class="button rounded-md primary flex flex-col align-center plain !p-3">
                         <div class="flex flex-row gap-2">
                             <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
                             <div class="text-base font-bold">Log in with Discord</div>
