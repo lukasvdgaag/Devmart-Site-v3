@@ -34,27 +34,6 @@
         </div>
 
         <div class="mt-3">
-            <Label for="name" value="Name"/>
-
-            <div class="flex flex-row gap-2">
-                <Input id="name"
-                       class="block mt-1 w-full"
-                       type="text"
-                       name="name"
-                       maxlength="50"
-                       placeholder="First name"
-                       required/>
-                <Input id="surname"
-                       class="block mt-1 w-full"
-                       type="text"
-                       name="surname"
-                       maxlength="50"
-                       placeholder="Last name"
-                       required/>
-            </div>
-        </div>
-
-        <div class="mt-3">
             <Label for="email" value="Email"/>
 
             <Input id="email"
