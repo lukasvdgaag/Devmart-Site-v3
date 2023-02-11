@@ -21,6 +21,7 @@ import PluginUpdateInfoPage from "@/components/Pages/Plugins/Views/PluginUpdateI
 import PastePageLayout from "@/components/Pages/Paste/PastePageLayout.vue";
 import PasteCreatePage from "@/components/Pages/Paste/PasteCreatePage.vue";
 import PasteInformationPage from "@/components/Pages/Paste/PasteInformationPage.vue";
+import AuthPageLayout from "@/components/Pages/Auth/AuthPageLayout.vue";
 
 const routes = [
     {
@@ -29,12 +30,24 @@ const routes = [
         component: HomePage,
     }, {
         path: '/login',
-        name: 'login',
-        component: LoginPage
+        component: AuthPageLayout,
+        children: [{
+            path: '',
+            component: LoginPage,
+            name: 'login'
+        }]
     }, {
         path: '/register',
-        name: 'register',
-        component: RegisterPage
+        component: AuthPageLayout,
+        props: {
+            header: 'Sign Up.',
+            subheader: 'Welcome to Devmart 👋'
+        },
+        children: [{
+            path: '',
+            component: RegisterPage,
+            name: 'register'
+        }]
     }, {
         path: '/paste',
         component: PastePageLayout,

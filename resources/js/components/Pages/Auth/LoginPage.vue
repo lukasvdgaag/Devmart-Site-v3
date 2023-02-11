@@ -1,72 +1,68 @@
 <template>
-    <div class="flex flex-row h-full">
-        <div class="w-full flex flex-col items-center m-0 p-0 h-full">
-            <Navbar :background="true"/>
-            <AuthCard class="w-full">
-                <form method="post" @submit.prevent="login">
-                    <a href="/login-with-discord" class="button rounded-md primary flex flex-col align-center plain !p-3">
-                        <div class="flex flex-row gap-2">
-                            <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
-                            <div class="text-base font-bold">Log in with Discord</div>
-                        </div>
-                    </a>
+    <form method="post" @submit.prevent="login">
+        <a href="/login-with-discord" class="button rounded-md primary flex flex-col align-center plain !p-3">
+            <div class="flex flex-row gap-2">
+                <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
+                <div class="text-base font-bold">Log in with Discord</div>
+            </div>
+        </a>
 
-                    <Hr/>
+        <Hr/>
 
-                    <div>
-                        <Label for="username" value="Username or Email"/>
-                        <Input id="username"
-                               v-model="data.username"
-                               class="block mt-1 w-full"
-                               type="text"
-                               :errors="errors"
-                               item="username"
-                               required
-                               autofocus/>
-                    </div>
-                    <div class="mt-4">
-                        <Label for="password" value="Password"/>
-                        <Input id="password"
-                               v-model="data.password"
-                               class="block mt-1 w-full"
-                               type="password"
-                               :errors="errors"
-                               item="username"
-                               required
-                               autocomplete="current-password"/>
-                    </div>
-
-                    <ValidationError item="username" :errors="errors"/>
-
-                    <div class="flex flex-row mt-2 center justify-between">
-                        <div>
-                            <label for="remember_me" class="inline-flex items-center h-full">
-                                <Input id="remember_me"
-                                       v-model="data.remember"
-                                       type="checkbox"/>
-
-                                <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                            </label>
-                        </div>
-                        <div>
-                            <router-link to="forgot-password" class="underline static text-sm">Forgot your password?</router-link>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col items-center justify-end mt-4">
-                        <button class="primary w-full p-2" :disabled="loggingIn">
-                            {{ loggingIn ? "Logging you in..." : "Log in" }}
-                        </button>
-                    </div>
-                </form>
-            </AuthCard>
+        <div>
+            <Label for="username" value="Username or Email"/>
+            <Input id="username"
+                   v-model="data.username"
+                   class="block mt-1 w-full"
+                   type="text"
+                   :errors="errors"
+                   item="username"
+                   required
+                   autofocus/>
         </div>
-    </div>
+        <div class="mt-4">
+            <Label for="password" value="Password"/>
+            <Input id="password"
+                   v-model="data.password"
+                   class="block mt-1 w-full"
+                   type="password"
+                   :errors="errors"
+                   item="username"
+                   required
+                   autocomplete="current-password"/>
+        </div>
+
+        <ValidationError item="username" :errors="errors"/>
+
+        <div class="flex flex-row mt-2 center justify-between">
+            <div>
+                <label for="remember_me" class="inline-flex items-center h-full">
+                    <Input id="remember_me"
+                           v-model="data.remember"
+                           type="checkbox"/>
+
+                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                </label>
+            </div>
+            <div>
+                <router-link to="forgot-password" class="underline static text-sm">Forgot your password?</router-link>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center justify-end mt-4">
+            <button class="primary w-full p-2" :disabled="loggingIn">
+                {{ loggingIn ? "Logging you in..." : "Log in" }}
+            </button>
+        </div>
+        <div class="mt-4 text-center">
+            No account yet?
+            <router-link to="register" class="static">Sign up Now!</router-link>
+        </div>
+    </form>
 </template>
 
 <script>
 import Navbar from "@/components/Common/Navbar";
-import AuthCard from "@/components/Common/AuthCard";
 import Label from "@/components/Common/Label";
 import Input from "@/components/Common/Input";
 import {useAuth} from "@/store/authStore";
@@ -75,18 +71,10 @@ import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "LoginPage",
-    components: {Hr, ValidationError, Input, Label, AuthCard, Navbar},
-
-    created() {
-        let loggedIn = this.authStore.loggedIn;
-        if (loggedIn) {
-            this.$router.push("/");
-        }
-    },
+    components: {Hr, ValidationError, Input, Label, Navbar},
 
     data() {
         return {
-            authStore: useAuth(),
             errors: {},
             data: {
                 username: '',
@@ -103,7 +91,7 @@ export default {
             this.loggingIn = true;
 
             try {
-                const response = await this.authStore.login(this.data);
+                const response = await useAuth().login(this.data);
                 if (response.status === 200) {
                     if (this.$route.query.redirect) {
                         this.$router.push(this.$route.query.redirect);
