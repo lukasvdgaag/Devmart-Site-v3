@@ -33,7 +33,7 @@
                                 <font-awesome-icon icon="gear" class="icon"/>
                                 <span>Settings</span>
                             </router-link>
-                            <button class="flex flex-row plain items-center gap-2 logout-link rounded-b-sm account-popup-item"
+                            <button class="flex flex-row plain items-center gap-2 logout-link rounded-t-none rounded-b-md account-popup-item"
                                     type="submit"
                                     @click="this.logoutUser($event)">
                                 <font-awesome-icon icon="right-from-bracket" class="icon"/>

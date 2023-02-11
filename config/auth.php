@@ -38,7 +38,8 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+//            'provider' => 'users',
+            'provider' => 'gcnt-database',
         ],
     ],
 
@@ -62,6 +63,11 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
+
+        'gcnt-database' => [
+            'driver' => 'gcnt-database',
             'model' => App\Models\User::class,
         ],
 

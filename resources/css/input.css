@@ -52,7 +52,7 @@
     -webkit-text-size-adjust: 100%;
 }
 
-:root body.dark-theme {
+:root html.dark {
     --background: #121e30;
     --text-header: rgb(200, 217, 255);
     --header-secondary: #e6e6e6;
@@ -327,7 +327,7 @@ tbody {
     padding: 10px;
 }
 
-.header-big .header-logo, body.dark-theme .header-big .header-logo {
+.header-big .header-logo, html.dark .header-big .header-logo {
     fill: #fff;
 }
 
@@ -335,7 +335,7 @@ header.header-filled .header-logo {
     fill: #000;
 }
 
-body:not(.dark-theme) header.header-filled .nav-link {
+html:not(.dark) header.header-filled .nav-link {
     color: #000;
 }
 
@@ -349,16 +349,15 @@ body:not(.dark-theme) header.header-filled .nav-link {
 }
 
 header.header-filled .nav-action {
-    background-color: var(--acpu-f-bg);
-    color: var(--acpu-f-color);
+    @apply bg-gray-900 dark:bg-white text-white dark:text-gray-900;
 }
 
 .nav-action:hover {
     background-color: var(--background-soft-darkened);
 }
 
-body:not(.dark-theme) header.header-filled .nav-action:hover {
-    background-color: #131313FF;
+html:not(.dark) header.header-filled .nav-action:hover {
+    @apply bg-gray-900;
 }
 
 .nav-link:hover {
@@ -1187,12 +1186,7 @@ input[type='password'] {
 }
 
 .account-popup {
-    background-color: var(--acpu-bg);
-    color: var(--acpu-color);
-    min-width: 200px;
-    border-radius: 8px;
-    border: var(--border-light);
-    font-size: 14px;
+    @apply bg-gray-900 dark:bg-white text-white dark:text-gray-900 min-w-[200px] rounded-md border text-base;
 }
 
 .account-popup-info {
@@ -1226,8 +1220,7 @@ input[type='password'] {
 }
 
 .header-filled .account-popup {
-    background-color: var(--acpu-f-bg);
-    color: var(--acpu-f-color);
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
 }
 
 .account-popup path {
