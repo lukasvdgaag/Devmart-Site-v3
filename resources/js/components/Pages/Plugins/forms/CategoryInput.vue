@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import Input from "@/components/Common/Input.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import MutedText from "@/components/Common/MutedText.vue";
 
 export default {

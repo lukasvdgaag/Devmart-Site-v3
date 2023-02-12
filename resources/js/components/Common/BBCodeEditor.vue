@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Input from "@/components/Common/Input.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import BBCodeParser from "@/services/BBCodeParser";
 import BBCode from "@/components/Common/BBCode.vue";
 

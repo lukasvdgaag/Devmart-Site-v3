@@ -34,29 +34,6 @@
             </template>
         </div>
 
-        <div class="flex flex-row gap-4 mt-3">
-            <div class="w-full">
-                <Label class="font-bold" value="First Name"/>
-                <Input v-model="user.name"
-                       :disabled="!isAdmin"
-                       class="block mt-1 w-full"
-                       placeholder="First Name"
-                       required/>
-            </div>
-            <div class="w-full">
-                <Label class="font-bold" value="Last Name"/>
-                <Input v-model="user.surname"
-                       :disabled="!isAdmin"
-                       class="block mt-1 w-full"
-                       placeholder="Last Name"
-                       required/>
-            </div>
-        </div>
-        <MutedText v-if="userLoading || !isAdmin">
-            Your name cannot be changed after it has been entered during the signup process.
-            If this name is incorrect, please contact a staff member to change it.
-        </MutedText>
-
         <div class="mt-3">
             <Label class="font-bold" value="Email"/>
             <Input v-model="user.email"
@@ -164,15 +141,15 @@
 </template>
 
 <script>
-import Label from "@/components/Common/Label.vue";
-import Input from "@/components/Common/Input.vue";
+import Label from "@/components/Common/Form/Label.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import UserRepository from "@/services/UserRepository";
-import Select from "@/components/Common/Select.vue";
+import Select from "@/components/Common/Form/Select.vue";
 import DiscordSuggestionNotifications from "@/models/DiscordSuggestionNotifications";
-import DisabledFormText from "@/components/Common/DisabledFormText.vue";
+import DisabledFormText from "@/components/Common/Form/DisabledFormText.vue";
 import AccountTheme from "@/models/AccountTheme";
 import MutedText from "@/components/Common/MutedText.vue";
-import ValidationError from "@/components/Common/ValidationError.vue";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";

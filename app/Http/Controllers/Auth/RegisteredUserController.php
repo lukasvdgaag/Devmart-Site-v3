@@ -7,6 +7,7 @@ use App\Models\DiscordUserAuthInfo;
 use App\Models\User;
 use App\Providers\GCNTDatabaseUserProvider;
 use App\Utils\WebUtils;
+use http\Env\Response;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,7 +90,6 @@ class RegisteredUserController extends Controller
      * Handle an incoming registration request.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -109,17 +109,26 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ];
 
-        if ($request->session()->has('discordAuthInfo')) {
-            $discordInfo = $request->session()->get('discordAuthInfo');
-            $userInfo['discord_verified'] = true;
-            $userInfo['discord_id'] = $discordInfo->id;
+        if ($request->has('discord_auth_token')) {
+            $discordInfo = DiscordUserAuthInfo::where('token', $request->get('discord_auth_token'))->first();
+            if ($discordInfo) {
+                $userInfo['discord_verified'] = true;
+                $userInfo['discord_id'] = $discordInfo->discord_id;
+            }
         }
 
         $user = User::create($userInfo);
+        if (!$user) {
+            return response()->json([
+                'errors' => [
+                    'general' => 'Failed to create user.'
+                ]
+            ]);
+        }
 
         event(new Registered($user));
         Auth::login($user);
 
-        return WebUtils::redirectOrGoHome($request);
+        return response()->json($user, 201);
     }
 }

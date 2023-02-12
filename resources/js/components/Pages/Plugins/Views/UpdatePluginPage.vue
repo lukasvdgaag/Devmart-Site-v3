@@ -96,8 +96,8 @@ import PluginRepository from "@/services/PluginRepository";
 import FileInput from "@/components/Common/FileInput.vue";
 import MutedText from "@/components/Common/MutedText.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
-import Input from "@/components/Common/Input.vue";
-import ValidationError from "@/components/Common/ValidationError.vue";
+import Input from "@/components/Common/Form/Input.vue";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Plugin from "@/models/rest/Plugin";
 
 export default {

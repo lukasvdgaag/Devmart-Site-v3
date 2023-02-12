@@ -53,7 +53,7 @@
 <script>
 import Logo from "@/components/Common/Logo";
 import {useAuth} from "@/store/authStore";
-import SwitchInput from "@/components/Common/SwitchInput.vue";
+import SwitchInput from "@/components/Common/Form/SwitchInput.vue";
 import {initDropdowns} from "flowbite";
 import NavPopupItem from "@/components/Common/NavPopupItem.vue";
 

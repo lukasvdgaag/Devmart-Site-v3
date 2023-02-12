@@ -63,10 +63,10 @@
 
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
-import Label from "@/components/Common/Label.vue";
-import Input from "@/components/Common/Input.vue";
+import Label from "@/components/Common/Form/Label.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import {useAuth} from "@/store/authStore";
-import ValidationError from "@/components/Common/ValidationError.vue";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Hr from "@/components/Common/Hr.vue";
 
 export default {

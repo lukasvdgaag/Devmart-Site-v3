@@ -1,5 +1,5 @@
 <template>
-    <div v-if="item in errors" class="text-red-400 text-md mt-2">
+    <div v-if="item in errors" class="text-red-400 text-md mt-1">
         {{ errors[item][0] }}
     </div>
 </template>

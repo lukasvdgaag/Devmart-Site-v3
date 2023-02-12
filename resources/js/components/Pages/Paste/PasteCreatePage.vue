@@ -112,16 +112,16 @@
 </template>
 
 <script>
-import Input from "@/components/Common/Input.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import Paste from "@/models/rest/paste/Paste";
-import Label from "@/components/Common/Label.vue";
+import Label from "@/components/Common/Form/Label.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
 import {initDropdowns, initModals} from "flowbite";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import PasteCreateBody from "@/models/rest/paste/PasteCreateBody";
 import PastesRepository from "@/services/PastesRepository";
-import ValidationError from "@/components/Common/ValidationError.vue";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import {useAuth} from "@/store/authStore";
 import ConfirmationModal from "@/components/Common/Modal/ConfirmationModal.vue";
 

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Input from "@/components/Common/Input.vue";
+import Input from "@/components/Common/Form/Input.vue";
 
 export default {
     name: "FileInput",

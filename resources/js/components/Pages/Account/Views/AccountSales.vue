@@ -83,7 +83,7 @@
 <script>
 import MutedText from "@/components/Common/MutedText.vue";
 import QuickLink from "@/components/Common/QuickLink.vue";
-import Searchbar from "@/components/Common/Searchbar.vue";
+import Searchbar from "@/components/Common/Form/Searchbar.vue";
 import PluginRepository from "@/services/PluginRepository";
 import StringService from "@/services/StringService";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";

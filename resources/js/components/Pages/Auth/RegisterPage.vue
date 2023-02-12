@@ -8,27 +8,38 @@
 
     <Hr/>
 
-    <Alert type="warning" class="mb-4">
+    <Alert v-if="discordErrorType === 'username_in_use'" type="warning" class="mb-4">
         The username that is linked to your Discord account is already in use or contains non-alphanumeric characters.
         Please pick another one.
     </Alert>
 
-    <form method="POST">
-        <div>
+    <form @submit.prevent="register">
+        <div class="relative">
             <Label for="username" value="Username"/>
             <Input id="username"
                    v-model="data.username"
+                   @update:modelValue="checkUsernameValidity"
                    :errors="errors"
                    autofocus
                    class="block mt-1 w-full"
                    item="username"
                    maxlength="50"
-                   pattern="([A-Za-z][0-9]-_){50}"
                    placeholder="Username"
                    required
+                   ref="usernameInput"
                    type="text"
+                   data-popover-target="popover-password" data-popover-trigger="click" data-popover-placement="bottom"
             />
             <ValidationError :errors="errors" item="username"/>
+
+            <!--            <div id="popover-password" ref="usernamePopover" role="tooltip" class="absolute z-10 invisible inline-block text-sm font-light text-gray-500-->
+            <!--            transition-opacity duration-300 bg-gray-200 border border-gray-200 rounded-lg shadow-sm opacity-0 dark:bg-gray-800 dark:border-gray-600-->
+            <!--             dark:text-gray-400 p-3 w-full">-->
+            <!--                <div class="font-semibold">Username requirements</div>-->
+            <!--                <div data-popper-arrow></div>-->
+            <!--            </div>-->
+            <InputRequirementList :value="data.username" ref="usernameReqs" :requirements="['min:3', 'type:username']"/>
+
         </div>
 
         <div class="mt-3">
@@ -47,27 +58,15 @@
         <div class="mt-3">
             <Label for="password" value="Password"/>
 
-            <div class="relative">
-                <Input id="password" v-model="data.password"
-                       autocomplete="new-password"
-                       class="block mt-1 w-full"
-                       name="password"
-                       placeholder="Password"
-                       required type="password"/>
-
-                <p class="muted text-sm mt-1 italic">The password must be at least 8 characters
-                    long.</p>
-
-                <div class="password-view-toggle">
-                    <font-awesome-icon icon="eye-slash"/>
-                </div>
-            </div>
+            <PasswordInput v-model="data.password"/>
+            <InputRequirementList :value="data.password" :requirements="['min:8']"/>
         </div>
 
         <div class="mt-3">
             <label class="inline-flex items-center h-full" for="accept_tos">
                 <Input id="accept_tos" class="rounded"
                        name="accept_tos"
+                       v-model="data.accept_tos"
                        required type="checkbox"/>
 
                 <span class="ml-2 text-sm text-gray-600">I have read and agree to Devmart's
@@ -85,51 +84,66 @@
         <div class="mt-4 text-center">
             Already got an account?
             <router-link class="static" :to="{name: 'login'}">Login Now!</router-link>
+
+            <ValidationError :errors="errors" item="general"/>
         </div>
     </form>
 </template>
 
 <script>
-import Label from "@/components/Common/Label.vue";
-import Input from "@/components/Common/Input.vue";
+import Label from "@/components/Common/Form/Label.vue";
+import Input from "@/components/Common/Form/Input.vue";
 import Hr from "@/components/Common/Hr.vue";
-import ValidationError from "@/components/Common/ValidationError.vue";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
+import PasswordInput from "@/components/Common/Form/PasswordInput.vue";
+import MutedText from "@/components/Common/MutedText.vue";
+import InputRequirementList from "@/components/Common/Form/InputRequirementList.vue";
+import {initPopovers} from "flowbite";
+import AuthService from "@/services/AuthService";
+import {useAuth} from "@/store/authStore";
 
 export default {
     name: "RegisterPage",
-    components: {Alert, ValidationError, Hr, Input, Label},
+    components: {InputRequirementList, MutedText, PasswordInput, Alert, ValidationError, Hr, Input, Label},
 
     created() {
         let query = Object.assign({}, this.$route.query);
 
         if (query.email) {
             this.data.email = query.email;
-            delete query.email;
         }
         if (query.username) {
             this.data.username = query.username;
-            delete query.username;
         }
 
         if (query.discord_error) {
             this.discordErrorType = query.discord_error;
+        }
+    },
 
-            if (query.discord_error !== 'username_in_use') this.errors.discord = [this.determineDiscordErrorMessage()]
+    mounted() {
+        initPopovers();
 
-            delete query.discord_error;
-            this.$router.replace({query});
+        let query = Object.assign({}, this.$route.query);
+        if (query.discord_error) {
+            if (query.discord_error === 'username_in_use') {
+                this.errors.username = [this.$refs.usernameReqs.metAllRequirements() ? 'This username is taken.' : 'This username is invalid.'];
+            } else {
+                this.errors.discord = [this.determineDiscordErrorMessage()]
+            }
         }
     },
 
     data() {
         return {
-            discordErrorType: 0,
+            discordErrorType: null,
             errors: {},
             data: {
                 username: '',
                 email: '',
                 password: '',
+                accept_tos: false,
             }
         }
     },
@@ -151,6 +165,27 @@ export default {
                     return 'We failed to verify your authentication request.';
                 default:
                     return 'An unknown error occurred.';
+            }
+        },
+        checkUsernameValidity() {
+            this.data.username = this.data.username.replaceAll(' ', '_');
+            delete this.errors.username;
+        },
+        async register() {
+            try {
+                const res = await AuthService.registerUser(this.data);
+                // todo login user with return of register request.
+                if (res && res.status === 201) {
+                    useAuth().user = res.data;
+                    useAuth().loaded = true;
+
+                    this.$router.push({name: 'home'});
+                } else {
+                    this.errors = {general: ['An unknown error occurred.']};
+                }
+            } catch (res) {
+                console.error(res)
+                this.errors = res.data?.errors ?? {};
             }
         }
     }
