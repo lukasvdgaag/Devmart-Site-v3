@@ -30,15 +30,14 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
         $this->table = $table;
     }
 
-    public function verifyDiscordLogin($code)
-    {
+    public static function verifyDiscordAuth($code, $redirectUri, $scope = 'identify') {
         $payload = [
             'code' => $code,
             'client_id' => '1012682286099075095',
             'client_secret' => 'atk7t2Jlg8fMcZRn1cFuq-xzRlRHrfye',
             'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://127.0.0.1:8000/login-discord',
-            'scope' => 'identify'
+            'redirect_uri' => $redirectUri,
+            'scope' => $scope,
         ];
 
         $client = new Client(['curl' => [CURLOPT_SSL_VERIFYPEER => false]]);
@@ -63,14 +62,22 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
                 ]);
 
                 if ($usersResponse->getStatusCode() === 200) {
-                    $discordInfo = json_decode($usersResponse->getBody());
-                    return $discordInfo->id;
+                    return json_decode($usersResponse->getBody());
                 }
 
             }
         } catch (Exception) {
         }
         return null;
+    }
+
+    public static function verifyDiscordLogin($code)
+    {
+        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, 'http://127.0.0.1:8000/login-discord');
+    }
+
+    public static function verifyDiscordRegister($code) {
+        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, 'http://127.0.0.1:8000/register-discord', 'identify email');
     }
 
     /**
@@ -90,9 +97,9 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
         $query = $this->conn->table($this->table);
 
         $withDiscord = false;
-        if (isset($credentials['code']) && $credentials['code'] != null && $credentials['code'] !== '') {
-            $discordId = $this->verifyDiscordLogin($credentials['code']);
-            if ($discordId == null) return;
+        if (isset($credentials['code']) && $credentials['code'] && $credentials['code'] !== '') {
+            $discordId = GCNTDatabaseUserProvider::verifyDiscordLogin($credentials['code'])->id;
+            if (!$discordId) return;
 
             $query->where('discord_id', $discordId)
                 ->where('discord_verified', true);

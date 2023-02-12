@@ -25,7 +25,7 @@ export default {
             const param = this.$route.query.user;
             if (!param) return {};
 
-            return { user: param };
+            return {user: param};
         }
     }
 }

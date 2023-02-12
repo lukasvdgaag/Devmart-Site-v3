@@ -1,28 +1,28 @@
 <template>
     <textarea v-if="isTextarea"
-              :value="modelValue"
-              @input="onInput($event)"
-              :disabled="disabled"
-              :maxlength="maxlength"
-              class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full  dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
               :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
                type === 'checkbox' ? 'p-2.5 rounded-md' : '',
-           ]"></textarea>
+           ]"
+              :disabled="disabled"
+              :maxlength="maxlength"
+              :value="modelValue"
+              class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full  dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
+              @input="onInput($event)"></textarea>
 
     <input v-else
-           :value="modelValue"
-           @change="onChange($event)"
-           :type="type"
-           @input="onInput($event)"
-           :disabled="disabled"
-           class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
            :class="[
                hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
                type === 'checkbox' ? 'p-2.5 rounded-md' : '',
                disabled ? 'bg-gray-100 dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600' : 'bg-white dark:text-gray-300 dark:bg-gray-800'
            ]"
+           :disabled="disabled"
            :maxlength="maxlength"
+           :type="type"
+           :value="modelValue"
+           class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
+           @change="onChange($event)"
+           @input="onInput($event)"
     />
 </template>
 

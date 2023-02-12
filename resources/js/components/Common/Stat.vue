@@ -1,6 +1,6 @@
 <template>
-    <div class="rounded-full w-2 h-2 mr-2 flex-shrink-0 bg-gray-300 dark:bg-gray-700" v-if="dot"></div>
-    <div class="font-semibold text-gray-500 dark:text-gray-400" :class="{'text-sm mr-2': small, 'text-base mr-4': !small}">
+    <div v-if="dot" class="rounded-full w-2 h-2 mr-2 flex-shrink-0 bg-gray-300 dark:bg-gray-700"></div>
+    <div :class="{'text-sm mr-2': small, 'text-base mr-4': !small}" class="font-semibold text-gray-500 dark:text-gray-400">
         <slot></slot>
     </div>
 </template>

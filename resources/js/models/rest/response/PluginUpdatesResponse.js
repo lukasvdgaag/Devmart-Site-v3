@@ -1,6 +1,6 @@
 import PageableRestResponse from "@/models/rest/response/PageableRestResponse";
 
-export default class PluginUpdatesResponse extends PageableRestResponse{
+export default class PluginUpdatesResponse extends PageableRestResponse {
 
     /**
      * @type {PluginUpdate[]}

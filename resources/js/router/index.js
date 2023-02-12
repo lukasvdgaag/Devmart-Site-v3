@@ -1,7 +1,7 @@
-import HomePage from "@/components/pages/HomePage";
+import HomePage from "@/components/Pages/HomePage.vue";
 import {createRouter, createWebHistory} from 'vue-router';
-import LoginPage from "@/components/pages/auth/LoginPage";
-import RegisterPage from "@/components/pages/auth/RegisterPage";
+import LoginPage from "@/components/Pages/Auth/LoginPage.vue";
+import RegisterPage from "@/components/Pages/Auth/RegisterPage.vue";
 import {checkAuthenticated} from "@/middleware";
 import AccountLayout from "@/components/Pages/Account/AccountLayout.vue";
 import AccountHome from "@/components/Pages/Account/Views/AccountHome.vue";

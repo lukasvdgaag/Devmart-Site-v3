@@ -1,11 +1,11 @@
 <template>
-    <label class="switch mt-0" :class="{small: small}">
-        <input type="checkbox"
+    <label :class="{small: small}" class="switch mt-0">
+        <input :id="id"
+               :checked="checked"
                :name="name"
-               :id="id"
-               @change="this.$emit('update:modelValue', $event.target.checked)"
                :value="modelValue"
-               :checked="checked">
+               type="checkbox"
+               @change="this.$emit('update:modelValue', $event.target.checked)">
         <span class="slider"></span>
     </label>
 </template>

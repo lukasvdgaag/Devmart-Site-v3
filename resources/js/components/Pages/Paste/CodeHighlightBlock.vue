@@ -2,7 +2,7 @@
     <div class="overflow-x-auto overflow-y-hidden bg-gray-100 rounded-lg">
         <table>
             <tbody>
-            <tr v-for="(line, index) in codeLines" :key="index" :id="`L${index}`">
+            <tr v-for="(line, index) in codeLines" :id="`L${index}`" :key="index">
                 <td class="code-line text-gray-400 text-right whitespace-nowrap select-none w-1 min-w-12">
                     {{ index + 1 }}
                 </td>

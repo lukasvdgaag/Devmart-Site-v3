@@ -2,7 +2,7 @@
     <h2 class="my-2">Updates</h2>
 
     <div class="flex flex-col gap-2">
-        <PluginUpdateInformation v-if="update" :update="update" :permissions="permissions"/>
+        <PluginUpdateInformation v-if="update" :permissions="permissions" :update="update"/>
     </div>
 </template>
 

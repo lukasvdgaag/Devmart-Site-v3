@@ -1,18 +1,18 @@
 <template>
     <div class="bbcode-editor-container flex flex-col">
         <div class="bbcode-editor-header flex flex-row">
-            <div class="item" :class="{active: !showParsed}" @click="showParsed = false">Editor</div>
-            <div class="item" :class="{active: showParsed}" @click="showParsed = true">Preview</div>
+            <div :class="{active: !showParsed}" class="item" @click="showParsed = false">Editor</div>
+            <div :class="{active: showParsed}" class="item" @click="showParsed = true">Preview</div>
         </div>
 
         <BBCode v-if="showParsed" :source="parsedBBCode()" class="bbcode-preview"/>
         <Input v-else
                :is-textarea="true"
-               :value="modelValue"
-               @input="$emit('update:modelValue', $event.target.value)"
-               class="bbcode-editor"
+               :placeholder="placeholder"
                :required="required"
-               :placeholder="placeholder"/>
+               :value="modelValue"
+               class="bbcode-editor"
+               @input="$emit('update:modelValue', $event.target.value)"/>
     </div>
 </template>
 

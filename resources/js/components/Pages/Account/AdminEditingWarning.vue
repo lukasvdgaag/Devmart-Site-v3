@@ -1,5 +1,5 @@
 <template>
-    <Alert type="warning" class="mb-4 text-black" icon="fa-circle-exclamation">
+    <Alert class="mb-4 text-black" icon="fa-circle-exclamation" type="warning">
         <div>
             <div class="text-lg mb-2 font-bold">Hello Admin,</div>
             <div>

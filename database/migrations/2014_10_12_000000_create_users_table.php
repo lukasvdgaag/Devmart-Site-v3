@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 50)->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('discord_id')->nullable();
             $table->boolean('discord_verified')->default(false);
             $table->string('role', 10)->default('user');

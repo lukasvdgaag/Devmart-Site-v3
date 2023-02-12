@@ -6,9 +6,9 @@
         <QuickLink icon="fa-sack-dollar" label="Total Sales">
             {{ totalSales }}
         </QuickLink>
-        <QuickLink icon="fa-calendar-days"
-                   label="Sales Last 30 Days"
-                   class="md:row-start-2">
+        <QuickLink class="md:row-start-2"
+                   icon="fa-calendar-days"
+                   label="Sales Last 30 Days">
             <div>{{ total30Days }}</div>
             <div class="up text-sm flex flex-row gap-1 items-end mt-1">
                 <GraphIcon :percentage="difference30Days"/>
@@ -16,7 +16,7 @@
                 <div class=" muted">from last month</div>
             </div>
         </QuickLink>
-        <QuickLink label="Earnings This Week" class="md:row-span-2 lg:col-span-8 h-full">
+        <QuickLink class="md:row-span-2 lg:col-span-8 h-full" label="Earnings This Week">
             <div class="flex content-center mt-2 mb-2 font-bold text-2xl flex-row gap-2">
                 <div>{{ totalWeek }}</div>
                 <div class="mt-1 ml-1 up text-sm flex flex-row gap-1 items-end justify-center">
@@ -26,14 +26,14 @@
                 </div>
             </div>
             <div class="w-full relative h-full w-full">
-                <Vue3Apexcharts ref="chart" type="line" height="100%" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0"/>
+                <Vue3Apexcharts ref="chart" :options="chartOptions" :series="chartSeries" class="min-h-[300px] lg:min-h-0" height="100%" type="line"/>
             </div>
         </QuickLink>
 
-        <QuickLink label="Recent Sales" class="!col-span-12">
-            <Searchbar placeholder="Search a purchase by email or user..."
-                       v-model="transactionsFetchable.query"
+        <QuickLink class="!col-span-12" label="Recent Sales">
+            <Searchbar v-model="transactionsFetchable.query"
                        :disabled="!transactionsFetchable.canRequest()"
+                       placeholder="Search a purchase by email or user..."
                        @submit="loadRecentSales"/>
 
             <table>
@@ -49,7 +49,7 @@
                 <tbody class="sale-search-result">
 
                 <tr v-if="transactionsFetchable.loading">
-                    <td colspan="5" class="italic">
+                    <td class="italic" colspan="5">
                         Loading search results...
                     </td>
                 </tr>
@@ -62,7 +62,7 @@
                     <td>{{ StringService.formatMoney(sale.amount) }}</td>
                 </tr>
                 <tr v-if="!transactionsFetchable.loading && recentSales.length === 0">
-                    <td colspan="5" class="text-red-500 font-medium">
+                    <td class="text-red-500 font-medium" colspan="5">
                         No sales were found for your search query.
                     </td>
                 </tr>
@@ -70,11 +70,11 @@
             </table>
 
             <Pagination
-                :last-page="recentSalesPages"
                 :current-page="transactionsFetchable.page"
+                :fetchable="transactionsFetchable"
+                :last-page="recentSalesPages"
                 :per-page="10"
                 :total="recentSalesTotal"
-                :fetchable="transactionsFetchable"
             />
         </QuickLink>
     </div>

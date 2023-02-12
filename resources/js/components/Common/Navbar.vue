@@ -1,45 +1,47 @@
 <template>
     <header :class="{'header-filled': this.background}" class="header-big d-grid z-10">
         <nav class="flex flex-row justify-between items-center">
-            <router-link exact-active-class="lmWixQ" :to="{name: 'home'}" class="nav-side">
+            <router-link :to="{name: 'home'}" class="nav-side" exact-active-class="lmWixQ">
                 <Logo class="header-logo"/>
             </router-link>
 
             <div class="nav-links">
-                <router-link exact-active-class="active" :to="{name: 'home'}" class="nav-link">Home</router-link>
-                <router-link active-class="active" :to="{name: 'plugins'}" class="nav-link">Plugins</router-link>
-                <router-link active-class="active" :to="{name: 'paste'}" class="nav-link">Paste</router-link>
-                <router-link active-class="active" :to="{name: 'builds'}" class="nav-link">Builds</router-link>
-                <router-link active-class="active" :to="{name: 'wiki'}" class="nav-link">Wiki</router-link>
-                <router-link active-class="active" :to="{name: 'admin'}" v-if="this.user !== null && this.user.role === 'admin'" class="nav-link">Admin
+                <router-link :to="{name: 'home'}" class="nav-link" exact-active-class="active">Home</router-link>
+                <router-link :to="{name: 'plugins'}" active-class="active" class="nav-link">Plugins</router-link>
+                <router-link :to="{name: 'paste'}" active-class="active" class="nav-link">Paste</router-link>
+                <router-link :to="{name: 'builds'}" active-class="active" class="nav-link">Builds</router-link>
+                <router-link :to="{name: 'wiki'}" active-class="active" class="nav-link">Wiki</router-link>
+                <router-link v-if="this.user !== null && this.user.role === 'admin'" :to="{name: 'admin'}" active-class="active" class="nav-link">Admin
                 </router-link>
             </div>
 
             <div class="nav-button nav-side">
-                <div v-if="user" class="nav-action account-link cursor-pointer relative"
-                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom-end">Account
+                <div v-if="user" id="user-menu-button"
+                     aria-expanded="false" class="nav-action account-link cursor-pointer relative" data-dropdown-placement="bottom-end" data-dropdown-toggle="user-dropdown">Account
                 </div>
-                <router-link exact-active-class="lmWixQ" :to="loginLink" v-else class="nav-action">Login</router-link>
+                <router-link v-else :to="loginLink" class="nav-action" exact-active-class="lmWixQ">Login</router-link>
 
                 <div v-if="user"
-                     class="z-50 hidden my-4 text-base list-none divide-y rounded-lg shadow"
+                     id="user-dropdown"
                      :class="[!background ? 'bg-white divide-gray-100': 'bg-gray-700 divide-gray-600 dark:bg-white dark:divide-gray-100']"
-                     id="user-dropdown">
+                     class="z-50 hidden my-4 text-base list-none divide-y rounded-lg shadow">
                     <div class="px-4 py-3">
-                        <span class="block text-sm" :class="[!background ? 'text-gray-900': 'text-gray-100 dark:text-black']">Hi, {{ this.user.username }} 👋</span>
+                        <span :class="[!background ? 'text-gray-900': 'text-gray-100 dark:text-black']" class="block text-sm">Hi, {{
+                                this.user.username
+                            }} 👋</span>
                     </div>
-                    <ul class="py-2" aria-labelledby="user-menu-button">
+                    <ul aria-labelledby="user-menu-button" class="py-2">
                         <li>
-                            <NavPopupItem :label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                            <NavPopupItem :background="background"
                                           :icon="darkMode ? 'lightbulb' : 'moon'"
-                                          @click.prevent="switchTheme()"
-                                          :background="background" />
+                                          :label="darkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                                          @click.prevent="switchTheme()"/>
                         </li>
                         <li>
-                            <NavPopupItem label="Settings" icon="gear" :to="{name: 'account'}" type="link" :background="background" />
+                            <NavPopupItem :background="background" :to="{name: 'account'}" icon="gear" label="Settings" type="link"/>
                         </li>
                         <li>
-                            <NavPopupItem label="Sign out" icon="right-from-bracket" @click.prevent="this.logoutUser($event)" :background="background" />
+                            <NavPopupItem :background="background" icon="right-from-bracket" label="Sign out" @click.prevent="this.logoutUser($event)"/>
                         </li>
                     </ul>
                 </div>

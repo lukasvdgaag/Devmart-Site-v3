@@ -5,15 +5,15 @@
         <form class="h-full">
             <div class="flex flex-col gap-1">
                 <Label class="uppercase text-md">Title</Label>
-                <Input class="w-full px-4 text-base"
-                       tabindex="0"
-                       placeholder="Paste title"
-                       v-model="paste.title"
+                <Input v-model="paste.title"
                        :errors="errors"
-                       maxlength="50"
+                       class="w-full px-4 text-base"
                        item="title"
+                       maxlength="50"
+                       placeholder="Paste title"
+                       tabindex="0"
                 />
-                <ValidationError item="title" :errors="errors" class="mt-0"/>
+                <ValidationError :errors="errors" class="mt-0" item="title"/>
             </div>
 
             <div class="flex flex-col-reverse flex-wrap md:flex-col md:flex-nowrap gap-2 mt-2">
@@ -22,52 +22,52 @@
                     <Label class="uppercase text-md hidden md:block">Content</Label>
                     <div class="flex gap-2 md:gap-1 w-full flex-wrap md:flex-nowrap">
                         <DropdownSelect
-                            placeholder="Lifetime"
                             id="dd-lifetime"
-                            :items="lifetimeSelectItems"
-                            header="Paste Lifetime"
-                            description="How long should this paste be available?"
                             v-model="selectedLifetime"
+                            :items="lifetimeSelectItems"
                             class="w-full"
+                            description="How long should this paste be available?"
+                            header="Paste Lifetime"
+                            placeholder="Lifetime"
                         />
                         <DropdownSelect
-                            placeholder="Visibility"
                             id="dd-visibility"
-                            :items="visibilitySelectItems"
-                            header="Visibility"
-                            description="How should this paste be listed?"
                             v-model="selectedVisibility"
+                            :items="visibilitySelectItems"
                             class="w-full"
+                            description="How should this paste be listed?"
+                            header="Visibility"
+                            placeholder="Visibility"
                         />
                         <DropdownSelect
-                            placeholder="Style"
                             id="dd-style"
-                            :items="styleSelectItems"
-                            header="Styling"
-                            description="How should we style your paste?"
                             v-model="selectedStyle"
+                            :items="styleSelectItems"
                             class="w-full"
+                            description="How should we style your paste?"
+                            header="Styling"
+                            placeholder="Style"
                         />
-                        <button class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white hidden md:block"
-                                data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"
-                                type="button"
-                                v-if="pasteId">
+                        <button v-if="pasteId"
+                                class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white hidden md:block" data-modal-target="confirm-delete-modal"
+                                data-modal-toggle="confirm-delete-modal"
+                                type="button">
                             <font-awesome-icon icon="fa-solid fa-trash-can"/>
                         </button>
                         <div class="flex gap-2 w-full">
 
-                            <button class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden"
-                                    data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"
-                                    type="button"
-                                    v-if="pasteId">
+                            <button v-if="pasteId"
+                                    class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden" data-modal-target="confirm-delete-modal"
+                                    data-modal-toggle="confirm-delete-modal"
+                                    type="button">
                                 <font-awesome-icon icon="fa-solid fa-trash-can"/>
                                 <span class="break-keep">Delete</span>
                             </button>
-                            <button class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2"
-                                    :disabled="loading"
-                                    @click.prevent="uploadPaste"
-                                    type="submit">
-                                <font-awesome-icon icon="fa-solid fa-cloud-arrow-up" class="text-sm"/>
+                            <button :disabled="loading"
+                                    class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2"
+                                    type="submit"
+                                    @click.prevent="uploadPaste">
+                                <font-awesome-icon class="text-sm" icon="fa-solid fa-cloud-arrow-up"/>
                                 <span class="break-keep">{{ loading ? "Uploading..." : this.pasteId ? "Update Paste" : "Upload Paste" }}</span>
                             </button>
                         </div>
@@ -76,28 +76,29 @@
                 <div class="lg:mb-6">
                     <Label class="uppercase text-md mb-1 md:hidden">Content</Label>
 
-                    <div class="transition transition-all" :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']">
-                        <Input class="w-full min-h-[34rem] lg:h-full relative"
+                    <div :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']" class="transition transition-all">
+                        <Input ref="content"
+                               v-model="paste.content"
                                :class="{'!rounded-none h-full': fullScreen}"
+                               :errors="errors"
                                :is-textarea="true"
+                               class="w-full min-h-[34rem] lg:h-full relative"
+                               item="content"
                                placeholder="Start typing here..."
                                required
-                               v-model="paste.content"
-                               :errors="errors"
-                               @update:modelValue="delete this.errors.content"
-                               item="content"
                                wrap="off"
-                               ref="content"
+                               @update:modelValue="delete this.errors.content"
                         />
-                        <ValidationError item="content" :errors="errors" class="mt-0"/>
+                        <ValidationError :errors="errors" class="mt-0" item="content"/>
 
-                        <button class="top-2 absolute bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:bg-gray-600 py-2 px-3 rounded-md cursor-pointer transition select-none"
-                                :style="contentStyling"
-                                type="button"
-                                ref="fullScreenButton"
-                                @click="toggleFullScreen">
-                            <font-awesome-icon v-if="fullScreen" icon="fa-solid fa-down-left-and-up-right-to-center" class="text-gray-900 dark:text-gray-300"/>
-                            <font-awesome-icon v-else icon="fa-solid fa-up-right-and-down-left-from-center" class="text-gray-900 dark:text-gray-300"/>
+                        <button
+                            ref="fullScreenButton"
+                            :style="contentStyling"
+                            class="top-2 absolute bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:bg-gray-600 py-2 px-3 rounded-md cursor-pointer transition select-none"
+                            type="button"
+                            @click="toggleFullScreen">
+                            <font-awesome-icon v-if="fullScreen" class="text-gray-900 dark:text-gray-300" icon="fa-solid fa-down-left-and-up-right-to-center"/>
+                            <font-awesome-icon v-else class="text-gray-900 dark:text-gray-300" icon="fa-solid fa-up-right-and-down-left-from-center"/>
                         </button>
                     </div>
                 </div>

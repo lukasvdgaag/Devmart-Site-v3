@@ -3,29 +3,29 @@
         <div class="w-full flex flex-col items-center m-0 p-0">
             <Navbar/>
 
-            <HeaderBackground title="Plugins" subtitle="Our selection of high quality plugins"/>
+            <HeaderBackground subtitle="Our selection of high quality plugins" title="Plugins"/>
 
             <div class="d-grid !grid-cols-12 mb-6 mt-4">
                 <!-- Carousel -->
                 <div class="hidden featured-plugins mb-4 mt-2 col-span-12 text-center">
                     <div class="flex flex-row align-center">
-                        <img src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048"
-                             alt="Banner image"
-                             class="plugin-preview-banner">
-                        <img src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048"
-                             alt="Banner image"
-                             class="plugin-preview-banner">
-                        <img src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048"
-                             alt="Banner image"
-                             class="plugin-preview-banner">
+                        <img alt="Banner image"
+                             class="plugin-preview-banner"
+                             src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048">
+                        <img alt="Banner image"
+                             class="plugin-preview-banner"
+                             src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048">
+                        <img alt="Banner image"
+                             class="plugin-preview-banner"
+                             src="https://cdn.discordapp.com/discovery-splashes/536178805828485140/e3cf88323111aa759f8764230c3c440c.jpg?size=2048">
                     </div>
                 </div>
 
                 <Sidebar :links="sidebarLinks"/>
                 <div class="col-span-12 lg:col-span-9 w-full">
-                    <Searchbar placeholder="Find a plugin..."
-                               v-model="pluginsFetchable.query"
+                    <Searchbar v-model="pluginsFetchable.query"
                                :disabled="!pluginsFetchable.canRequest()"
+                               placeholder="Find a plugin..."
                                @submit="updateSearch"/>
 
                     <div class="w-full col-gap-4 mt-2 text-xl font-bold">
@@ -33,15 +33,15 @@
                     </div>
 
                     <div class="flex gap-y-5 mt-2 flex-col">
-                        <PluginPreview v-for="plugin in plugins" :plugin="plugin" :key="plugin.id"/>
+                        <PluginPreview v-for="plugin in plugins" :key="plugin.id" :plugin="plugin"/>
                     </div>
 
                     <Pagination
                         :current-page="pluginsFetchable?.page ?? 1"
+                        :fetchable="pluginsFetchable"
                         :last-page="pages"
                         :per-page="6"
-                        :total="totalPlugins"
-                        :fetchable="pluginsFetchable"/>
+                        :total="totalPlugins"/>
                 </div>
             </div>
         </div>

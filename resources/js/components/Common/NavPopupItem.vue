@@ -1,15 +1,15 @@
 <template>
     <button
         v-if="type === 'button'"
-        class="navbar-popup-item"
         :class="[background ? 'navbar-popup-item-nobg': 'navbar-popup-item-bg']"
+        class="navbar-popup-item"
         type="button">
         <font-awesome-icon :icon="icon" class="text-xs min-w-3"/>
-        <span>{{label}}</span>
+        <span>{{ label }}</span>
     </button>
-    <router-link v-else :to="to" class="navbar-popup-item" :class="[background ? 'navbar-popup-item-nobg': 'navbar-popup-item-bg']">
+    <router-link v-else :class="[background ? 'navbar-popup-item-nobg': 'navbar-popup-item-bg']" :to="to" class="navbar-popup-item">
         <font-awesome-icon :icon="icon" class="text-xs min-w-3"/>
-        <span>{{label}}</span>
+        <span>{{ label }}</span>
     </router-link>
 </template>
 
@@ -45,6 +45,7 @@ export default {
 .navbar-popup-item {
     @apply block px-4 py-2 w-full rounded-none text-sm flex flex-row items-center gap-2;
 }
+
 .navbar-popup-item-bg {
     @apply text-gray-700 hover:bg-gray-100;
 }

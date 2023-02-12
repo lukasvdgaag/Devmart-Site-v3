@@ -7,34 +7,34 @@
                     <span class="lg:hidden">Version: </span>
                     {{ update.effective_version }}</span>
             </div>
-            <a v-if="permissions?.download" :href="`/plugins/${update.plugin}/download/${update.file_name}`" target="_blank"
-               class="plain rounded-md bg-primary-400 hover:bg-primary flex-nowrap text-white h-fit py-2 lg:py-1 px-3 text-xl lg:text-base lg:hidden lg:px-2 break-keep flex gap-2 align-center mr-[-4px]">
+            <a v-if="permissions?.download" :href="`/plugins/${update.plugin}/download/${update.file_name}`" class="plain rounded-md bg-primary-400 hover:bg-primary flex-nowrap text-white h-fit py-2 lg:py-1 px-3 text-xl lg:text-base lg:hidden lg:px-2 break-keep flex gap-2 align-center mr-[-4px]"
+               target="_blank">
                 <font-awesome-icon icon="fa-solid fa-file-arrow-down"/>
             </a>
         </div>
 
-        <p v-html="changelog" :class="{'text-ellipsis max-h-[120px] overflow-hidden break-words': !expanded}" />
+        <p :class="{'text-ellipsis max-h-[120px] overflow-hidden break-words': !expanded}" v-html="changelog"/>
         <button v-if="changelogLines.length > 5"
                 class="bg-gray-200 px-2 py-1 mt-3 text-gray-800 lg:hidden flex gap-2 items-center w-fit"
                 @click="expanded = !expanded">
-            <font-awesome-icon icon="fa-chevron-up" :rotation="expanded ? 0 : 90" class="transition text-sm text-gray-600"></font-awesome-icon>
+            <font-awesome-icon :rotation="expanded ? 0 : 90" class="transition text-sm text-gray-600" icon="fa-chevron-up"></font-awesome-icon>
 
-            {{ expanded ? 'Read less...' : 'Read more...'}}
+            {{ expanded ? 'Read less...' : 'Read more...' }}
         </button>
 
         <div class="flex justify-between mt-3 items-center">
             <div class="gap-3 hidden lg:flex ">
-                <a v-if="permissions?.download" :href="`/plugins/${update.plugin}/download/${update.file_name}`" target="_blank"
-                   class="plain rounded-md bg-primary-400 hover:bg-primary flex-nowrap text-white h-fit py-2 lg:py-1 px-3 text-xl lg:text-base lg:px-2 break-keep flex gap-2 align-center mr-[-4px]">
+                <a v-if="permissions?.download" :href="`/plugins/${update.plugin}/download/${update.file_name}`" class="plain rounded-md bg-primary-400 hover:bg-primary flex-nowrap text-white h-fit py-2 lg:py-1 px-3 text-xl lg:text-base lg:px-2 break-keep flex gap-2 align-center mr-[-4px]"
+                   target="_blank">
                     <font-awesome-icon icon="fa-solid fa-file-arrow-down"/>
                     <span class="break-keep whitespace-nowrap hidden lg:block">Download</span>
                 </a>
                 <button v-if="changelogLines.length > 5"
                         class="bg-gray-200 px-2 py-1 mt-0 text-gray-800 flex gap-2 items-center w-fit"
                         @click="expanded = !expanded">
-                    <font-awesome-icon icon="fa-chevron-up" :rotation="expanded ? 0 : 90" class="transition text-sm text-gray-600"></font-awesome-icon>
+                    <font-awesome-icon :rotation="expanded ? 0 : 90" class="transition text-sm text-gray-600" icon="fa-chevron-up"></font-awesome-icon>
 
-                    {{ expanded ? 'Read less...' : 'Read more...'}}
+                    {{ expanded ? 'Read less...' : 'Read more...' }}
                 </button>
             </div>
             <Stats class="!mt-0">

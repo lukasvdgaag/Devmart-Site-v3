@@ -1,5 +1,5 @@
 <template>
-    <Input :value="$slots.default()[0].children" disabled class="w-fit mt-1" />
+    <Input :value="$slots.default()[0].children" class="w-fit mt-1" disabled/>
 </template>
 
 <script>

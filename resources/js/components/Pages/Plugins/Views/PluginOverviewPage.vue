@@ -1,9 +1,9 @@
 <template>
     <Highlights>
-        <Highlight title="Supported Versions" :description="supportedVersions" image="/assets/img/getbukkit.png"/>
-        <Highlight title="Last Updated" :description="formattedLastUpdated" image="/assets/img/calendar.svg"/>
-        <Highlight v-if="plugin.dependencies.length > 0" title="(Soft) Dependencies" :description="plugin.dependencies"
-                   image="/assets/img/download.svg"/>
+        <Highlight :description="supportedVersions" image="/assets/img/getbukkit.png" title="Supported Versions"/>
+        <Highlight :description="formattedLastUpdated" image="/assets/img/calendar.svg" title="Last Updated"/>
+        <Highlight v-if="plugin.dependencies.length > 0" :description="plugin.dependencies" image="/assets/img/download.svg"
+                   title="(Soft) Dependencies"/>
     </Highlights>
 
     <BBCode :source="plugin.features">

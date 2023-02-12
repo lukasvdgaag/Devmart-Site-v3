@@ -1,5 +1,5 @@
 <template>
-    <div role="status" class="animate-pulse w-full" v-if="loading">
+    <div v-if="loading" class="animate-pulse w-full" role="status">
         <div class="h-10 bg-gray-200 rounded dark:bg-gray-700 w-1/2 mb-2"></div>
         <div class="h-5 bg-gray-300 rounded-full dark:bg-gray-600 w-60 mb-6"></div>
 
@@ -16,20 +16,20 @@
 
         <div class="mt-4 mb-6">
             <div class="flex gap-2 justify-end font-semibold">
-                <PasteActionLink :href="`/paste/${pasteId}/download`" icon="fa-solid fa-download" target="_blank" text="Download" smallIcon/>
-                <PasteActionLink :href="`/paste/${pasteId}/raw`" icon="fa-solid fa-align-left" text="Raw" smallIcon/>
-                <PasteActionLink :href="`/paste/${pasteId}/edit`" icon="fa-solid fa-pen" text="Edit" smallIcon highlighted/>
+                <PasteActionLink :href="`/paste/${pasteId}/download`" icon="fa-solid fa-download" smallIcon target="_blank" text="Download"/>
+                <PasteActionLink :href="`/paste/${pasteId}/raw`" icon="fa-solid fa-align-left" smallIcon text="Raw"/>
+                <PasteActionLink :href="`/paste/${pasteId}/edit`" highlighted icon="fa-solid fa-pen" smallIcon text="Edit"/>
 
                 <button class="primary w-fit px-4 py-2 rounded-md align-center gap-2 hidden lg:flex" @click="share">
                     <font-awesome-icon :icon="shareIcons"/>
-                    {{shareText}}
+                    {{ shareText }}
                 </button>
             </div>
 
             <CodeHighlightBlock v-if="paste.content"
                                 ref="codeHighlightBlock"
-                                :language="paste.style"
                                 :code="paste.content ?? ''"
+                                :language="paste.style"
                                 class="mt-2"
             />
         </div>

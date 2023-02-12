@@ -1,13 +1,13 @@
 <template>
-    <router-view :pluginId="pluginId"
-                 :plugin="plugin"
+    <router-view :pageCount="pageCount"
                  :permissions="permissions"
-                 :updates="updates"
-                 :pageCount="pageCount"
+                 :plugin="plugin"
+                 :pluginId="pluginId"
                  :updateCount="updateCount"
+                 :updates="updates"
                  :updatesFetchable="updatesFetchable"/>
 
-    <Pagination :last-page="pageCount" :current-page="updatesFetchable.page" :per-page="10" :total="updateCount" :fetchable="updatesFetchable"/>
+    <Pagination :current-page="updatesFetchable.page" :fetchable="updatesFetchable" :last-page="pageCount" :per-page="10" :total="updateCount"/>
 </template>
 
 <script>

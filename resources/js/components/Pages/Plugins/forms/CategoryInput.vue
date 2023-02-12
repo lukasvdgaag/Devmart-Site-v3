@@ -1,22 +1,23 @@
 <template>
     <div class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 w-full" multiple @click="$refs.catsInput.$el.focus()">
         <div class="inline">
-            <div v-for="category in categories" class="bg-primary rounded-md py-1 px-1.5 text-white uppercase w-fit h-6 inline-flex break-keep my-0.5 mr-1 items-center font-medium text-sm">
-                <span class="w-fit">{{category}}</span>
-                <font-awesome-icon @click="e => deleteCategory(e,category)" icon="fa-circle-xmark" class="h-full w-full ml-1 cursor-pointer"/>
+            <div v-for="category in categories"
+                 class="bg-primary rounded-md py-1 px-1.5 text-white uppercase w-fit h-6 inline-flex break-keep my-0.5 mr-1 items-center font-medium text-sm">
+                <span class="w-fit">{{ category }}</span>
+                <font-awesome-icon class="h-full w-full ml-1 cursor-pointer" icon="fa-circle-xmark" @click="e => deleteCategory(e,category)"/>
             </div>
         </div>
 
-        <Input v-model="currentCategory"
-               @keydown="e => handleInput(e)"
+        <Input ref="catsInput"
+               v-model="currentCategory"
                class="border-none shadow-none text-sm p-1 bg-transparent"
                maxlength="20"
-               type="text"
-               ref="catsInput"
                name="categories"
+               type="text"
+               @keydown="e => handleInput(e)"
         />
     </div>
-    <MutedText class="mt-1" :margin-top="false">{{description}}</MutedText>
+    <MutedText :margin-top="false" class="mt-1">{{ description }}</MutedText>
 </template>
 
 <script>
@@ -36,13 +37,13 @@ export default {
     },
 
     computed: {
-      description() {
-          if (this.categories.length >= this.maxCategories) {
-              return "You have reached the maximum number of categories!"
-          }
+        description() {
+            if (this.categories.length >= this.maxCategories) {
+                return "You have reached the maximum number of categories!"
+            }
 
-          return `You have added ${this.categories.length}/${this.maxCategories} categories.`
-      }
+            return `You have added ${this.categories.length}/${this.maxCategories} categories.`
+        }
     },
 
     methods: {

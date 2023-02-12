@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         <tr v-if="!updatesFetchable.loading && updates?.length === 0">
-            <td colspan="5" class="text-red-400">This plugin has not released a version yet.</td>
+            <td class="text-red-400" colspan="5">This plugin has not released a version yet.</td>
         </tr>
 
         <tr v-for="version in updates" :key="version.id">
@@ -21,8 +21,8 @@
             <td>{{ DateService.formatDateRelatively(new Date(version.created_at), true) }}</td>
             <td class="hidden md:table-cell">{{ version.file_size }}</td>
             <td>{{ StringService.formatNumber(version.downloads) }}</td>
-            <td class="text-right" v-if="permissions?.download">
-                <a :href="`/plugins/${pluginId}/download/${version.file_name}`" target="_blank" class="static">
+            <td v-if="permissions?.download" class="text-right">
+                <a :href="`/plugins/${pluginId}/download/${version.file_name}`" class="static" target="_blank">
                     Download
                 </a>
             </td>

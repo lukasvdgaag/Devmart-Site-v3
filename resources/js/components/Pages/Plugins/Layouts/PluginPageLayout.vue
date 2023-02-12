@@ -30,10 +30,10 @@
                                 </PluginSalePart>
                                 <PluginSalePart v-if="saleTimeLeft">{{ saleTimeLeft }}</PluginSalePart>
                             </div>
-                            <PluginLabel v-if="plugin.isRecentlyUpdated()" label="Recently Updated"
-                                         icon="fa-calendar-days" class="mb-2"/>
-                            <div class="flex flex-row" :class="{'border-b border-b-gray-200': !permissions?.modify}">
-                                <img class="resource-icon hide-big" :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon">
+                            <PluginLabel v-if="plugin.isRecentlyUpdated()" class="mb-2"
+                                         icon="fa-calendar-days" label="Recently Updated"/>
+                            <div :class="{'border-b border-b-gray-200': !permissions?.modify}" class="flex flex-row">
+                                <img :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon" class="resource-icon hide-big">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
                                         <h1 class="font-black text-xl lg:text-4xl mb-1 lg:mb-2">
@@ -57,11 +57,11 @@
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
 
-                            <router-view :plugin="plugin" :pluginId="pluginId" :permissions="permissions"/>
+                            <router-view :permissions="permissions" :plugin="plugin" :pluginId="pluginId"/>
                         </div>
                     </div>
 
-                    <PluginSidebar :plugin="plugin" :permissions="permissions"/>
+                    <PluginSidebar :permissions="permissions" :plugin="plugin"/>
 
                 </div>
             </div>
@@ -71,20 +71,19 @@
 
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
-import PluginRepository from "@/services/PluginRepository";
+import PluginRepository from "@/services/PluginRepository.js";
 import Stats from "@/components/Common/Stats.vue";
 import Stat from "@/components/Common/Stat.vue";
-import DateService from "@/services/DateService";
+import DateService from "@/services/DateService.js";
 import PluginSidebar from "@/components/Pages/Plugins/PluginSidebar.vue";
-import StringService from "@/services/StringService";
+import StringService from "@/services/StringService.js";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
-import Alert from "@/components/Common/Alert.vue";
 import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 
 export default {
     name: "PluginOverviewPage",
-    components: {PluginSalePart, Alert, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
+    components: {PluginSalePart, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
 
     created() {
         this.fetchPluginData();
@@ -129,7 +128,7 @@ export default {
     methods: {
         async fetchPluginData() {
             try {
-                let withFeaturesField = this.$route.matched.filter(r => r.components?.default === PluginOverviewPage).length > 0;
+                let withFeaturesField = this.$route.matched.filter(r => r?.components?.default === PluginOverviewPage).length > 0;
 
                 this.plugin = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
             } catch (e) {

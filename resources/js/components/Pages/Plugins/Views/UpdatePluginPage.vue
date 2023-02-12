@@ -3,22 +3,22 @@
         <FormSection>
             <FormRow label="Version">
                 <Input v-model="updateInfo.version"
-                       @input="checkForStringInputError(updateInfo.version, 'version')"
-                       class="block w-full"
-                       name="version"
-                       :placeholder="plugin?.latest_update?.version ?? '1.0.0'"
                        :errors="errors"
+                       :placeholder="plugin?.latest_update?.version ?? '1.0.0'"
+                       class="block w-full"
                        item="version"
-                       required/>
-                <ValidationError item="version" :errors="errors"/>
+                       name="version"
+                       required
+                       @input="checkForStringInputError(updateInfo.version, 'version')"/>
+                <ValidationError :errors="errors" item="version"/>
             </FormRow>
             <FormRow label="Beta number">
                 <Input v-model="updateInfo.beta_number"
+                       :placeholder="plugin?.latest_update?.beta_number ?? '0'"
                        class="block w-full"
+                       min="0"
                        name="beta_number"
                        type="number"
-                       min="0"
-                       :placeholder="plugin?.latest_update?.beta_number ?? '0'"
                 />
                 <MutedText>
                     Enter a number higher than zero to indicate that this is a beta version.
@@ -26,39 +26,39 @@
             </FormRow>
             <FormRow label="Title">
                 <Input v-model="updateInfo.title"
+                       :errors="errors"
                        class="block w-full"
+                       item="title"
                        name="title"
                        placeholder="Title"
-                       @input="checkForStringInputError(updateInfo.title, 'title')"
-                       :errors="errors"
-                       item="title"
-                       required/>
-                <ValidationError item="title" :errors="errors"/>
+                       required
+                       @input="checkForStringInputError(updateInfo.title, 'title')"/>
+                <ValidationError :errors="errors" item="title"/>
             </FormRow>
         </FormSection>
         <FormSection>
             <FormRow label="File">
-                <FileInput @upload="handleFileUpload($event)"
-                           v-model="fileName"
+                <FileInput v-model="fileName"
                            :accept="allowedFileTypes"
-                           required
                            :errors="errors"
-                           item="file"/>
-                <ValidationError item="file" :errors="errors"/>
+                           item="file"
+                           required
+                           @upload="handleFileUpload($event)"/>
+                <ValidationError :errors="errors" item="file"/>
             </FormRow>
         </FormSection>
         <FormSection>
             <FormRow label="Changelog">
                 <Input v-model="updateInfo.changelog"
-                       class="block w-full"
+                       :errors="errors"
                        :is-textarea="true"
+                       class="block w-full"
+                       item="changelog"
                        name="changelog"
                        placeholder="Full changelog..."
-                       @input="checkForStringInputError(updateInfo.changelog, 'changelog')"
-                       :errors="errors"
-                       item="changelog"
-                       required/>
-                <ValidationError item="changelog" :errors="errors"/>
+                       required
+                       @input="checkForStringInputError(updateInfo.changelog, 'changelog')"/>
+                <ValidationError :errors="errors" item="changelog"/>
                 <MutedText>
                     The complete changelog for this update. Include all changes, fixes, and
                     improvements. This will be displayed on the update page.
@@ -81,10 +81,10 @@
             </FormRow>
         </FormSection>
         <StickyFooter class="!mt-2">
-            <button class="primary w-full md:w-2/4 p-2 mt-0" :class="{'bg-opacity-50': isUpdating}" :disabled="isUpdating" type="submit">
+            <button :class="{'bg-opacity-50': isUpdating}" :disabled="isUpdating" class="primary w-full md:w-2/4 p-2 mt-0" type="submit">
                 {{ isUpdating ? 'Updating...' : 'Update' }}
             </button>
-            <ValidationError item="general" :errors="errors"/>
+            <ValidationError :errors="errors" item="general"/>
         </StickyFooter>
     </form>
 </template>

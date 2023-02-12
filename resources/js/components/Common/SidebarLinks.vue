@@ -1,9 +1,9 @@
 <template>
     <Sidebar :margin="margin">
         <template v-for="item in links">
-            <router-link :to="item.link" :key="item.id" v-if="item.renderRequirements" active-class="" exact-active-class=""
+            <router-link v-if="item.renderRequirements" :key="item.id" :class="{'sidebar-active': this.isActive(item)}" :to="item.link" active-class=""
                          class="py-3 px-4 my-2 lg:mr-3 rounded-lg flex flex-row items-center plain"
-                         :class="{'sidebar-active': this.isActive(item)}">
+                         exact-active-class="">
                 <div v-if="item.icon" class="preview-link-icon flex justify-center">
                     <font-awesome-icon :icon="item.icon"/>
                 </div>
@@ -25,9 +25,9 @@ export default {
             const def = this.links.find((link) => link.isDefault);
             if (!def || def !== item) return false;
 
-            return this.links.filter(l => this.isActive(l,false)).length === 0;
+            return this.links.filter(l => this.isActive(l, false)).length === 0;
         },
-        isActive(item, checkForDefault=true) {
+        isActive(item, checkForDefault = true) {
             if (item.activeRequirements) return true;
             if (checkForDefault && this.isDefault(item)) return true;
 

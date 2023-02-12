@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\GCNTDatabaseUserProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -37,9 +38,16 @@ Route::middleware('guest')->group(function () {
         }
         return redirect('/login')->withErrors(['discord' => 'Failed to login with your Discord account.']);
     });
+    Route::get('register-discord', function (\Illuminate\Http\Request $request) {
+        if ($request->has('code')) {
+            $controller = new RegisteredUserController();
+            return $controller->storeDiscordUser($request);
+        }
+        return redirect('/register')->withErrors(['discord' => 'Failed to login with your Discord account.']);
+    });
 
-    Route::get('register-discord', function () {
-        $discordUrl = "https://discord.com/api/oauth2/authorize?client_id=1012682286099075095&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fregister&response_type=code&scope=identify%20email";
+    Route::get('register-with-discord', function () {
+        $discordUrl = "https://discord.com/api/oauth2/authorize?client_id=1012682286099075095&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fregister-discord&response_type=code&scope=identify%20email";
         return redirect($discordUrl);
     });
     Route::get('login-with-discord', function () {

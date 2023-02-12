@@ -2,7 +2,7 @@
     <div class="w-full flex flex-col items-center m-0 p-0">
         <Navbar :background="true"/>
 
-        <div class="d-grid !grid-cols-12 gap-0" v-if="this.plugin && this.plugin?.name">
+        <div v-if="this.plugin && this.plugin?.name" class="d-grid !grid-cols-12 gap-0">
             <div class="titled-header col-span-12 text-center">
                 <h1>{{ title }}</h1>
                 <p class="text-lg">{{ plugin.name }}</p>
@@ -19,7 +19,7 @@
                     <router-link :to="{name: 'plugin-overview', params: {pluginId: plugin.id}}" class="static">Return to the plugin page.</router-link>
                 </div>
 
-                <router-view :pluginId="pluginId" :plugin="plugin" />
+                <router-view :plugin="plugin" :pluginId="pluginId"/>
             </div>
         </div>
     </div>
@@ -28,9 +28,7 @@
 <script>
 import PluginPreview from "@/components/Pages/Plugins/PluginPreview.vue";
 import Navbar from "@/components/Common/Navbar.vue";
-import Plugin from "@/models/rest/Plugin";
 import PluginRepository from "@/services/PluginRepository";
-import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
 import EditPluginPage from "@/components/Pages/Plugins/Views/EditPluginPage.vue";
 
 export default {
@@ -54,19 +52,19 @@ export default {
     },
 
     data() {
-      return {
-          title: '',
-          /**
-           * @type {Plugin}
-           */
-          plugin: null,
-      }
+        return {
+            title: '',
+            /**
+             * @type {Plugin}
+             */
+            plugin: null,
+        }
     },
 
     methods: {
         async fetchPluginData() {
             try {
-                let withFeaturesField = this.$route.matched.filter(r => r.components?.default === EditPluginPage).length > 0;
+                let withFeaturesField = this.$route.matched.filter(r => r?.components?.default === EditPluginPage).length > 0;
 
                 return PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
             } catch (e) {

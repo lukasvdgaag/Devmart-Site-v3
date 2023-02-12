@@ -15,12 +15,12 @@
         <div class="mt-2">
             <Label value="Username"/>
             <Input v-model="user.username"
-                   class="block mt-1 w-full"
-                   placeholder="Username"
-                   required
+                   :disabled="!canChangeUsername"
                    :errors="errors"
+                   class="block mt-1 w-full"
                    item="username"
-                   :disabled="!canChangeUsername"/>
+                   placeholder="Username"
+                   required/>
             <ValidationError :errors="errors" item="username"/>
 
             <template v-if="userLoading || !isAdmin">
@@ -38,18 +38,18 @@
             <div class="w-full">
                 <Label class="font-bold" value="First Name"/>
                 <Input v-model="user.name"
-                       placeholder="First Name"
+                       :disabled="!isAdmin"
                        class="block mt-1 w-full"
-                       required
-                       :disabled="!isAdmin"/>
+                       placeholder="First Name"
+                       required/>
             </div>
             <div class="w-full">
                 <Label class="font-bold" value="Last Name"/>
                 <Input v-model="user.surname"
-                       placeholder="Last Name"
+                       :disabled="!isAdmin"
                        class="block mt-1 w-full"
-                       required
-                       :disabled="!isAdmin"/>
+                       placeholder="Last Name"
+                       required/>
             </div>
         </div>
         <MutedText v-if="userLoading || !isAdmin">
@@ -60,12 +60,12 @@
         <div class="mt-3">
             <Label class="font-bold" value="Email"/>
             <Input v-model="user.email"
-                   class="block mt-1 w-full"
-                   placeholder="Email"
-                   type="email"
                    :errors="errors"
+                   class="block mt-1 w-full"
                    item="email"
-                   required/>
+                   placeholder="Email"
+                   required
+                   type="email"/>
             <ValidationError :errors="errors" item="email"/>
         </div>
 
@@ -73,21 +73,21 @@
         <div class="mt-2">
             <Label class="font-bold" value="Discord"/>
             <Input v-model="user.discord"
-                   placeholder="Discord#1234"
                    class="block mt-1 w-full"
+                   placeholder="Discord#1234"
                    required/>
         </div>
 
         <div class="mt-3">
             <Label class="font-bold" value="Discord Suggestions Notifications"/>
             <DropdownSelect id="discord-sugs-dd"
-                            :items="discordSuggestionNotificationsSelect"
-                            placeholder="Select a notification type"
-                            header="Discord Suggestions Notifications"
-                            description="Type of notifications you want to receive from our Discord Bot regarding your suggestions."
-                            class="w-full mt-1"
+                            v-model="selectedDSN"
                             :full-width="true"
-                            v-model="selectedDSN"/>
+                            :items="discordSuggestionNotificationsSelect"
+                            class="w-full mt-1"
+                            description="Type of notifications you want to receive from our Discord Bot regarding your suggestions."
+                            header="Discord Suggestions Notifications"
+                            placeholder="Select a notification type"/>
 
             <MutedText>
                 Select what kind of notifications you want to receive from our Discord Bot regarding your
@@ -98,9 +98,9 @@
         <div class="mt-3">
             <Label class="font-bold" value="SpigotMC Account ID"/>
             <Input v-model="user.spigot"
+                   :disabled="!isAdmin"
                    class="block mt-1 w-full"
-                   placeholder="SpigotMC ID"
-                   :disabled="!isAdmin"/>
+                   placeholder="SpigotMC ID"/>
 
             <MutedText v-if="!userLoading && isAdmin">
                 Changing a user's SpigotMC ID will automatically verify their account, so make sure that
@@ -108,7 +108,7 @@
             </MutedText>
             <MutedText v-else>
                 It is not possible to manually change your SpigotMC ID. Please head to our
-                <a href="/discord" target="_blank" class="static">Discord Server</a> to link and verify your SpigotMC
+                <a class="static" href="/discord" target="_blank">Discord Server</a> to link and verify your SpigotMC
                 account to your GCNT account.
             </MutedText>
         </div>
@@ -145,18 +145,18 @@
         <h2 class="mt-4">Appearance</h2>
         <div class="flex flex-row gap-4 flex-wrap min-w-[200px] mt-2">
             <button v-for="type in AccountTheme()"
-                    class="flex flex-col gap-2 rounded-md p-2 cursor-pointer"
                     :class="[user.theme === type ? 'border-primary border-3' : 'border-gray-300 dark:border-gray-600 border-2']"
+                    class="flex flex-col gap-2 rounded-md p-2 cursor-pointer"
                     type="button"
                     @click="selectTheme(type)">
-                <img class="rounded-md" :src="`/assets/img/theme-${type}.svg`" :alt="`Theme ${type}`">
+                <img :alt="`Theme ${type}`" :src="`/assets/img/theme-${type}.svg`" class="rounded-md">
                 <span class="text-md font-bold capitalize w-full text-center select-none dark:text-gray-300">{{ type }}</span>
             </button>
         </div>
 
         <StickyFooter>
-            <button class="primary w-full md:w-2/4 p-2 mt-0"
-                    :disabled="loading"
+            <button :disabled="loading"
+                    class="primary w-full md:w-2/4 p-2 mt-0"
                     type="submit">{{ loading ? "Updating..." : "Save Settings" }}
             </button>
         </StickyFooter>

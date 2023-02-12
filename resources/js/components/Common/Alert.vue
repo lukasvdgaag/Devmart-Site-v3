@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-row items-center gap-4 rounded-lg flex px-4 py-3 text-white"
-         :class="classes">
-        <font-awesome-icon v-if="icon" size="2xl" :icon="icon"/>
+    <div :class="classes"
+         class="flex flex-row items-center gap-4 rounded-lg flex px-4 py-3 text-white">
+        <font-awesome-icon v-if="icon" :icon="icon" size="2xl"/>
         <slot/>
     </div>
 </template>

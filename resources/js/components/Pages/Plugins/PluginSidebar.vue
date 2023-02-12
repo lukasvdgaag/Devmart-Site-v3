@@ -12,7 +12,8 @@
 
         <Hr class="lg:hidden"/>
 
-        <router-link v-if="showDownloadLink" :to="downloadLink" target="_blank" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex">
+        <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex"
+                     target="_blank">
             <span>{{ downloadLabel }}</span>
             <span class="text-[10px]">{{ downloadInfo }}</span>
         </router-link>
@@ -31,7 +32,7 @@
         <Hr class="hidden lg:block"/>
 
         <div v-if="plugin?.sale" class="flex mb-4 mt-[-0.5rem] gap-1 flex-wrap">
-            <PluginLabel :label="`${plugin?.sale?.percentage.toFixed(0)}% Sale`" :background="`bg-red-400`"/>
+            <PluginLabel :background="`bg-red-400`" :label="`${plugin?.sale?.percentage.toFixed(0)}% Sale`"/>
         </div>
         <PluginSidebarHeader class="mt-2">Author</PluginSidebarHeader>
         <div>{{ plugin.author_username }}</div>

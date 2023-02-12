@@ -10,7 +10,7 @@
     </Alert>
 
     <div class="flex flex-row gap-2 items-center">
-        <img src="/assets/img/discord-finance-bot-logo.png" alt="Discord Finance Bot Logo" class="icon big rounded-full">
+        <img alt="Discord Finance Bot Logo" class="icon big rounded-full" src="/assets/img/discord-finance-bot-logo.png">
         <h2>PayPal Information</h2>
     </div>
 
@@ -24,51 +24,51 @@
         <div class="flex flex-row gap-4 mt-3">
             <div class="w-full">
                 <Label class="font-bold" value="First Name"/>
-                <Input class="block mt-1 w-full"
-                       v-model="data.name"
-                       :placeholder="user.name"
-                       required
+                <Input v-model="data.name"
                        :errors="errors"
-                       item="name"/>
-                <ValidationError item="name" :errors="errors"/>
+                       :placeholder="user.name"
+                       class="block mt-1 w-full"
+                       item="name"
+                       required/>
+                <ValidationError :errors="errors" item="name"/>
 
             </div>
             <div class="w-full">
                 <Label class="font-bold" value="Last Name"/>
-                <Input class="block mt-1 w-full"
-                       v-model="data.surname"
-                       :placeholder="user.surname"
-                       required
+                <Input v-model="data.surname"
                        :errors="errors"
-                       item="surname"/>
-                <ValidationError item="surname" :errors="errors"/>
+                       :placeholder="user.surname"
+                       class="block mt-1 w-full"
+                       item="surname"
+                       required/>
+                <ValidationError :errors="errors" item="surname"/>
             </div>
         </div>
 
         <div class="mt-3">
             <Label class="font-bold" value="Email Address"/>
-            <Input class="block mt-1 w-full"
-                   type="email"
-                   v-model="data.email"
-                   :placeholder="user.email"
-                   required
+            <Input v-model="data.email"
                    :errors="errors"
-                   item="email"/>
-            <ValidationError item="email" :errors="errors"/>
+                   :placeholder="user.email"
+                   class="block mt-1 w-full"
+                   item="email"
+                   required
+                   type="email"/>
+            <ValidationError :errors="errors" item="email"/>
         </div>
 
         <div class="mt-3">
             <Label class="font-bold" value="Business Name (Optional)"/>
-            <Input class="block mt-1 w-full"
-                   v-model="data.business"
-                   placeholder="Business Name"
+            <Input v-model="data.business"
                    :errors="errors"
-                   item="business"/>
-            <ValidationError item="business" :errors="errors"/>
+                   class="block mt-1 w-full"
+                   item="business"
+                   placeholder="Business Name"/>
+            <ValidationError :errors="errors" item="business"/>
         </div>
 
         <StickyFooter>
-            <button class="primary w-full md:w-2/4 p-2 mt-0" type="submit" :disabled="loading">
+            <button :disabled="loading" class="primary w-full md:w-2/4 p-2 mt-0" type="submit">
                 {{ loading ? "Updating..." : "Save Settings" }}
             </button>
         </StickyFooter>

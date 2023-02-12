@@ -17,16 +17,16 @@
                 </div>
                 <div class="text-sm mt-1">{{ plugin.description }}</div>
                 <Stats>
-                    <Stat :small="true" :dot="false">{{ StringService.formatNumber(plugin.downloads) }} Downloads</Stat>
+                    <Stat :dot="false" :small="true">{{ StringService.formatNumber(plugin.downloads) }} Downloads</Stat>
                     <Stat :small="true">By {{ plugin.author_username }}</Stat>
                     <Stat :small="true">Updated {{ formattedDate }}</Stat>
                 </Stats>
                 <div class="mt-1.5 lg:mt-auto gap-x-2 flex flex-row">
-                    <PluginLabel v-if="plugin.sale" :label="`${plugin.sale.percentage.toFixed(0)}% Sale`" :background="`bg-red-400`"/>
+                    <PluginLabel v-if="plugin.sale" :background="`bg-red-400`" :label="`${plugin.sale.percentage.toFixed(0)}% Sale`"/>
                     <PluginLabel v-if="plugin.custom" label="Custom"/>
                     <PluginLabel v-if="plugin.price > 0" label="Paid"/>
-                    <PluginLabel v-if="plugin.isRecentlyUpdated()" label="Recently Updated"
-                                 icon="fa-calendar-days"/>
+                    <PluginLabel v-if="plugin.isRecentlyUpdated()" icon="fa-calendar-days"
+                                 label="Recently Updated"/>
                 </div>
             </div>
         </div>

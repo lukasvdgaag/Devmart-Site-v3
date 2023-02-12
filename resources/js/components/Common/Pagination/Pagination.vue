@@ -1,13 +1,14 @@
 <template>
-    <div v-if="lastPage > 1" class="flex items-center mt-3 justify-between border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6">
+    <div v-if="lastPage > 1"
+         class="flex items-center mt-3 justify-between border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6">
         <div class="flex flex-1 justify-between sm:hidden">
             <div class="flex flex-row justify-content-start w-full">
-                <PaginationItem v-if="currentPage-1 >= 1" @update="handleUpdate" :page="Math.max(1, currentPage-1)">
+                <PaginationItem v-if="currentPage-1 >= 1" :page="Math.max(1, currentPage-1)" @update="handleUpdate">
                     Previous
                 </PaginationItem>
             </div>
             <div class="flex flex-row justify-end w-full">
-                <PaginationItem v-if="currentPage+1 <= lastPage" @update="handleUpdate" :page="Math.min(lastPage, currentPage+1)">
+                <PaginationItem v-if="currentPage+1 <= lastPage" :page="Math.min(lastPage, currentPage+1)" @update="handleUpdate">
                     Next
                 </PaginationItem>
             </div>
@@ -20,33 +21,33 @@
                 </p>
             </div>
             <div class="flex flex-col gap-2">
-                <nav class="group isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                    <PaginationItem :page="currentPage-1"
+                <nav aria-label="Pagination" class="group isolate inline-flex -space-x-px rounded-md shadow-sm">
+                    <PaginationItem v-if="currentPage-1 >= 1"
                                     :active="false"
                                     :disabled="false"
-                                    @update="handleUpdate"
-                                    v-if="currentPage-1 >= 1"
-                                    class="rounded-none rounded-l-md px-2">
+                                    :page="currentPage-1"
+                                    class="rounded-none rounded-l-md px-2"
+                                    @update="handleUpdate">
                         <span class="sr-only">Previous</span>
-                        <font-awesome-icon icon="fa-chevron-left" class="text-sm w-5" aria-hidden="true"/>
+                        <font-awesome-icon aria-hidden="true" class="text-sm w-5" icon="fa-chevron-left"/>
                     </PaginationItem>
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
                     <PaginationItem
-                        @update="handleUpdate"
                         v-for="page in pages"
-                        class="first:rounded-l-md last:rounded-r-md"
-                        :page="page.page"
                         :active="page.active"
-                        :disabled="page.disabled"/>
+                        :disabled="page.disabled"
+                        :page="page.page"
+                        class="first:rounded-l-md last:rounded-r-md"
+                        @update="handleUpdate"/>
 
-                    <PaginationItem :page="currentPage+1"
+                    <PaginationItem v-if="currentPage+1 <= lastPage"
                                     :active="false"
                                     :disabled="false"
-                                    @update="handleUpdate"
-                                    v-if="currentPage+1 <= lastPage"
-                                    class="rounded-none rounded-r-md px-2">
+                                    :page="currentPage+1"
+                                    class="rounded-none rounded-r-md px-2"
+                                    @update="handleUpdate">
                         <span class="sr-only">Next</span>
-                        <font-awesome-icon icon="fa-chevron-right" class="text-sm w-5" aria-hidden="true"/>
+                        <font-awesome-icon aria-hidden="true" class="text-sm w-5" icon="fa-chevron-right"/>
                     </PaginationItem>
                 </nav>
             </div>

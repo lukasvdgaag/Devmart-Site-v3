@@ -12,7 +12,8 @@
         "laravel/tinker": "^2.7",
         "laravel/fortify": "^v1.13.6",
         "ext-fileinfo": "*",
-        "ext-zlib": "*"
+        "ext-zlib": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -24,12 +24,12 @@
             <FormRow label="Banner Image">
                 <img :src="bannerUrl" alt="Banner image" class="plugin-preview-banner"/>
 
-                <FileInput @upload="updateBannerPreview" accept=".jpg,.jpeg,.png,.webp,.svg,.avif"/>
+                <FileInput accept=".jpg,.jpeg,.png,.webp,.svg,.avif" @upload="updateBannerPreview"/>
             </FormRow>
             <FormRow label="Logo Image">
                 <img :src="iconUrl" alt="Logo image" class="icon huge rounded-xl"/>
 
-                <FileInput @upload="updateLogoPreview" accept=".jpg,.jpeg,.png,.webp,.svg,.avif"/>
+                <FileInput accept=".jpg,.jpeg,.png,.webp,.svg,.avif" @upload="updateLogoPreview"/>
             </FormRow>
         </FormSection>
 
@@ -37,10 +37,10 @@
             <FormRow label="Price">
                 <Input v-model="plugin.price"
                        class="block w-full"
-                       placeholder="Price"
                        min="0"
-                       type="number"
-                       required/>
+                       placeholder="Price"
+                       required
+                       type="number"/>
                 <MutedText>
                     The one-time price a user has to pay to gain access to this project.
                     <br>
@@ -57,26 +57,26 @@
                 <div v-else>
                     <div class="flex flex-row">
                         <div class="grid gap-0 md:gap-2 grid-cols-12 w-full">
-                            <Input class="col-span-2 w-full rounded-r-none md:rounded-r-md"
-                                   v-model="plugin.sale.percentage"
-                                   type="number"
-                                   min="0"
+                            <Input v-model="plugin.sale.percentage"
+                                   class="col-span-2 w-full rounded-r-none md:rounded-r-md"
                                    max="100"
+                                   min="0"
                                    placeholder="%"
-                                   required/>
-                            <Input class="col-span-5 w-full rounded-none md:rounded-md"
-                                   v-model="plugin.sale.start_date"
-                                   type="datetime-local"
+                                   required
+                                   type="number"/>
+                            <Input v-model="plugin.sale.start_date"
+                                   class="col-span-5 w-full rounded-none md:rounded-md"
                                    placeholder="Start date"
-                                   required/>
-                            <Input class="col-span-5 w-full rounded-l-none md:rounded-l-md"
-                                   v-model="plugin.sale.end_date"
-                                   type="datetime-local"
+                                   required
+                                   type="datetime-local"/>
+                            <Input v-model="plugin.sale.end_date"
+                                   class="col-span-5 w-full rounded-l-none md:rounded-l-md"
                                    placeholder="End date"
+                                   type="datetime-local"
                             />
                         </div>
                         <button class="text-lg h-12 w-12 flex align-center mt-0" type="button" @click.prevent="plugin.sale = null">
-                            <font-awesome-icon icon="fa-circle-xmark" class="text-red-500 w-full h-full"/>
+                            <font-awesome-icon class="text-red-500 w-full h-full" icon="fa-circle-xmark"/>
                         </button>
                     </div>
                     <MutedText>
@@ -89,7 +89,7 @@
             </FormRow>
 
             <FormRow v-if="plugin.price > 0" label="Custom">
-                <SwitchInput class="mt-2" v-model="plugin.custom" :checked="plugin.custom"/>
+                <SwitchInput v-model="plugin.custom" :checked="plugin.custom" class="mt-2"/>
                 <MutedText>
                     When enabled, this project will be marked as custom. It will not be indexed by
                     search engines, updates will not be announced to the Discord, and only people with
@@ -104,29 +104,29 @@
                         :key="version"
                         class="list-none">
                         <label class="flex items-center mb-1">
-                            <Input type="checkbox"
-                                   @change="updateMinecraftVersion(version)"
-                                   :checked="minecraftVersions[version]"
-                                   class="mr-2"/>
+                            <Input :checked="minecraftVersions[version]"
+                                   class="mr-2"
+                                   type="checkbox"
+                                   @change="updateMinecraftVersion(version)"/>
                             {{ version }}
                         </label>
                     </li>
                 </ul>
             </FormRow>
             <FormRow label="(Soft) Dependencies">
-                <Input class="block w-full"
-                       v-model="plugin.dependencies"
+                <Input v-model="plugin.dependencies"
+                       class="block w-full"
                        placeholder="Enter any (soft) dependencies"/>
             </FormRow>
         </FormSection>
 
         <FormSection>
             <FormRow label="Spigot id">
-                <Input class="block mt-1 w-full"
+                <Input v-model="plugin.spigot_link"
+                       class="block mt-1 w-full"
                        min="0"
-                       type="number"
                        placeholder="67706"
-                       v-model="plugin.spigot_link"/>
+                       type="number"/>
                 <MutedText>
                     If this project has an associated SpigotMC resource page, please enter the numeric id of
                     the page. You can find it at the end of the resource page's URL, after the dot.
@@ -135,9 +135,9 @@
                 </MutedText>
             </FormRow>
             <FormRow label="GitHub id">
-                <Input class="block mt-1 w-full"
-                       placeholder="dev-mart/SkyWarsReloaded"
-                       v-model="plugin.github_link"/>
+                <Input v-model="plugin.github_link"
+                       class="block mt-1 w-full"
+                       placeholder="dev-mart/SkyWarsReloaded"/>
                 <MutedText>
                     An optional GitHub repository id for the source of this project.
                     You can find this id in the URL of your GitHub repository after github.com.
@@ -146,9 +146,9 @@
                 </MutedText>
             </FormRow>
             <FormRow label="Donation link">
-                <Input class="block mt-1 w-full"
-                       placeholder="https://www.devmart.net/donate"
-                       v-model="plugin.donation_url"/>
+                <Input v-model="plugin.donation_url"
+                       class="block mt-1 w-full"
+                       placeholder="https://www.devmart.net/donate"/>
                 <MutedText>
                     A full link to a donation platform of your choice. Users can use this to support
                     you. The Devmart donation link will be used as the default.
@@ -162,7 +162,7 @@
         </FormSection>
 
         <StickyFooter class="!mt-2">
-            <button class="primary w-full md:w-2/4 p-2 mt-0" :class="{'bg-opacity-50':isSaving}" :disabled="isSaving" type="submit">
+            <button :class="{'bg-opacity-50':isSaving}" :disabled="isSaving" class="primary w-full md:w-2/4 p-2 mt-0" type="submit">
                 {{ isSaving ? 'Saving...' : 'Save' }}
             </button>
         </StickyFooter>

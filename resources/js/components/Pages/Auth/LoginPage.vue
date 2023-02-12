@@ -1,6 +1,6 @@
 <template>
     <form method="post" @submit.prevent="login">
-        <a href="/login-with-discord" class="button rounded-md primary flex flex-col align-center plain !p-3">
+        <a class="button rounded-md primary flex flex-col align-center plain !p-3" href="/login-with-discord">
             <div class="flex flex-row gap-2">
                 <font-awesome-icon :icon="['fab', 'discord']" class="icon light"/>
                 <div class="text-base font-bold">Log in with Discord</div>
@@ -13,30 +13,30 @@
             <Label for="username" value="Username or Email"/>
             <Input id="username"
                    v-model="data.username"
-                   class="block mt-1 w-full"
-                   type="text"
                    :errors="errors"
+                   autofocus
+                   class="block mt-1 w-full"
                    item="username"
                    required
-                   autofocus/>
+                   type="text"/>
         </div>
         <div class="mt-4">
             <Label for="password" value="Password"/>
             <Input id="password"
                    v-model="data.password"
-                   class="block mt-1 w-full"
-                   type="password"
                    :errors="errors"
+                   autocomplete="current-password"
+                   class="block mt-1 w-full"
                    item="username"
                    required
-                   autocomplete="current-password"/>
+                   type="password"/>
         </div>
 
-        <ValidationError item="username" :errors="errors"/>
+        <ValidationError :errors="errors" item="username"/>
 
         <div class="flex flex-row mt-2 center justify-between">
             <div>
-                <label for="remember_me" class="inline-flex items-center h-full">
+                <label class="inline-flex items-center h-full" for="remember_me">
                     <Input id="remember_me"
                            v-model="data.remember"
                            type="checkbox"/>
@@ -45,26 +45,26 @@
                 </label>
             </div>
             <div>
-                <router-link to="forgot-password" class="underline static text-sm">Forgot your password?</router-link>
+                <router-link class="underline static text-sm" to="forgot-password">Forgot your password?</router-link>
             </div>
         </div>
 
         <div class="flex flex-col items-center justify-end mt-4">
-            <button class="primary w-full p-2" :disabled="loggingIn">
+            <button :disabled="loggingIn" class="primary w-full p-2">
                 {{ loggingIn ? "Logging you in..." : "Log in" }}
             </button>
         </div>
         <div class="mt-4 text-center">
             No account yet?
-            <router-link to="register" class="static">Sign up Now!</router-link>
+            <router-link class="static" to="register">Sign up Now!</router-link>
         </div>
     </form>
 </template>
 
 <script>
-import Navbar from "@/components/Common/Navbar";
-import Label from "@/components/Common/Label";
-import Input from "@/components/Common/Input";
+import Navbar from "@/components/Common/Navbar.vue";
+import Label from "@/components/Common/Label.vue";
+import Input from "@/components/Common/Input.vue";
 import {useAuth} from "@/store/authStore";
 import ValidationError from "@/components/Common/ValidationError.vue";
 import Hr from "@/components/Common/Hr.vue";

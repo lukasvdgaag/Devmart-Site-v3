@@ -9,7 +9,7 @@
                 <div class="col-span-12 lg:col-span-9 pt-2">
                     <AdminEditingWarning v-if="!loading && isAdmin" :username="user.username"/>
 
-                    <router-view :userLoading="loading" :user="user" :isAdmin="isAdmin" :userId="userId"/>
+                    <router-view :isAdmin="isAdmin" :user="user" :userId="userId" :userLoading="loading"/>
                 </div>
             </div>
         </div>

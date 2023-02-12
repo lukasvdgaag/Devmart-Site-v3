@@ -1,5 +1,5 @@
 <template>
-    <div class="text-base muted" :class="{'mt-2': marginTop}">
+    <div :class="{'mt-2': marginTop}" class="text-base muted">
         <slot/>
     </div>
 </template>
