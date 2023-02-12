@@ -14,8 +14,8 @@
 
         <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex"
                      target="_blank">
-            <span>{{ downloadLabel }}</span>
-            <span class="text-[10px]">{{ downloadInfo }}</span>
+            <span class="leading-4">{{ downloadLabel }}</span>
+            <span class="text-[10px] leading-3">{{ downloadInfo }}</span>
         </router-link>
         <router-link :to="`/plugins/${plugin.id}/updates`"
                      class="action-button gray-hollow flex-col align-center hidden lg:flex"><span>Updates</span>

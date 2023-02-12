@@ -15,7 +15,7 @@
                 <div class="mt-[-28px] lg:mt-[-52px] z-1 d-grid hide-small">
                     <img :src="`/assets/img/${this.plugin.logo_url}`"
                          alt="Resource Icon"
-                         class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white"
+                         class="ml-12 w-12 h-12 max-w-none lg:w-22 lg:h-22 lg:border-8 lg:rounded-3xl object-cover rounded-2xl bg-white border-4 border-white dark:border-gray-900"
                     >
                 </div>
 
@@ -32,14 +32,14 @@
                             </div>
                             <PluginLabel v-if="plugin.isRecentlyUpdated()" class="mb-2"
                                          icon="fa-calendar-days" label="Recently Updated"/>
-                            <div :class="{'border-b border-b-gray-200': !permissions?.modify}" class="flex flex-row">
+                            <div :class="{'border-b border-b-gray-200 dark:border-b-gray-700': !permissions?.modify}" class="flex flex-row">
                                 <img :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon" class="resource-icon hide-big">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
                                         <h1 class="font-black text-xl lg:text-4xl mb-1 lg:mb-2">
                                             {{ plugin.title }}
                                         </h1>
-                                        <p class="text-gray-600 text-xs lg:text-xl mb-3 lg:mb-6 font-roboto">{{ plugin.description }}</p>
+                                        <p class="text-gray-600 dark:text-gray-400 text-xs lg:text-xl mb-3 lg:mb-6 font-roboto">{{ plugin.description }}</p>
                                     </router-link>
 
                                     <Stats class="pb-2">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
 
-                            <div v-if="permissions?.modify" class="mt-2 border-b border-b-gray-200 ">
+                            <div v-if="permissions?.modify" class="mt-2 border-b border-b-gray-200 dark:border-b-gray-700">
                                 <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
                                 <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"

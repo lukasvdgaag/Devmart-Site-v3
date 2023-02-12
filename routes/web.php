@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DiscordController;
 use App\Http\Controllers\Api\PasteController;
 use App\Http\Controllers\Api\PluginsController;
 use App\Http\Controllers\Api\UsersController;
@@ -65,7 +66,9 @@ Route::prefix('api')->group(function () {
                 ->withoutMiddleware('auth:sanctum');
         });
 
-
+        Route::prefix('/discord')->group(function () {
+            Route::get('/user/{userId}', [DiscordController::class, 'getUserInformation']);
+        });
     });
 });
 
