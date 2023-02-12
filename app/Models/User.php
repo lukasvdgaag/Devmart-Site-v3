@@ -20,11 +20,19 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
+        'discord_id',
+        'discord_verified',
+        'email_verified_at',
+        'role',
         'email',
         'password',
         'spigot',
+        'spigot_verified',
         'discord_suggestion_notifications',
         'theme',
+        'verify_code',
+        'username_changed_at',
+        'remember_token'
     ];
 
     /**

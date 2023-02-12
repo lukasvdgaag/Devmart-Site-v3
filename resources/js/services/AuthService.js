@@ -19,9 +19,9 @@ export default {
     getAuthUser() {
         return authClient.get("/api/user");
     },
-    async registerUser(payload) {
+    async registerUser(payload, discordAuthToken) {
         await authClient.get("/sanctum/csrf-cookie");
-        return authClient.post("/register", payload);
+        return authClient.post(`/register${discordAuthToken ? `?discord_auth_token=${discordAuthToken}` : ''}`, payload);
     }
 
 }

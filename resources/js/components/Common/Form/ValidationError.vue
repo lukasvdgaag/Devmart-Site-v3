@@ -8,12 +8,6 @@
 export default {
     name: "ValidationError",
 
-    watch: {
-        errors: (to) => {
-            console.log(to);
-        }
-    },
-
     props: {
         errors: {
             type: Object,

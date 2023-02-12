@@ -28,7 +28,6 @@
                    required
                    ref="usernameInput"
                    type="text"
-                   data-popover-target="popover-password" data-popover-trigger="click" data-popover-placement="bottom"
             />
             <ValidationError :errors="errors" item="username"/>
 
@@ -48,18 +47,27 @@
             <Input id="email"
                    v-model="data.email"
                    class="block mt-1 w-full"
+                   @update:modelValue="delete this.errors.email"
                    maxlength="255"
                    name="email"
                    placeholder="Email"
                    required
+                   item="email"
+                   :errors="errors"
                    type="email"/>
+
+            <ValidationError :errors="errors" item="email"/>
         </div>
 
         <div class="mt-3">
             <Label for="password" value="Password"/>
 
-            <PasswordInput v-model="data.password"/>
-            <InputRequirementList :value="data.password" :requirements="['min:8']"/>
+            <PasswordInput v-model="data.password" item="password" :errors="errors"
+                           @update:modelValue="delete this.errors.password"
+            />
+
+            <ValidationError :errors="errors" item="password"/>
+            <InputRequirementList :value="data.password" :requirements="['min:8']" ref="passwordReqs"/>
         </div>
 
         <div class="mt-3">
@@ -77,15 +85,15 @@
         </div>
 
         <div class="flex flex-col items-center justify-end mt-4">
-            <button class="primary w-full p-2">
-                Sign Up
+            <button class="primary w-full p-2" :disabled="loading">
+                {{ loading ? 'Signing up...' : 'Sign Up' }}
             </button>
+
+            <ValidationError :errors="errors" item="general"/>
         </div>
         <div class="mt-4 text-center">
             Already got an account?
             <router-link class="static" :to="{name: 'login'}">Login Now!</router-link>
-
-            <ValidationError :errors="errors" item="general"/>
         </div>
     </form>
 </template>
@@ -97,15 +105,14 @@ import Hr from "@/components/Common/Hr.vue";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import PasswordInput from "@/components/Common/Form/PasswordInput.vue";
-import MutedText from "@/components/Common/MutedText.vue";
 import InputRequirementList from "@/components/Common/Form/InputRequirementList.vue";
 import {initPopovers} from "flowbite";
-import AuthService from "@/services/AuthService";
-import {useAuth} from "@/store/authStore";
+import AuthService from "@/services/AuthService.js";
+import {useAuth} from "@/store/authStore.js";
 
 export default {
     name: "RegisterPage",
-    components: {InputRequirementList, MutedText, PasswordInput, Alert, ValidationError, Hr, Input, Label},
+    components: {InputRequirementList, PasswordInput, Alert, ValidationError, Hr, Input, Label},
 
     created() {
         let query = Object.assign({}, this.$route.query);
@@ -137,6 +144,7 @@ export default {
 
     data() {
         return {
+            loading: false,
             discordErrorType: null,
             errors: {},
             data: {
@@ -171,10 +179,25 @@ export default {
             this.data.username = this.data.username.replaceAll(' ', '_');
             delete this.errors.username;
         },
+        checkErrors() {
+            if (!this.$refs.usernameReqs.metAllRequirements()) {
+                this.errors.username = ['Please enter a valid username.'];
+            }
+            if (!this.$refs.passwordReqs.metAllRequirements()) {
+                this.errors.password = ['Please enter a valid password.'];
+            }
+
+            return Object.keys(this.errors).length === 0;
+        },
         async register() {
+            this.loading = true;
+            if (!this.checkErrors()) {
+                this.loading = false;
+                return;
+            }
+
             try {
-                const res = await AuthService.registerUser(this.data);
-                // todo login user with return of register request.
+                const res = await AuthService.registerUser(this.data, this.$route.query.discord_auth_token);
                 if (res && res.status === 201) {
                     useAuth().user = res.data;
                     useAuth().loaded = true;
@@ -184,8 +207,9 @@ export default {
                     this.errors = {general: ['An unknown error occurred.']};
                 }
             } catch (res) {
-                console.error(res)
-                this.errors = res.data?.errors ?? {};
+                this.errors = res.response.data?.errors ?? {};
+            } finally {
+                this.loading = false;
             }
         }
     }

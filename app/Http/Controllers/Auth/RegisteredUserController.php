@@ -83,7 +83,7 @@ class RegisteredUserController extends Controller
 
             return redirect('/');
         }
-        return redirect('/register')->withErrors(['discord' => 'Failed to login with your Discord account.']);
+        return redirect('/register')->withErrors(['discord' => 'Failed to create an account using Discord.']);
     }
 
     /**
@@ -109,6 +109,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ];
 
+        $discordInfo = null;
         if ($request->has('discord_auth_token')) {
             $discordInfo = DiscordUserAuthInfo::where('token', $request->get('discord_auth_token'))->first();
             if ($discordInfo) {
@@ -125,6 +126,8 @@ class RegisteredUserController extends Controller
                 ]
             ]);
         }
+
+        if ($discordInfo) $discordInfo->delete();
 
         event(new Registered($user));
         Auth::login($user);
