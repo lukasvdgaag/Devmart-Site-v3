@@ -20,5 +20,8 @@ export default {
     },
     async updateUserPayPalById(id, payload) {
         return await client.put(`/${id}/paypal`, JSON.stringify(payload));
+    },
+    async fetchDiscordInformation(discordId) {
+        return await client.get(import.meta.env.VITE_APP_API_URL + `/api/discord/user/${discordId}`);
     }
 }

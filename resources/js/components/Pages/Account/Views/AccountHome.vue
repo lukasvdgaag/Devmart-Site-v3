@@ -49,7 +49,21 @@
         <h2 class="mt-4">Socials</h2>
         <div class="mt-2">
             <Label class="font-bold" value="Discord"/>
-            <Input v-model="user.discord"
+
+            <div v-if="user.discord_id && discordInfo" class="flex items-center gap-2 mt-1">
+                <img :src="discordAvatar" alt="avatar" class="h-9 w-9 rounded-full">
+                <div class="text-lg">
+                    <span class="font-bold leading-3">{{ discordInfo.username }}</span>#{{ discordInfo.discriminator }}
+                </div>
+            </div>
+
+            <button v-if="!isAdmin" class="primary flex flex-row align-center gap-2 mt-2 py-1 px-3" type="button">
+                <font-awesome-icon :icon="['fab', 'discord']" class="text-md"/>
+                <span class="text-base font-medium">{{user.discord_id ? 'Link a new Discord' : 'Link your Discord'}}</span>
+            </button>
+
+            <Input v-if="isAdmin"
+                   v-model="user.discord"
                    class="block mt-1 w-full"
                    placeholder="Discord#1234"
                    required/>
@@ -170,6 +184,7 @@ export default {
             loading: false,
             justUpdated: false,
             selectedDSN: null,
+            discordInfo: null,
             discordSuggestionNotificationsSelect: [
                 new DropdownSelectItemModel('All messages', 'Get a notification for every action that regards you.', 'ALL_MESSAGES'),
                 new DropdownSelectItemModel('Only staff reactions', 'Receive only notifications from staff reactions and responses.', 'ONLY_ADMINS'),
@@ -182,6 +197,8 @@ export default {
     async created() {
         await this.user;
         this.selectedDSN = this.discordSuggestionNotificationsSelect.find(e => e.value === this.user.discord_suggestion_notifications);
+
+        await this.fetchDiscordInfo();
     },
 
     mounted() {
@@ -203,8 +220,21 @@ export default {
             const plus30 = DateService.offset(30, this.user.username_changed_at);
             return DateService.diffInDays(new Date(), plus30);
         },
+        discordAvatar() {
+            if (this.discordInfo?.avatar) {
+                return `https://cdn.discordapp.com/avatars/${this.user.discord_id}/${this.discordInfo.avatar}.png`
+            } else {
+                return '/assets/img/default-discord-avatar.png';
+            }
+        },
     },
     methods: {
+        async fetchDiscordInfo() {
+            if (!this.user.discord_id) return;
+            const res = await UserRepository.fetchDiscordInformation(this.user.discord_id);
+            this.discordInfo = res.data;
+            console.log(this.discordInfo);
+        },
         AccountTheme() {
             return AccountTheme
         },
