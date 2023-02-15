@@ -35,6 +35,33 @@ class RegisteredUserController extends Controller
         return $authInfo;
     }
 
+    public function relinkDiscordUser(Request $request) {
+        if (!$request->has('code')) {
+            return redirect('/account?discord_error=invalid_request');
+        }
+
+        $verify = GCNTDatabaseUserProvider::verifyDiscordRegister($request->get('code'));
+        if (!$verify) {
+            return redirect('/account?discord_error=invalid_request');
+        }
+
+        $user = $request->user();
+        $foundUsersWithId = User::query()
+            ->where('discord_id', '=', $verify->id)
+            ->where('id', '!=', $user->id)
+            ->first();
+
+        if ($foundUsersWithId) {
+            return redirect('/account?discord_error=discord_in_use');
+        }
+
+        $user->discord_id = $verify->id;
+        $user->discord_verified = true;
+        $user->save();
+
+        return redirect('/account?discord_success=success');
+    }
+
     public function storeDiscordUser(Request $request)
     {
         if (!$request->has('code')) {

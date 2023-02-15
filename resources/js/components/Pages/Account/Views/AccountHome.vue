@@ -57,10 +57,10 @@
                 </div>
             </div>
 
-            <button v-if="!isAdmin" class="primary flex flex-row align-center gap-2 mt-2 py-1 px-3" type="button">
+            <a href="/link-discord" v-if="!isAdmin" class="primary flex flex-row align-center gap-2 mt-2 py-1 px-3" type="button">
                 <font-awesome-icon :icon="['fab', 'discord']" class="text-md"/>
                 <span class="text-base font-medium">{{user.discord_id ? 'Link a new Discord' : 'Link your Discord'}}</span>
-            </button>
+            </a>
 
             <Input v-if="isAdmin"
                    v-model="user.discord"
