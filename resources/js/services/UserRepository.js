@@ -1,4 +1,5 @@
 import axios from "axios";
+import User from "@/models/rest/User";
 
 export const client = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL + "/api/users",
@@ -10,10 +11,20 @@ export const client = axios.create({
 
 export default {
     async fetchUserById(id) {
-        return await client.get(`/${id}`);
+        try {
+            const res = await client.get(`/${id}`);
+            return User.fromJson(res.data.user);
+        } catch (e) {
+            return null;
+        }
     },
     async updateUserById(id, payload) {
-        return await client.put(`/${id}`, JSON.stringify(payload));
+        try {
+            const res = await client.put(`/${id}`, JSON.stringify(payload));
+            return User.fromJson(res.data);
+        } catch (e) {
+            throw e;
+        }
     },
     async fetchUserPayPalById(id) {
         return await client.get(`/${id}/paypal`);

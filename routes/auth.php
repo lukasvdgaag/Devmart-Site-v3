@@ -44,7 +44,7 @@ Route::middleware('guest')->group(function () {
     });
 
     Route::get('link-discord', function (\Illuminate\Http\Request $request) {
-        if ($request->has('code')) {
+        if ($request->has('code') || $request->has('error')) {
             $cont = new RegisteredUserController();
             return $cont->relinkDiscordUser($request);
         }

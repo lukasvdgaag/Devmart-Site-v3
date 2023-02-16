@@ -91,7 +91,7 @@ class UsersController
 
         $username = $json->get('username');
         $email = $json->get('email');
-        $discord = $json->get('discord');
+        $discord = $json->get('discord_id');
         $discordSuggestionNotifications = $json->get('discord_suggestion_notifications');
         $theme = $json->get('theme');
 
@@ -106,7 +106,7 @@ class UsersController
         }
 
         // checking if there were no changes to discontinue the rest.
-        if ($username === $user->username && $email === $user->email && $discord === $user->discord && $discordSuggestionNotifications === $user->discord_suggestion_notifications && $theme === $user->theme) {
+        if ($username === $user->username && $email === $user->email && $discord === $user->discord_id && $discordSuggestionNotifications === $user->discord_suggestion_notifications && $theme === $user->theme) {
             return response()->json([
                 'user' => $user
             ]);
@@ -137,6 +137,9 @@ class UsersController
             $modelValues['email_verified_at'] = null;
         }
 
+        if ($request->user()->role === 'admin') {
+            $modelValues['discord_id'] = $discord;
+        }
         $modelValues['discord_suggestion_notifications'] = $discordSuggestionNotifications;
         $modelValues['theme'] = $theme;
 

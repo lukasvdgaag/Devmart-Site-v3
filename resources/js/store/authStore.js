@@ -1,10 +1,14 @@
 import AuthService from "@/services/AuthService";
 import router from "@/router/index";
 import {defineStore} from "pinia";
+import User from "@/models/rest/User";
 
 export const useAuth = defineStore({
     id: "authStore",
     state: () => ({
+        /**
+         * @type {User}
+         */
         user: null,
         loaded: false,
         error: null,
@@ -33,7 +37,7 @@ export const useAuth = defineStore({
             if (!force && this.loaded) return this.user;
             try {
                 const res = await AuthService.getAuthUser();
-                this.user = res.data.data;
+                this.user = User.fromJson(res.data.data);
                 this.loaded = true;
                 return this.user;
             } catch (error) {

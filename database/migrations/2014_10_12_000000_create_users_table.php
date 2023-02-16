@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
             $table->boolean('discord_verified')->default(false);
             $table->string('role', 10)->default('user');
             $table->string('theme', 10)->default('system');
-            $table->string('verify_code')->default('');
             $table->timestamp('username_changed_at')->useCurrent();
             $table->string('spigot', 50)->nullable();
             $table->boolean('spigot_verified')->default(false);

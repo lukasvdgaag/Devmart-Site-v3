@@ -30,7 +30,6 @@ class User extends Authenticatable
         'spigot_verified',
         'discord_suggestion_notifications',
         'theme',
-        'verify_code',
         'username_changed_at',
         'remember_token'
     ];

@@ -7,11 +7,9 @@ use App\Models\DiscordUserAuthInfo;
 use App\Models\User;
 use App\Providers\GCNTDatabaseUserProvider;
 use App\Utils\WebUtils;
-use http\Env\Response;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -35,12 +33,19 @@ class RegisteredUserController extends Controller
         return $authInfo;
     }
 
-    public function relinkDiscordUser(Request $request) {
+    public function relinkDiscordUser(Request $request)
+    {
+        if ($request->has('error')) {
+            if ($request->get('error') === 'access_denied') return redirect('/account?discord_error=cancel');
+
+            return redirect('/account?discord_error=invalid_request');
+        }
+
         if (!$request->has('code')) {
             return redirect('/account?discord_error=invalid_request');
         }
 
-        $verify = GCNTDatabaseUserProvider::verifyDiscordRegister($request->get('code'));
+        $verify = GCNTDatabaseUserProvider::verifyDiscordAuth($request->get('code'), 'http://127.0.0.1:8000/link-discord');
         if (!$verify) {
             return redirect('/account?discord_error=invalid_request');
         }

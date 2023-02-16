@@ -7,7 +7,7 @@
                 <AccountSidebar/>
 
                 <div class="col-span-12 lg:col-span-9 pt-2">
-                    <AdminEditingWarning v-if="!loading && isAdmin" :username="user.username"/>
+                    <AdminEditingWarning v-if="!loading && isAdmin" :username="user?.username ?? null"/>
 
                     <router-view :isAdmin="isAdmin" :user="user" :userId="userId" :userLoading="loading"/>
                 </div>
@@ -27,12 +27,12 @@ export default {
     name: "AccountHome",
     components: {AdminEditingWarning, AccountSidebar, Navbar},
 
-    created() {
+    async created() {
         this.userId = this.$route.query.user ? Number.parseInt(this.$route.query.user) : null;
         if (this.user?.role !== "admin" || !this.userId) {
             this.userId = useAuth().user?.id;
         }
-        this.user = this.fetchUserInfo(this.userId);
+        await this.fetchUserInfo(this.userId);
     },
 
     computed: {
@@ -43,6 +43,9 @@ export default {
 
     data() {
         return {
+            /**
+             * @type {User}
+             */
             user: useAuth().user,
             loading: true,
             userId: useAuth().user?.id
@@ -51,17 +54,12 @@ export default {
 
     methods: {
         async fetchUserInfo(id) {
-            try {
-                const res = await UserRepository.fetchUserById(id);
-                if (res.status === 200) {
-                    this.user = res.data.user;
-                    this.loading = false;
-                    return;
-                }
-            } catch (e) {
-                console.error(e);
+            this.loading = true;
+            this.user = await UserRepository.fetchUserById(id);
+            if (!this.user) {
+                this.$router.push({name: "not-found"});
             }
-            // todo send to 404 page?
+            this.loading = false;
         },
     },
 }
