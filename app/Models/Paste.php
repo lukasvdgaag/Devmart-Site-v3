@@ -30,7 +30,7 @@ class Paste extends Model
 
     protected $casts = [
         'id' => 'string',
-        'creator' => 'int',
+        'creator' => 'integer',
     ];
 
     public function getCreator(): BelongsTo

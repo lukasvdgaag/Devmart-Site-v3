@@ -20,7 +20,7 @@ class PluginSale extends Model
     ];
 
     protected $casts = [
-        'plugin' => 'int',
+        'plugin' => 'integer',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
         'percentage' => 'float'

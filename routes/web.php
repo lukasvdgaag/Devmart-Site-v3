@@ -77,6 +77,11 @@ Route::get('/paste/{pasteId}/raw', [PasteController::class, 'handleRawPasteRetri
 Route::get('/paste/{pasteId}/download', [PasteController::class, 'handlePasteDownload'])
     ->withoutMiddleware('auth:sanctum');
 
+Route::get('/plugins/{pluginId}/download', [PluginsController::class, 'handleDownload'])
+    ->withoutMiddleware('auth:sanctum');
+Route::get('/plugins/{pluginId}/download/{version}', [PluginsController::class, 'handleDownload'])
+    ->withoutMiddleware('auth:sanctum');
+
 Route::get('/account', function () {
     return view('welcome', ['title' => 'Devmart | Account']);
 })->middleware(['auth'])->name('account');

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Plugin extends Model
 {
@@ -16,7 +17,6 @@ class Plugin extends Model
         'description' => '',
         'title' => '',
         'features' => '',
-        'custom' => false,
         'donation_url' => 'https://www.gcnt.net/donate',
         'price' => 0,
         'logo_url' => 'https://www.gcnt.net/inc/img/default-plugin-image.png',
@@ -41,10 +41,10 @@ class Plugin extends Model
     ];
 
     protected $casts = [
-        'custom' => 'bool',
-        'spigot_link' => 'int',
+        'custom' => 'boolean',
+        'spigot_link' => 'integer',
         'last_updated' => 'datetime',
-        'author' => 'int',
+        'author' => 'integer',
         'price' => 'float',
     ];
 
@@ -64,7 +64,7 @@ class Plugin extends Model
     }
 
     public function hasAccess($user): bool {
-        if ($this->price === 0 && !$this->custom) return true;
+        if ($this->price == 0 && !$this->custom) return true;
 
         if ($user instanceof User) {
             return $this->hasModifyAccess($user) || $user->getPlugins()->where('plugins.id', '=', $this->id)->count() !== 0;

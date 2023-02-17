@@ -11,10 +11,10 @@ class PluginPayment extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
 
     protected $casts = [
-        'id' => 'int',
-        'user_id' => 'int',
-        'plugin_id' => 'int',
-        'payment_amount' => 'int',
+        'id' => 'integer',
+        'user_id' => 'integer',
+        'plugin_id' => 'integer',
+        'payment_amount' => 'integer',
         'created_at' => 'datetime',
         'verified' => 'boolean'
     ];

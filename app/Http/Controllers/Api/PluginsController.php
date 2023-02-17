@@ -261,7 +261,7 @@ class PluginsController
                 , 'plugins.last_updated', 'plugins.author', 'plugins.price', 'plugins.logo_url', 'plugins.banner_url', 'plugins.donation_url'
                 , 'plugins.created_at', 'plugins.updated_at');
         } else {
-            $query = $query->select('plugins.id', 'plugins.name', 'plugins.author');
+            $query = $query->select('plugins.id', 'plugins.name', 'plugins.author', 'plugins.custom', 'plugins.price');
         }
 
         if ($withAuthorField) $query = $this->insertAuthorUsername($query);
@@ -561,6 +561,47 @@ class PluginsController
         unset($response['sale_start_date']);
         unset($response['sale_end_date']);
         return $response;
+    }
+
+    public function handleDownload(Request $request, $pluginId, $version = "latest") {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @type Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+
+        $updatesBuilder = $plugin->getUpdates();
+        if ($version == 'latest') {
+            $update = $updatesBuilder->limit(1)->first();
+        } else {
+            $updateInfo = PluginUpdate::getVersionInfoFromString($version);
+
+            $update = $updatesBuilder->where('version', '=', $updateInfo['version'])
+                ->where('beta_number', '=', $updateInfo['beta_number'])
+                ->first();
+        }
+
+        if (!$update) {
+            return response()->json([
+                'error' => 'The version you requested does not exist.'
+            ], 404);
+        }
+        $path = $update->getFilePath();
+
+        if (!file_exists($path)) {
+            return response()->json([
+                'error' => 'The version you requested exists, but the file could not be found.'
+            ], 404);
+        }
+
+        $update->increment('downloads');
+
+        $str = $plugin->name . ' v' . $update->getDisplayName();
+        Log::error('str: ' . $str);
+        return response()->download($path, $str . '.jar');
     }
 
 }

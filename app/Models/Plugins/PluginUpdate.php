@@ -18,10 +18,10 @@ class PluginUpdate extends Model
     ];
 
     protected $casts = [
-        'plugin' => 'int',
-        'beta_number' => 'int',
+        'plugin' => 'integer',
+        'beta_number' => 'integer',
         'date' => 'datetime',
-        'downloads' => 'int'
+        'downloads' => 'integer'
     ];
 
     protected $fillable = [
@@ -43,7 +43,25 @@ class PluginUpdate extends Model
 
     public function getDisplayName(): string
     {
-        return PluginUpdate::getVersionDisplayName($this->version, $this->beta_number);
+        return self::getVersionDisplayName($this->version, $this->beta_number);
+    }
+
+    public static function getVersionInfoFromString($string): array {
+        $version = $string;
+        $betaNumber = 0;
+        if (str_starts_with($string, 'SNAPSHOT-')) {
+            $string = substr($string, 9);
+            if (str_contains($string, '_')) {
+                $parts = explode('_', $string);
+                $version = $parts[0];
+                $betaNumber = $parts[1];
+            }
+        }
+
+        return [
+            'version' => $version,
+            'beta_number' => $betaNumber
+        ];
     }
 
     public function getFileName(): string
