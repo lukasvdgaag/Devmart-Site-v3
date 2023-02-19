@@ -1,12 +1,9 @@
 <template>
     <Sidebar :left-side="false" :margin="true" class="mb-6 lg:mb-2">
         <StickyFooter :fixed="true" class="block lg:hidden">
-            <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex flex-col gap-0 align-center">
+            <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex flex-col gap-0 align-center !mb-0">
                 <span>{{ downloadLabel }}</span>
-                <span class="text-xs">{{ downloadInfo }}</span>
-            </router-link>
-            <router-link :to="`/plugins/${plugin.id}/updates`"
-                         class="action-button gray-hollow flex flex-col align-center"><span>Updates</span>
+                <span class="text-[10px] leading-3">{{ downloadInfo }}</span>
             </router-link>
         </StickyFooter>
 
@@ -138,7 +135,8 @@ export default {
             return "#";
         },
         downloadInfo() {
-            return this.plugin?.latest_update?.file_size ?? "No File Found";
+            let fileSize = this.plugin?.latest_update?.file_size;
+            return fileSize ? StringService.formatFileSize(fileSize) + ` (.${this.plugin.latest_update.file_extension})` : "No File Found";
         },
         categories() {
             return this.plugin?.categories?.split(',') ?? [];

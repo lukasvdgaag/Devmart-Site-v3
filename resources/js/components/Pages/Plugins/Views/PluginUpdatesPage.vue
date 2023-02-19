@@ -5,7 +5,7 @@
         <span v-if="!updatesFetchable.loading && updates?.length === 0" class="text-red-400">This resource has no updates yet.</span>
         <span v-else-if="updatesFetchable.loading" class="text-gray-400">Loading updates...</span>
 
-        <PluginUpdateInformation v-for="update in updates" :key="update.id" :permissions="permissions" :update="update"/>
+        <PluginUpdateInformation v-for="update in updates" :key="update.id" :permissions="permissions" :update="update" :keep-expanded="false"/>
     </div>
 </template>
 

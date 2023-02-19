@@ -19,7 +19,7 @@
                     >
                 </div>
 
-                <div class="d-grid mt-2 mt-4-small mb-32">
+                <div class="d-grid mt-2 mt-4-small mb-20">
                     <div class="col-span-12 lg:col-span-9 lg:pl-12 flex">
                         <div class="w-full">
                             <div v-if="plugin?.sale" class="mb-3 flex gap-1 flex-wrap">

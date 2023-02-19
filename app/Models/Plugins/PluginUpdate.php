@@ -64,32 +64,24 @@ class PluginUpdate extends Model
         ];
     }
 
-    public function getFileName(): string
+    public function getFileName($withExtension = true): string
     {
         if ($this->beta_number > 0) {
-            return 'SNAPSHOT-' . $this->version . '_' . $this->beta_number . "." . $this->file_extension;
+            return 'SNAPSHOT-' . $this->version . '_' . $this->beta_number . ($withExtension ? "." . $this->file_extension : '');
         }
-        return $this->version . "." . $this->file_extension;
+        return $this->version . ($withExtension ? "." . $this->file_extension : '');
     }
 
     public function getFilePath(): string {
         return env('DIR_UPLOADS') . $this->plugin . '/' . $this->getFileName();
     }
 
-    public function getFileDetails($withFileExtension = true): string {
+    public function getFileDetails($withFileExtension = true): string|null {
         $path = $this->getFilePath();
         if (file_exists($path)) {
-            $size = round(filesize($path) / 1024);
-            $res = $size . " KB";
-
-            if ($size >= 1024) {
-                $res = round($size/1024,2) . " MB";
-            }
-
-            if ($withFileExtension) $res .= " (." . $this->file_extension . ")";
-            return $res;
+            return filesize($path);
         }
-        return "No File Found";
+        return null;
     }
 
     public function getPlugin(): BelongsTo
@@ -102,7 +94,7 @@ class PluginUpdate extends Model
         $arr = parent::toArray();
         $arr['effective_version'] = $this->getDisplayName();
         $arr['file_size'] = $this->getFileDetails(false);
-        $arr['file_name'] = $this->getFileName();
+        $arr['file_name'] = $this->getFileName(false);
 
         return $arr;
     }

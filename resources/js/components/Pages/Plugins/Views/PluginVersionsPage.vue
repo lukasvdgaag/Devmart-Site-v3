@@ -8,7 +8,7 @@
             <th>Release Date</th>
             <th class="hidden md:table-cell">File Size</th>
             <th>Downloads</th>
-            <th v-if="permissions?.download"></th>
+            <th v-if="permissions?.download && anyDownloadsAvailable"></th>
         </tr>
         </thead>
         <tbody>
@@ -19,9 +19,9 @@
         <tr v-for="version in updates" :key="version.id">
             <td>{{ version.effective_version }}</td>
             <td>{{ DateService.formatDateRelatively(new Date(version.created_at), true) }}</td>
-            <td class="hidden md:table-cell">{{ version.file_size }}</td>
+            <td class="hidden md:table-cell">{{ version.file_size ? StringService.formatFileSize(version.file_size) : 'No download available' }}</td>
             <td>{{ StringService.formatNumber(version.downloads) }}</td>
-            <td v-if="permissions?.download" class="text-right">
+            <td v-if="permissions?.download && anyDownloadsAvailable && version.file_size" class="text-right">
                 <a :href="`/plugins/${pluginId}/download/${version.file_name}`" class="static" target="_blank">
                     Download
                 </a>
@@ -47,6 +47,9 @@ export default {
         },
         DateService() {
             return DateService
+        },
+        anyDownloadsAvailable() {
+            return this.updates.some(update => update.file_size);
         }
     },
     components: {Pagination},
