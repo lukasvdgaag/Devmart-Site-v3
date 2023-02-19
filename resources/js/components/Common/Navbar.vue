@@ -51,15 +51,14 @@
 </template>
 
 <script>
-import Logo from "@/components/Common/Logo";
-import {useAuth} from "@/store/authStore";
-import SwitchInput from "@/components/Common/Form/SwitchInput.vue";
+import Logo from "@/components/Common/Logo.vue";
+import {useAuth} from "@/store/authStore.js";
 import {initDropdowns} from "flowbite";
 import NavPopupItem from "@/components/Common/NavPopupItem.vue";
 
 export default {
     name: "Navbar",
-    components: {NavPopupItem, SwitchInput, Logo},
+    components: {NavPopupItem, Logo},
     props: {
         background: {
             type: Boolean,

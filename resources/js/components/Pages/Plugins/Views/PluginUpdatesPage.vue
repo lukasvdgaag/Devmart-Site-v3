@@ -1,5 +1,5 @@
 <template>
-    <h2 class="my-2">Updates</h2>
+    <h2 class="my-4">Updates</h2>
 
     <div class="flex flex-col gap-2">
         <span v-if="!updatesFetchable.loading && updates?.length === 0" class="text-red-400">This resource has no updates yet.</span>

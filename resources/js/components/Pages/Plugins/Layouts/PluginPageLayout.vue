@@ -50,11 +50,13 @@
                                 </div>
                             </div>
 
-                            <div v-if="permissions?.modify" class="mt-2 border-b border-b-gray-200 dark:border-b-gray-700">
+                            <div v-if="permissions?.modify" class="mt-2">
                                 <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
                                 <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
+
+                                <PluginQuickNavigation/>
                             </div>
 
                             <router-view :permissions="permissions" :plugin="plugin" :pluginId="pluginId"/>
@@ -80,10 +82,11 @@ import StringService from "@/services/StringService.js";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PluginSalePart from "@/components/Pages/Plugins/PluginSalePart.vue";
 import PluginOverviewPage from "@/components/Pages/Plugins/Views/PluginOverviewPage.vue";
+import PluginQuickNavigation from "@/components/Pages/Plugins/PluginQuickNavigation.vue";
 
 export default {
     name: "PluginOverviewPage",
-    components: {PluginSalePart, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
+    components: {PluginQuickNavigation, PluginSalePart, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
 
     created() {
         this.fetchPluginData();

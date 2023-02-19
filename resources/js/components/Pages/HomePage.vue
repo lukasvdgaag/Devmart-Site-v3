@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import Navbar from "@/components/Common/Navbar";
+import Navbar from "@/components/Common/Navbar.vue";
 
 export default {
     name: "HomeView",

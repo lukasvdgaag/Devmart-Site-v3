@@ -1,5 +1,5 @@
 <template>
-    <h2 class="my-2">Version History</h2>
+    <h2 class="my-4">Version History</h2>
 
     <table>
         <thead>
