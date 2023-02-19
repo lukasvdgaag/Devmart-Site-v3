@@ -5,9 +5,9 @@
         'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-300': !active,
         'hover:bg-gray-50 hover:dark:bg-gray-700': !disabled && !active,
         'cursor-pointer': !disabled,
-        'rounded-md': $slots.default
+        'rounded-md': $slots.default && rounded,
     }"
-                 :to="{query: getQuery()}"
+                 :to="{query: this.getQuery()}"
                  class="relative inline-flex items-center border px-4 py-2 text-sm font-medium plain"
                  @click.prevent="handleClick">
         <slot v-if="$slots.default"/>
@@ -47,6 +47,11 @@ export default {
             required: false,
             default: false
         },
+        rounded: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
     }
 }
 </script>

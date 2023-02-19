@@ -1,16 +1,24 @@
 <template>
     <div v-if="lastPage > 1"
          class="flex items-center mt-3 justify-between border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 sm:px-6">
-        <div class="flex flex-1 justify-between sm:hidden">
-            <div class="flex flex-row justify-content-start w-full">
-                <PaginationItem v-if="currentPage-1 >= 1" :page="Math.max(1, currentPage-1)" @update="handleUpdate">
-                    Previous
-                </PaginationItem>
+        <div class="flex flex-1 flex-col gap-2 sm:hidden">
+            <div>
+                <p class="text-sm text-gray-700 dark:text-gray-400">
+                    Showing <span class="font-medium">{{ start }}</span> to <span class="font-medium">{{ end }}</span> of <span
+                    class="font-medium">{{ total }}</span> results
+                </p>
             </div>
-            <div class="flex flex-row justify-end w-full">
-                <PaginationItem v-if="currentPage+1 <= lastPage" :page="Math.min(lastPage, currentPage+1)" @update="handleUpdate">
-                    Next
-                </PaginationItem>
+            <div class="flex flex-1 justify-between">
+                <div class="flex flex-row justify-content-start w-full">
+                    <PaginationItem v-if="currentPage-1 >= 1" :page="Math.max(1, currentPage-1)" @update="handleUpdate" :rounded="true">
+                        Previous
+                    </PaginationItem>
+                </div>
+                <div class="flex flex-row justify-end w-full">
+                    <PaginationItem v-if="currentPage+1 <= lastPage" :page="Math.min(lastPage, currentPage+1)" @update="handleUpdate" :rounded="true">
+                        Next
+                    </PaginationItem>
+                </div>
             </div>
         </div>
         <div class="hidden sm:flex sm:flex-1 sm:flex-wrap gap-2 sm:items-center sm:justify-between">
@@ -44,7 +52,7 @@
                                     :active="false"
                                     :disabled="false"
                                     :page="currentPage+1"
-                                    class="rounded-none rounded-r-md px-2"
+                                    class="rounded-r-md px-2"
                                     @update="handleUpdate">
                         <span class="sr-only">Next</span>
                         <font-awesome-icon aria-hidden="true" class="text-sm w-5" icon="fa-chevron-right"/>
@@ -57,7 +65,7 @@
 
 <script>
 import PaginationItem from "@/components/Common/Pagination/PaginationItem.vue";
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/Fetchable.js";
 
 export default {
     name: "Pagination",
