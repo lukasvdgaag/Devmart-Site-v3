@@ -28,7 +28,7 @@ export default {
         @apply flex-grow sm:flex-grow-0;
     }
     a {
-        @apply inline-block w-full sm:w-fit p-2 sm:p-4 border-b rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300;
+        @apply inline-block w-full sm:w-fit p-2 sm:p-4 border-b dark:border-b-gray-700 rounded-t-lg hover:text-gray-600 hover:border-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-500;
     }
     a.active {
         @apply text-primary-600 border-blue-600 dark:text-blue-500 dark:border-blue-500;

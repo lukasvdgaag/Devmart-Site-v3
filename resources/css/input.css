@@ -701,18 +701,15 @@ input::-moz-placeholder, input::placeholder, textarea::-moz-placeholder, textare
 }
 
 .gray, .gray-hollow:hover {
-    color: #fff;
-    background-color: #747f8d;
+    @apply !text-white bg-gray-500 dark:bg-gray-400;
 }
 
 .gray:hover {
-    background-color: #5f6974;
+    @apply bg-gray-500 dark:bg-gray-400;
 }
 
 .gray-hollow {
-    background-color: transparent;
-    border: 1px solid #5f6974;
-    color: #5f6974;
+    @apply bg-transparent border border-gray-500 dark:border-gray-400 text-gray-500 dark:text-gray-300;
 }
 
 .primary-hollow {
@@ -852,7 +849,7 @@ table td, table th {
 }
 
 table tr:not(:first-child) {
-    border-top: var(--border-light);
+    @apply border-t border-t-gray-200 dark:border-gray-700;
 }
 
 .b-light {
