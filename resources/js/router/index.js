@@ -22,6 +22,7 @@ import PastePageLayout from "@/components/Pages/Paste/PastePageLayout.vue";
 import PasteCreatePage from "@/components/Pages/Paste/PasteCreatePage.vue";
 import PasteInformationPage from "@/components/Pages/Paste/PasteInformationPage.vue";
 import AuthPageLayout from "@/components/Pages/Auth/AuthPageLayout.vue";
+import wikiRoutes from "@/router/wiki-routes.js";
 
 const routes = [
     {
@@ -71,9 +72,6 @@ const routes = [
     }, {
         path: '/builds',
         name: 'builds',
-    }, {
-        path: '/wiki',
-        name: 'wiki',
     }, {
         path: '/admin',
         name: 'admin',
@@ -180,7 +178,10 @@ const routes = [
 
 let index = createRouter({
     history: createWebHistory(),
-    routes: routes
+    routes: [
+        ...routes,
+        ...wikiRoutes
+    ]
 });
 index.beforeEach(checkAuthenticated);
 export default index;
