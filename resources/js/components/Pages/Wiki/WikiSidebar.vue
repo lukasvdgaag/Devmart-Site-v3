@@ -16,10 +16,6 @@ export default {
     name: "WikiSidebar",
     components: {WikiSidebarItem},
 
-    created() {
-        console.log(this.routes)
-    },
-
     data() {
         return {
             routes: wikiRoutes[0].children
