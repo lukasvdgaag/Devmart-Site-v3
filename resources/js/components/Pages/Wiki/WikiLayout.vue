@@ -35,4 +35,10 @@ export default {
     .wiki p {
         @apply my-2;
     }
+    .wiki h2:not(:first-of-type) {
+        @apply mt-6;
+    }
+    .wiki h3 {
+        @apply mt-4;
+    }
 </style>

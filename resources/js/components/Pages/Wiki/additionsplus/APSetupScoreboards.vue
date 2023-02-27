@@ -11,7 +11,7 @@
         Scoreboards are still limited to a maximum of 16 lines.
     </p>
 
-    <h2 class="mt-6">Set up the config file</h2>
+    <h2>Set up the config file</h2>
     <p>
         The scoreboards feature has its own section in the <i>config.yml</i> file,
         under the name <cite>scoreboards</cite>. Make sure that scoreboards are enabled by setting
@@ -20,7 +20,7 @@
         There are some more options that may be worth checking out:
     </p>
 
-    <ul class="mb-6">
+    <ul>
         <li>
             <i-code>remove_when_disabled</i-code>
             removes the scoreboard when the player
@@ -57,9 +57,9 @@
     </p>
 
 
-    <h3 class="mt-4">Individual Scoreboard Settings</h3>
+    <h3>Individual Scoreboard Settings</h3>
     <p>Each scoreboard consists of a couple of options:</p>
-    <ul class="list-disc list-inside pl-5">
+    <ul>
         <li>
             <i-code>enabled</i-code>
             determines whether this specific scoreboard should be
@@ -76,7 +76,7 @@
         </li>
     </ul>
 
-    <h3 class="mt-4">Per World Scoreboards</h3>
+    <h3>Per World Scoreboards</h3>
     <p>
         As previously described, each world has its own individual scoreboard settings under the
         <i-code>worlds</i-code>
@@ -88,7 +88,7 @@
         <i-code>enabled</i-code>
         option of the scoreboard to <cite>false</cite>.
     </p>
-    <p class="mt-2">
+    <p>
         <router-link to="/paste/sLtfCzxZ" title="Go to the example per-world setup">
             An example setup for per-world scoreboards can be found here.
         </router-link>
