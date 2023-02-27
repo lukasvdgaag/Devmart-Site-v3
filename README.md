@@ -72,9 +72,9 @@ The example below should be placed in the `children` array of the `/wiki` route.
 The sidebar will automatically generate the correct links for the subroutes and will by default use the `path` property to generate the name. 
 This name is calculated by removing the "/" character and replacing all "-" characters with spaces. You can override this by using the `meta.name` property.
 
-Subroutes also support home pages, eg: `/additionsplus` (no subroute). To add a home page, add a child route with `''` as path and give it a name. 
+Subroutes also support home pages, eg: `/additionsplus` (no subroute). To add a home page, add a child route with `''` as path and give it a name.
+Home page routes without the `meta.name` property will be displayed as "Getting Started" in the sidebar.
 Please know that route names should be unique!
-For example:
 ```js
 {
     path: '/additionsplus',
