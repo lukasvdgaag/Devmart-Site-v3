@@ -1,5 +1,5 @@
 <template>
-    <div class="wiki-quicklink col-span-4 plain grid-half-small grid-full-smallest">
+    <div class="quicklink col-span-4 plain grid-half-small grid-full-smallest">
         <div class="flex flex-col justify-between w-full h-full">
             <template v-if="icon">
                 <div class="flex flex-col">

@@ -7,7 +7,7 @@
             </div>
         </a>
 
-        <Hr/>
+        <hr/>
 
         <div>
             <Label for="username" value="Username or Email"/>
@@ -67,11 +67,10 @@ import Label from "@/components/Common/Form/Label.vue";
 import Input from "@/components/Common/Form/Input.vue";
 import {useAuth} from "@/store/authStore";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
-import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "LoginPage",
-    components: {Hr, ValidationError, Input, Label, Navbar},
+    components: {ValidationError, Input, Label, Navbar},
 
     data() {
         return {

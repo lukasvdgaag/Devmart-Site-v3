@@ -6,7 +6,7 @@
     </a>
     <ValidationError :errors="errors" item="discord"/>
 
-    <Hr/>
+    <hr/>
 
     <Alert v-if="discordErrorType === 'username_in_use'" type="warning" class="mb-4">
         The username that is linked to your Discord account is already in use or contains non-alphanumeric characters.
@@ -101,7 +101,6 @@
 <script>
 import Label from "@/components/Common/Form/Label.vue";
 import Input from "@/components/Common/Form/Input.vue";
-import Hr from "@/components/Common/Hr.vue";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 import PasswordInput from "@/components/Common/Form/PasswordInput.vue";
@@ -112,7 +111,7 @@ import {useAuth} from "@/store/authStore.js";
 
 export default {
     name: "RegisterPage",
-    components: {InputRequirementList, PasswordInput, Alert, ValidationError, Hr, Input, Label},
+    components: {InputRequirementList, PasswordInput, Alert, ValidationError, Input, Label},
 
     created() {
         let query = Object.assign({}, this.$route.query);

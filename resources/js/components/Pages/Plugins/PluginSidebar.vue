@@ -7,7 +7,7 @@
             </router-link>
         </StickyFooter>
 
-        <Hr class="lg:hidden"/>
+        <hr class="lg:hidden"/>
 
         <router-link v-if="showDownloadLink" :to="downloadLink" class="action-button primary btn-text-full flex-col gap-0 align-center hidden lg:flex"
                      target="_blank">
@@ -19,14 +19,14 @@
         </router-link>
 
         <template v-if="canModify">
-            <Hr class="hidden lg:block"/>
+            <hr class="hidden lg:block"/>
             <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
                          class="action-button purple flex-col align-center hidden lg:flex"><span>Post Update</span></router-link>
             <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
                          class="action-button purple flex-col align-center hidden lg:flex"><span>Edit Plugin</span></router-link>
         </template>
 
-        <Hr class="hidden lg:block"/>
+        <hr class="hidden lg:block"/>
 
         <div v-if="plugin?.sale" class="flex mb-4 mt-[-0.5rem] gap-1 flex-wrap">
             <PluginLabel :background="`bg-red-400`" :label="`${plugin?.sale?.percentage.toFixed(0)}% Sale`"/>
@@ -92,11 +92,10 @@ import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PluginPermissions from "@/models/rest/PluginPermissions";
 import Plugin from "@/models/rest/Plugin";
 import DateService from "../../../services/DateService";
-import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "PluginSidebar",
-    components: {Hr, PluginLabel, Icon, PluginCategory, PluginSidebarHeader, StickyFooter, Sidebar},
+    components: {PluginLabel, Icon, PluginCategory, PluginSidebarHeader, StickyFooter, Sidebar},
 
     computed: {
         DateService() {

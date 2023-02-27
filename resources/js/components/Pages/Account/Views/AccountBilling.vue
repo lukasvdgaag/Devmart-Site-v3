@@ -1,6 +1,6 @@
 <template>
     <h1>Billing</h1>
-    <Hr/>
+    <hr/>
 
     <Alert v-if="justUpdated" class="mb-4 font-medium" icon="fa-circle-check" type="success">
         {{ isAdmin ? `You saved the account settings of ${user.username}` : "Your settings have been saved!" }}
@@ -84,11 +84,10 @@ import StickyFooter from "@/components/Common/StickyFooter.vue";
 import UserRepository from "@/services/UserRepository";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
-import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "AccountBilling",
-    components: {Hr, Alert, ValidationError, StickyFooter, Input, Label, AdminEditingWarning},
+    components: {Alert, ValidationError, StickyFooter, Input, Label, AdminEditingWarning},
 
     created() {
         this.loadPayPalInformation();

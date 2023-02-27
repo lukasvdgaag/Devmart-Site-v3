@@ -1,5 +1,5 @@
 <template>
-    <div class="col-span-3 flex flex-col items-end bg-gray-100 dark:bg-gray-800 border-r border-r-gray-200 dark:border-r-gray-700 wsb p-5 min-h-full">
+    <div class="col-span-3 flex flex-col items-end bg-gray-75 dark:bg-gray-800 border-r border-r-gray-200 dark:border-r-gray-700 wsb p-5 min-h-full">
         <h2 class="text-lg">Table Of Contents</h2>
 
         <ul class="m-0 mt-4">

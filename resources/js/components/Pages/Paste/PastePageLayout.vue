@@ -7,7 +7,7 @@
         <div class="d-grid mt-6 h-full">
             <Sidebar :left-side="true" :margin="false" class="mb-4 lg:mb-2 row-start-2 lg:row-start-1 hidden lg:block">
 
-                <Hr class="lg:hidden"/>
+                <hr class="lg:hidden"/>
 
                 <router-link :target="isCreatePage ? '_blank' : '_self'"
                              :to="{name: 'paste'}"
@@ -22,7 +22,7 @@
                     Your Pastes
                 </router-link>
 
-                <Hr/>
+                <hr/>
                 <PluginSidebarHeader>Recent Pastes</PluginSidebarHeader>
 
                 <div class="flex flex-col gap-3">
@@ -62,7 +62,6 @@ import {useAuth} from "@/store/authStore";
 import PastesRepository from "@/services/PastesRepository";
 import PluginSidebarHeader from "@/components/Pages/Plugins/PluginSidebarHeader.vue";
 import DateService from "../../../services/DateService";
-import Hr from "@/components/Common/Hr.vue";
 import PasteCreatePage from "@/components/Pages/Paste/PasteCreatePage.vue";
 
 export default {
@@ -72,7 +71,7 @@ export default {
             return DateService
         }
     },
-    components: {Hr, PluginSidebarHeader, Sidebar, HeaderBackground, Navbar},
+    components: {PluginSidebarHeader, Sidebar, HeaderBackground, Navbar},
 
     created() {
         this.fetchRecentPastes();

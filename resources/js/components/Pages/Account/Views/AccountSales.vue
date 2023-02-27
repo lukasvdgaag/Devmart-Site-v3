@@ -1,6 +1,6 @@
 <template>
     <h1>Sales</h1>
-    <Hr/>
+    <hr/>
 
     <div class="grid col-span-12 h-unset mt-2 gap-4">
         <QuickLink icon="fa-sack-dollar" label="Total Sales">
@@ -91,11 +91,10 @@ import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
 import DateService from "@/services/DateService";
 import Fetchable from "@/models/Fetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
-import Hr from "@/components/Common/Hr.vue";
 
 export default {
     name: "AccountSales",
-    components: {Hr, Pagination, GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
+    components: {Pagination, GraphIcon, Searchbar, QuickLink, MutedText, Vue3Apexcharts},
 
     async created() {
         await Promise.all([

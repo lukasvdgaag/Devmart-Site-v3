@@ -1,6 +1,6 @@
 <template>
     <h1>Account Settings</h1>
-    <Hr/>
+    <hr/>
 
     <Alert v-if="justUpdated" class="mb-4 font-medium" icon="fa-circle-check" type="success">
         {{ isAdmin ? `You saved the account settings of ${user?.username}` : "Your settings have been saved!" }}
@@ -209,7 +209,6 @@ import StickyFooter from "@/components/Common/StickyFooter.vue";
 import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.vue";
 import StringService from "@/services/StringService";
 import DateService from "@/services/DateService";
-import Hr from "@/components/Common/Hr.vue";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
 import {initDropdowns} from "flowbite";
@@ -217,7 +216,7 @@ import User from "@/models/rest/User";
 
 export default {
     name: "AccountHome",
-    components: {DropdownSelect, Hr, AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
+    components: {DropdownSelect, AdminEditingWarning, StickyFooter, Alert, ValidationError, DisabledFormText, Select, MutedText, Input, Label},
 
     data() {
         return {

@@ -5,7 +5,7 @@
 
             <div class="grid grid-cols-12 w-full h-full border-t border-t-gray-200 dark:border-t-gray-700">
                 <WikiSidebar/>
-                <div class="col-span-9 w-full h-full">
+                <div class="col-span-9 w-full h-full p-12 max-w-6xl">
                     <router-view/>
                 </div>
             </div>

@@ -91,7 +91,7 @@ body {
 }
 
 h1, h2, h3, h4, h5 {
-    @apply font-roboto text-gray-900 dark:text-gray-200 font-semibold;
+    @apply font-poppins text-gray-900 dark:text-gray-200 font-bold;
 }
 
 .icon-container {
@@ -239,6 +239,10 @@ a.static, .static-link {
 
 tbody {
     @apply dark:text-gray-300;
+}
+
+hr {
+    @apply border-t border-t-gray-200 dark:border-t-gray-700 my-6;
 }
 
 /*.vue-apexcharts text {*/
@@ -1084,39 +1088,15 @@ textarea {
     max-width: 1080px;
 }
 
-.wiki-quicklink {
+.quicklink {
     @apply border border-gray-200 dark:border-gray-800 rounded-lg flex py-4 px-5 justify-between items-center transition-none;
 }
 
-.wiki-quicklink.gh:hover, .wiki-quicklink.sp:hover {
+.quicklink.gh:hover, .quicklink.sp:hover {
     background-repeat: no-repeat;
     background-size: 100px;
     background-position-x: 112%;
     background-position-y: 150%;
-}
-
-.wiki-quicklink.sp:hover {
-    background-image: url("https://static.spigotmc.org/img/spigot.png");
-    background-color: #d8811f;
-    background-position-y: 100%;
-    background-position-x: 100%;
-}
-
-.wiki-quicklink.gh:hover {
-    background-image: url("/assets/img/github-logo-colored.png");
-    background-color: #000;
-}
-
-.wiki-quicklink.dc:hover {
-    background-position-y: 100%;
-    background: url("https://theme.zdassets.com/theme_assets/678183/b7e9dce75f9edb23504e13b4699e208f204e5015.png") no-repeat;
-    background-size: cover;
-    fill: white;
-}
-
-.wiki-quicklink.dc:hover *, .wiki-quicklink.gh:hover *, .wiki-quicklink.sp:hover * {
-    color: white !important;
-    fill: white;
 }
 
 .icon {
@@ -1359,7 +1339,7 @@ select {
         margin-top: 24px;
     }
 
-    .grid-12-small, .wiki-quicklink {
+    .grid-12-small, .quicklink {
         grid-column: span 12;
     }
 
