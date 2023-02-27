@@ -20,7 +20,7 @@
         There are some more options that may be worth checking out:
     </p>
 
-    <ul class="mb-6 list-disc list-inside pl-5">
+    <ul class="mb-6">
         <li>
             <i-code>remove_when_disabled</i-code>
             removes the scoreboard when the player

@@ -5,7 +5,11 @@
 
             <div class="grid grid-cols-12 w-full h-full border-t border-t-gray-200 dark:border-t-gray-700">
                 <WikiSidebar/>
-                <div class="col-span-9 w-full h-full p-12 max-w-6xl">
+                <div class="wiki col-span-12 lg:col-span-9 w-full h-full p-4 py-8 lg:p-12 max-w-6xl">
+                    <div class="hidden lg:block mb-4">
+                        <WikiCurrentPage/>
+                    </div>
+
                     <router-view/>
                 </div>
             </div>
@@ -16,13 +20,19 @@
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
 import WikiSidebar from "@/components/Pages/Wiki/WikiSidebar.vue";
+import WikiCurrentPage from "@/components/Pages/Wiki/WikiCurrentPage.vue";
 
 export default {
     name: "WikiLayout",
-    components: {WikiSidebar, Navbar}
+    components: {WikiCurrentPage, WikiSidebar, Navbar}
 }
 </script>
 
-<style scoped>
-
+<style>
+    .wiki ul {
+        @apply list-disc list-inside pl-5 my-3;
+    }
+    .wiki p {
+        @apply my-2;
+    }
 </style>
