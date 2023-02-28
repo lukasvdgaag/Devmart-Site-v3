@@ -1,9 +1,11 @@
 <template>
-    <template v-for="(route, index) in matched" :key="index">
-        <router-link :to="getRouteLink(route)" class="capitalize static">{{ getRouteName(route) }}</router-link>
+    <div>
+        <template v-for="(route, index) in matched" :key="index">
+            <router-link :to="getRouteLink(route)" class="capitalize static">{{ getRouteName(route) }}</router-link>
 
-        <span v-if="index < matched.length - 1" class="mx-2">/</span>
-    </template>
+            <span v-if="index < matched.length - 1" class="mx-2">/</span>
+        </template>
+    </div>
 </template>
 
 <script>

@@ -6,12 +6,11 @@ import PageNotFound from "@/components/Pages/Errors/PageNotFound.vue";
 export default [
     {
         path: '/wiki',
-        name: 'wiki',
         component: WikiLayout,
         children: [
             {
                 path: '',
-                name: 'wiki-home',
+                name: 'wiki',
                 component: WikiHome,
                 meta: {
                     name: 'Home'

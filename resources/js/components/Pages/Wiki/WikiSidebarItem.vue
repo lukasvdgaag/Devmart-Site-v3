@@ -6,16 +6,20 @@
                          :exact="true"
                          active-class=""
                          exact-active-class="active"
+                         data-drawer-hide="drawer-navigation"
+                         aria-controls="drawer-navigation"
                          class="block"
                          :class="[isChild ? 'child' : 'parent']"
             >{{ routeName }}
             </router-link>
-            <div v-if="hasChildren" class="flex items-center" @click="expanded = !expanded">
+            <div v-if="hasChildren" class="flex gap-2 items-center" @click="expanded = !expanded">
                 <div class="w-full parent" :class="{active: active}">{{ routeName }}</div>
-                <font-awesome-icon :rotation="expanded ? 90 : null"
-                                   class="transition text-xs text-gray-600"
-                                   icon="fa-chevron-right"
-                />
+                <div class="mr-2">
+                    <font-awesome-icon :rotation="expanded ? 90 : null"
+                                       class="transition text-xs text-gray-600"
+                                       icon="fa-chevron-right"
+                    />
+                </div>
             </div>
         </div>
 
