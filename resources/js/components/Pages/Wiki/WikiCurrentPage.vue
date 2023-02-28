@@ -16,7 +16,8 @@ export default {
 
     computed: {
         matched() {
-            return this.$route.matched ?? [];
+            const matched = this.$route.matched;
+            return matched?.filter((m, i) => matched.findIndex(o => o.path === m.path) === i) ?? [];
         }
     },
 

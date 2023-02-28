@@ -7,20 +7,11 @@
         or quickly head into a popular wiki with any of the links below.
     </p>
 
-    <div class="grid grid-cols-3 mt-6 gap-5 row-gap-2">
-        <router-link to="#" class="quicklink col-span-1">
-            <div>AdditionsPlus Wiki</div>
-            <font-awesome-icon icon="fa-arrow-right" class="text-lg"/>
-        </router-link>
-        <router-link to="#" class="quicklink col-span-1">
-            <div>SkyWarsReloaded Wiki</div>
-            <font-awesome-icon icon="fa-arrow-right" class="text-lg"/>
-        </router-link>
-        <router-link to="#" class="quicklink col-span-1">
-            <div>StreakRewards Wiki</div>
-            <font-awesome-icon icon="fa-arrow-right" class="text-lg"/>
-        </router-link>
-    </div>
+    <Quicklinks>
+        <WikiQuicklink title="AdditionsPlus Wiki" :url="{name: 'wiki.additions'}"/>
+        <WikiQuicklink title="SkyWarsReloaded Wiki" url="#"/>
+        <WikiQuicklink title="StreakRewards Wiki" url="#"/>
+    </Quicklinks>
 
     <h2 class="mt-6">Quick Links</h2>
     <div class="grid grid-cols-3 mt-2 gap-5 row-gap-2">
@@ -62,10 +53,12 @@
 
 
 import QuickLink from "@/components/Common/QuickLink.vue";
+import WikiQuicklink from "@/components/Pages/Wiki/WikiQuicklink.vue";
+import Quicklinks from "@/components/Common/Quicklinks.vue";
 
 export default {
     name: "WikiHome",
-    components: {QuickLink}
+    components: {Quicklinks, WikiQuicklink, QuickLink}
 }
 </script>
 

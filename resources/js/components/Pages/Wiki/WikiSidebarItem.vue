@@ -1,6 +1,6 @@
 <template>
     <li class="w-full">
-        <div class="text-sm tracking-wide font-medium transition cursor-pointer select-none" :class="[isChild ? 'capitalize' : 'uppercase leading-8']">
+        <div class="text-sm tracking-wide font-medium transition cursor-pointer select-none" :class="[isChild && !hasChildren ? 'capitalize' : 'uppercase leading-8']">
             <router-link v-if="!hasChildren && !route?.redirect"
                          :to="{name: route.name}"
                          :exact="true"
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <ul v-if="hasChildren && expanded" class="pb-2 pl-3 my-1">
+        <ul v-if="hasChildren && expanded" class="pl-4 my-1">
             <WikiSidebarItem v-for="child in children" :route="child" class="p-0" is-child :full-path="route.path.concat('/', child.path)"
                              :key="route.path.concat(child.path)"/>
         </ul>
@@ -84,7 +84,7 @@ export default {
 }
 
 .child {
-    @apply block border-l border-l-4 pl-2 py-1 text-gray-600;
+    @apply block border-l-2 pl-2 py-1 text-gray-600;
 }
 
 .parent {

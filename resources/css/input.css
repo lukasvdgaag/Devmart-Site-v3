@@ -229,8 +229,8 @@ a:not(.action-button), .spoiler-button {
     @apply transition;
 }
 
-p a:not(.plain), span a:not(.plain) {
-    @apply text-primary-500 underline hover:text-primary-600;
+p a:not(.plain), span a:not(.plain), li a:not(.plain) {
+    @apply text-primary-500 hover:text-primary-600;
 }
 
 a.static, .static-link {
