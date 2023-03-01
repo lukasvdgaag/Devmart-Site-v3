@@ -1,5 +1,5 @@
 <template>
-    <a :class="[highlighted ? 'bg-gray-500 hover:bg-gray-600 text-white' : 'bg-gray-300 hover:bg-gray-400']" :href="href"
+    <a :class="[highlighted ? 'bg-gray-500 hover:bg-gray-600 text-white' : 'bg-gray-300 dark:bg-gray-400 dark:text-white hover:bg-gray-400 dark:hover:bg-gray-500']" :href="href"
        class="hover:bg-opacity-75 plain w-full lg:w-fit px-2 py-1 lg:px-4 lg:py-2 text-sm sm:text-base rounded-md flex align-center gap-2">
         <font-awesome-icon :class="{'text-sm': this.smallIcon}" :icon="icon"/>
         {{ text }}

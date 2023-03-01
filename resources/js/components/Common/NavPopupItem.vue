@@ -7,7 +7,7 @@
         <font-awesome-icon :icon="icon" class="text-xs min-w-3"/>
         <span>{{ label }}</span>
     </button>
-    <router-link v-else :class="[background ? 'navbar-popup-item-nobg': 'navbar-popup-item-bg']" :to="to" class="navbar-popup-item">
+    <router-link v-else :class="[background ? 'navbar-popup-item-nobg': 'navbar-popup-item-bg']" :to="to" class="navbar-popup-item plain">
         <font-awesome-icon :icon="icon" class="text-xs min-w-3"/>
         <span>{{ label }}</span>
     </router-link>

@@ -3,13 +3,13 @@
     <nav class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
         <ul class="flex flex-wrap gap-2 -mb-px">
             <li>
-                <router-link :to="{ name: 'plugin-overview'}" exact exact-active-class="active">Overview</router-link>
+                <router-link :to="{ name: 'plugin-overview'}" exact exact-active-class="active" class="plain">Overview</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'plugin-updates'}" active-class="active">Updates</router-link>
+                <router-link :to="{ name: 'plugin-updates'}" active-class="active" class="plain">Updates</router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'plugin-versions'}" active-class="active">Versions</router-link>
+                <router-link :to="{ name: 'plugin-versions'}" active-class="active" class="plain">Versions</router-link>
             </li>
         </ul>
     </nav>
