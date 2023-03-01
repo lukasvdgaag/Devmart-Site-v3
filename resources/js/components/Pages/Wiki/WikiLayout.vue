@@ -1,11 +1,11 @@
 <template>
-    <div class="flex flex-row h-full">
-        <div class="w-full flex flex-col items-center m-0 p-0 h-full">
+    <div class="min-h-full flex">
+        <div class="w-full flex-grow flex flex-col items-center m-0 p-0 min-h-full">
             <Navbar background/>
 
-            <div class="grid grid-cols-12 w-full h-full border-t border-t-gray-200 dark:border-t-gray-700">
+            <div class="flex flex-col flex-grow lg:grid grid-cols-12 w-full min-h-[calc(100%-80px)] border-t border-t-gray-200 dark:border-t-gray-700">
                 <WikiSidebar/>
-                <div class="wiki col-span-12 lg:col-span-9 w-full h-full p-4 py-8 lg:p-12 max-w-6xl">
+                <div class="flex flex-col flex-grow wiki col-span-12 lg:col-span-9 w-full min-h-full p-4 py-8 lg:p-12 max-w-6xl">
                     <div class="hidden lg:block mb-4">
                         <WikiCurrentPage/>
                     </div>
@@ -29,16 +29,33 @@ export default {
 </script>
 
 <style>
-    .wiki ul {
-        @apply list-disc list-inside pl-5 my-3;
-    }
-    .wiki p {
-        @apply my-2;
-    }
-    .wiki h2:not(:first-of-type) {
-        @apply mt-6;
-    }
-    .wiki h3 {
-        @apply mt-4;
-    }
+.wiki ul, .wiki ol {
+    @apply list-inside pl-5 my-3;
+}
+.wiki ul ul, .wiki ol ul, .wiki ul ol, .wiki ol ol {
+    @apply my-0;
+}
+
+.wiki ul {
+    @apply list-disc;
+}
+.wiki ol {
+    @apply list-decimal;
+}
+
+.wiki ul ul {
+    @apply list-circle;
+}
+
+.wiki p, .wiki .codeblock {
+    @apply my-2;
+}
+
+.wiki h2:not(:first-of-type) {
+    @apply mt-6;
+}
+
+.wiki h3 {
+    @apply mt-4;
+}
 </style>

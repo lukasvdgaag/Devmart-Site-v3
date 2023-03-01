@@ -82,7 +82,7 @@
 }
 
 body {
-    @apply min-h-screen h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200;
+    @apply h-screen min-h-full bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200;
     word-break: break-word;
 }
 

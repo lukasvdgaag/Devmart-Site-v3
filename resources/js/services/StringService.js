@@ -40,7 +40,7 @@ export default {
     },
 
     getWikiSidebarItemName(route) {
-        const name = route.path.split('/').pop().replaceAll(/-\./g, ' ');
+        const name = route.path.split('/').pop().replaceAll(/[-.]/g, ' ');
         return route.meta?.name ?? (name === '' ? 'Introduction' : name);
     }
 }

@@ -4,6 +4,7 @@
     </p>
 
     <h1>AdditionsPlus API</h1>
+    <hr>
     <p>
         The official API for AdditionsPlus: Everything your Minecraft server needs, in one plugin.<br>Create custom commands, menus, items, scoreboards,
         tablists, (animated) nametags, and much more!
@@ -15,7 +16,7 @@
         <em>Created by <a href="https://www.gcnt.net/" class="static">Devmart</a>.</em>
     </p>
 
-    <h2>Maven Dependency</h2>
+    <h2 class="mt-6">Maven Dependency</h2>
     <p>
         <img src="https://img.shields.io/nexus/gcnt/net.gcnt/additionsplus?server=https%3A%2F%2Fnexuslite.gcnt.net&amp;label=Latest%20version"
              alt="APIversionImg">
