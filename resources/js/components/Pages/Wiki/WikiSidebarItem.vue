@@ -80,22 +80,25 @@ export default {
 
 <style scoped>
 .child, .parent {
-    @apply font-roboto;
+    @apply font-roboto text-gray-600 dark:text-gray-300;
+}
+.child:hover, .parent:hover {
+    @apply text-gray-800 dark:text-gray-100;
 }
 
 .child {
-    @apply block border-l-2 pl-2 py-1 text-gray-600;
+    @apply block border-l-2 pl-2 py-1 dark:border-gray-600;
 }
 
-.parent {
-    @apply text-gray-600;
+.active {
+    @apply text-black dark:text-gray-100 font-semibold;
 }
 
 .parent.active {
-    @apply text-black font-semibold;
+    @apply font-semibold;
 }
 
 .child.active {
-    @apply border-l-gray-300 text-black;
+    @apply border-l-gray-300 dark:border-gray-500;
 }
 </style>

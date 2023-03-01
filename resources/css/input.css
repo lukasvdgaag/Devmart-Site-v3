@@ -230,7 +230,7 @@ a:not(.action-button), .spoiler-button {
 }
 
 p a:not(.plain), span a:not(.plain), li a:not(.plain) {
-    @apply text-primary-500 hover:text-primary-600;
+    @apply text-primary-500 dark:text-primary-200 hover:text-primary-600;
 }
 
 a.static, .static-link {
@@ -275,11 +275,7 @@ hr {
 }
 
 .icode {
-    background-color: var(--background-soft-darkened);
-    border: var(--border-light);
-    padding: 2px 4px;
-    border-radius: 4px;
-    line-height: 30px;
+    @apply px-1 py-0.5 rounded leading-8 bg-gray-200 dark:bg-gray-700;
 }
 
 .markdown .code-container {
@@ -1089,7 +1085,7 @@ textarea {
 }
 
 .quicklink {
-    @apply border border-gray-200 dark:border-gray-800 rounded-lg flex py-4 px-5 justify-between items-center transition-none;
+    @apply border border-gray-200 dark:border-gray-700 rounded-lg flex py-4 px-5 justify-between items-center transition-none;
 }
 
 .quicklink.gh:hover, .quicklink.sp:hover {

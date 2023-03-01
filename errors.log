@@ -16,3 +16,5 @@ Stack trace:
 [28-Feb-2023 13:37:05 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
 [28-Feb-2023 20:23:57 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
 [28-Feb-2023 20:45:44 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[01-Mar-2023 12:07:19 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[01-Mar-2023 12:20:44 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0

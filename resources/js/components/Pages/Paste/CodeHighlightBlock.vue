@@ -1,5 +1,5 @@
 <template>
-    <div class="codeblock overflow-x-auto overflow-y-hidden bg-gray-100 rounded-lg">
+    <div class="codeblock overflow-x-auto overflow-y-hidden bg-gray-100 dark:bg-gray-800 rounded-lg">
         <table>
             <tbody>
             <tr v-for="(line, index) in codeLines" :id="`L${index}`" :key="index">
@@ -16,7 +16,8 @@
 
 <script>
 import highlighter from "highlight.js";
-import "highlight.js/styles/github.css";
+import "@/../css/highlight/github.css"
+import "@/../css/highlight/github-dark.css"
 
 export default {
     name: "CodeHighlightBlock",
