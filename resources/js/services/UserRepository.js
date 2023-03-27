@@ -1,5 +1,7 @@
 import axios from "axios";
 import User from "@/models/rest/User";
+import Paste from "@/models/rest/paste/Paste";
+import PasteListResponse from "@/models/rest/response/PasteListResponse";
 
 export const client = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL + "/api/users",
@@ -34,5 +36,26 @@ export default {
     },
     async fetchDiscordInformation(discordId) {
         return await client.get(import.meta.env.VITE_APP_API_URL + `/api/discord/user/${discordId}`);
+    },
+    /**
+     * Get all pastes for a user
+     * @param id
+     * @param query
+     * @param page
+     * @returns {Promise<PasteListResponse>}
+     */
+    async fetchUserPastesById(id, query = '', page = 1) {
+        const res = await client.get(`/${id}/pastes`, {
+            params: {
+                query,
+                page,
+            }
+        });
+
+        let pastes = [];
+        for (const paste of res.data.pastes) {
+            pastes.push(Paste.fromJson(paste));
+        }
+        return new PasteListResponse(res.data.total, res.data.currentPage, res.data.pages, pastes);
     }
 }

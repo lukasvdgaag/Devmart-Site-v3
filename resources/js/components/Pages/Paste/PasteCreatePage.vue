@@ -258,7 +258,7 @@ export default {
                 new DropdownSelectItemModel('2 weeks', null, '2w'),
                 new DropdownSelectItemModel('1 month', null, '1m', () => useAuth().loggedIn),
                 new DropdownSelectItemModel('3 months', null, '3m', () => useAuth().loggedIn && useAuth().user.role === 'admin'),
-                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', null, () => useAuth().loggedIn && useAuth().user.role === 'admin')
+                new DropdownSelectItemModel('Unlimited', 'This paste will never expire.', 'never', () => useAuth().loggedIn && useAuth().user.role === 'admin')
             ],
             visibilitySelectItems: [
                 new DropdownSelectItemModel('Public', 'Anyone can view this paste.', 'PUBLIC'),

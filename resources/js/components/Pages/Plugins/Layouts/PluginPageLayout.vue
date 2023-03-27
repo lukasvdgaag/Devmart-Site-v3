@@ -32,7 +32,7 @@
                             </div>
                             <PluginLabel v-if="plugin.isRecentlyUpdated()" class="mb-2"
                                          icon="fa-calendar-days" label="Recently Updated"/>
-                            <div :class="{'border-b border-b-gray-200 dark:border-b-gray-700': !permissions?.modify}" class="flex flex-row">
+                            <div class="flex flex-row">
                                 <img :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon" class="resource-icon hide-big">
                                 <div class="ml-3-small">
                                     <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
@@ -52,12 +52,11 @@
 
                             <div v-if="permissions?.modify" class="mt-2">
                                 <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
-                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
+                                class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
                                 <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
-                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
-
-                                <PluginQuickNavigation/>
+                                class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
+                            <PluginQuickNavigation/>
 
                             <router-view :permissions="permissions" :plugin="plugin" :pluginId="pluginId"/>
                         </div>

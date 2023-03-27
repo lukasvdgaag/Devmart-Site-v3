@@ -26,7 +26,7 @@
                 <Label class="font-bold" value="First Name"/>
                 <Input v-model="data.name"
                        :errors="errors"
-                       :placeholder="user.name"
+                       placeholder="First name"
                        class="block mt-1 w-full"
                        item="name"
                        required/>
@@ -37,7 +37,7 @@
                 <Label class="font-bold" value="Last Name"/>
                 <Input v-model="data.surname"
                        :errors="errors"
-                       :placeholder="user.surname"
+                       placeholder="Last name"
                        class="block mt-1 w-full"
                        item="surname"
                        required/>
@@ -81,7 +81,7 @@ import AdminEditingWarning from "@/components/Pages/Account/AdminEditingWarning.
 import Label from "@/components/Common/Form/Label.vue";
 import Input from "@/components/Common/Form/Input.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
-import UserRepository from "@/services/UserRepository";
+import UserRepository from "@/services/UserRepository.js";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Alert from "@/components/Common/Alert.vue";
 

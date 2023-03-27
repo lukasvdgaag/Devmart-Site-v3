@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Paste;
+use App\Models\User;
 use App\Utils\WebUtils;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -22,6 +24,26 @@ class PasteController
         $perPage = min(25, max(1, $request->input('perPage', 10)));
         $pastes = $this->joinCreatorUsername($this->getBasicPasteInformation())
             ->where('visibility', '=', 'PUBLIC')
+            ->orderBy('updated_at', 'desc');
+
+        $paginated = $pastes->paginate($perPage);
+
+        return response()->json([
+            'total' => $paginated->total(),
+            'currentPage' => $paginated->currentPage(),
+            'pages' => $paginated->lastPage(),
+            'pastes' => $paginated->items(),
+        ]);
+    }
+
+    public function handleUserPastesRetrieval(Request $request, string $userId) {
+        $user = Controller::getUserOrRedirect($request, $userId);
+        if (!($user instanceof User)) return $user;
+
+        $perPage = min(25, max(1, $request->input('perPage', 10)));
+        $pastes = $this->joinCreatorUsername($this->getBasicPasteInformation())
+            ->where('creator', '=', $userId)
+            ->where('title', 'LIKE', '%' . $request->query('query', '') . '%')
             ->orderBy('updated_at', 'desc');
 
         $paginated = $pastes->paginate($perPage);
@@ -62,6 +84,8 @@ class PasteController
 
         return response()->json($paste);
     }
+
+
 
     public function handlePasteDeletion(Request $request, string $pasteId) {
         $checkPerms = $this->checkPasteEditPerms($request, $pasteId);
@@ -189,8 +213,8 @@ class PasteController
 
         // when not logged in, default to 7 days.
         if (!$user) $selectedLifetime = '7d';
-        else if ($user->role !== 'ADMIN') {
-            if (!in_array($selectedLifetime, ['7d', '2w', '1m', null])) {
+        else if ($user->role != 'admin') {
+            if (!in_array($selectedLifetime, ['7d', '2w', '1m'])) {
                 $selectedLifetime = '7d';
             }
         } else {

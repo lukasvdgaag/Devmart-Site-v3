@@ -9,7 +9,7 @@
                    @input="updateInput($event.target.value)"
             >
             <div :class="[inputEmpty ? 'cursor-not-allowed' : 'cursor-pointer']"
-                 class="absolute top-3 right-4 h-6 w-6" role="button"
+                 class="absolute top-1 right-1 h-10 w-10 p-2 bg-gray-250 dark:bg-gray-800" role="button"
                  @click="clearInput">
                 <font-awesome-icon :class="[!inputEmpty ? 'text-black dark:text-gray-200' : 'text-gray-400']" class="h-full w-full transition"
                                    icon="circle-xmark"/>

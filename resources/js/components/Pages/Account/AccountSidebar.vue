@@ -17,7 +17,7 @@ export default {
             return [
                 new SidebarItem({name: 'account', query: this.query}, 'fa-house-user', 'Account Details'),
                 new SidebarItem({name: 'accountBilling', query: this.query}, 'fa-money-bill-transfer', 'Billing'),
-                new SidebarItem({name: 'accountSales', query: this.query}, 'fa-money-bill-transfer', 'Sales'),
+                new SidebarItem({name: 'accountSales', query: this.query}, 'fa-square-poll-vertical', 'Sales'),
                 new SidebarItem({name: 'accountPastes', query: this.query}, 'fa-solid fa-paste', 'Your Pastes'),
             ];
         },

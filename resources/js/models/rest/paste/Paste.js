@@ -54,7 +54,7 @@ export default class Paste {
         let paste = new Paste();
         for (let key in json) {
             if (key === "created_at" || key === "updated_at" || key === "expire_at") {
-                paste[key] = new Date(json[key]);
+                paste[key] = json[key] != null ? new Date(json[key]) : null;
                 continue;
             }
             paste[key] = json[key];

@@ -28,10 +28,8 @@ class UsersController
         if (!($user instanceof User)) return $user;
 
         $paypalInformation = DB::query()
-            ->selectRaw('COALESCE(p.name, u.name) AS name')
-            ->addSelect(DB::raw('COALESCE(p.surname, u.surname) AS surname'))
+            ->selectRaw('p.name, p.surname, p.business')
             ->addSelect(DB::raw('COALESCE(p.email, u.email) AS email'))
-            ->addSelect('p.business')
             ->from('users', 'u')
             ->leftJoin('user_paypal AS p', 'u.id', '=', 'p.user')
             ->where('u.id', $userId)->get()->first();

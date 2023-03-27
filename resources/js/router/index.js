@@ -23,6 +23,7 @@ import PasteCreatePage from "@/components/Pages/Paste/PasteCreatePage.vue";
 import PasteInformationPage from "@/components/Pages/Paste/PasteInformationPage.vue";
 import AuthPageLayout from "@/components/Pages/Auth/AuthPageLayout.vue";
 import wikiRoutes from "@/router/wiki-routes.js";
+import AccountPastes from "@/components/Pages/Account/Views/AccountPastes.vue";
 
 const routes = [
     {
@@ -166,7 +167,7 @@ const routes = [
             }, {
                 path: 'pastes',
                 name: 'accountPastes',
-                component: AccountHome
+                component: AccountPastes
             }
         ]
     }, {

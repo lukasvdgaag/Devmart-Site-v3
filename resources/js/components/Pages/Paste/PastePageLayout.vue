@@ -18,7 +18,7 @@
                 <router-link v-if="useAuth().loggedIn"
                              :target="isCreatePage ? '_blank' : '_self'"
                              class="action-button gray flex flex-col align-center"
-                             to="#">
+                             :to="{name: 'accountPastes'}">
                     Your Pastes
                 </router-link>
 
