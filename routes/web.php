@@ -31,6 +31,8 @@ Route::prefix('api')->group(function () {
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
 
+            Route::get('/{userId}/pastes', [PasteController::class, 'handleUserPastesRetrieval']);
+
             Route::get('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationRetrieval']);
             Route::put('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationUpdate']);
         });

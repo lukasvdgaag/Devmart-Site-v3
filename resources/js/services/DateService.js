@@ -48,9 +48,8 @@ export default {
         return new Intl.DateTimeFormat('en-US', {month: 'long', day: 'numeric'}).format(date);
     },
 
-    formatTimeLeft(date) {
+    formatTimeLeft(date, firstOnly = false) {
         const now = new Date();
-        const daysLeft = this.diffInDays(date, now);
 
         // show in hh:mm:ss format
         const diff = Math.abs(date.getTime() - now.getTime());
@@ -60,12 +59,16 @@ export default {
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
         if (days > 0) {
+            if (firstOnly) return `${days} day${days > 1 ? 's' : ''} left`;
             return `${days}d ${hours}h ${minutes}m ${seconds}s left`;
         } else if (hours > 0) {
+            if (firstOnly) return `${hours} hour${hours > 1 ? 's' : ''} left`;
             return `${hours}h ${minutes}m ${seconds}s left`;
         } else if (minutes > 0) {
+            if (firstOnly) return `${minutes} minute${minutes > 1 ? 's' : ''} left`;
             return `${minutes}m ${seconds}s left`;
         } else {
+            if (firstOnly) return `${seconds} second${seconds > 1 ? 's' : ''} left`;
             return `${seconds}s left`;
         }
     },
@@ -111,7 +114,12 @@ export default {
         // format the date relatively to today, including the time in 12h format.
         // e.g. Today at 12:00 PM, Yesterday at 12:00 PM, August 24 at 12:00 PM, or when over a year: January 1, 2020 at 12:00 PM
         const today = new Date();
-        const diff = this.diffInDays(date, today);
+        let diff = this.diffInDays(date, today);
+        if (diff <= 1) {
+            // check if the date is today or yesterday
+            diff = (date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()) ? 1 : 2;
+        }
+
         if (diff <= 1) {
             return `Today${withTime ? ' at ' + this.formatTime(date) : ''}`;
         } else if (diff <= 2) {
