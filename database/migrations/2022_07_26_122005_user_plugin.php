@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class UserPlugin extends Migration
@@ -17,10 +18,12 @@ class UserPlugin extends Migration
             $table->bigInteger('id')->unsigned()->autoIncrement()->unique();
             $table->integer('user_id')->unsigned();
             $table->integer('plugin_id')->unsigned();
+            $table->integer('payment_id')->unsigned()->nullable();
             $table->dateTime('date')->useCurrent();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('plugin_id')->references('id')->on('plugins')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('payment_id')->references('id')->on('payments')->onDelete('cascade')->onUpdate('cascade');
         });
 
         $table = DB::table('gcnt.plugin_user');

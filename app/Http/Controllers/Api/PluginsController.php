@@ -123,6 +123,25 @@ class PluginsController
         return response([]);
     }
 
+    public function handlePluginTransactionsRetrieval(Request $request, string|int $pluginId) {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @var Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+        if (!$plugin->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        $transactions = $plugin->getTransactions()->paginate()->items();
+        return response()->json($transactions);
+    }
+
     public function handlePluginUpdate(Request $request, string|int $pluginId)
     {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);

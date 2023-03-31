@@ -2,13 +2,14 @@
 
 namespace App\Models\Plugins;
 
+use App\Models\PluginUser;
 use App\Models\User;
 use App\Utils\WebUtils;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class Plugin extends Model
 {
@@ -63,7 +64,8 @@ class Plugin extends Model
         return $this->belongsTo(User::class, 'author');
     }
 
-    public function hasAccess($user): bool {
+    public function hasAccess($user): bool
+    {
         if ($this->price == 0 && !$this->custom) return true;
 
         if ($user instanceof User) {
@@ -72,7 +74,8 @@ class Plugin extends Model
         return false;
     }
 
-    public function hasModifyAccess($user): bool {
+    public function hasModifyAccess($user): bool
+    {
         if ($user != null) {
             return $user->role === "admin" || $this->author === $user->id;
         }
@@ -86,6 +89,24 @@ class Plugin extends Model
             ->orderBy('end_date', 'desc');
     }
 
+    public function getTransactions(): HasMany
+    {
+        return $this->hasMany(PluginUser::class)
+            ->select('plugin_user.*')
+            ->addSelect([
+                DB::raw('payments.id AS payment_id'),
+                DB::raw('payments.payment_amount - payments.payment_fee AS payment_amount'),
+                'payments.email',
+                'platform',
+                'payment_status',
+                'payments.created_at AS payment_date',
+                'users.username'
+            ])
+            ->leftJoin('payments', 'payments.id', '=', 'plugin_user.payment_id')
+            ->leftJoin('users', 'users.id', '=', 'plugin_user.user_id')
+            ->orderByDesc('plugin_user.date');
+    }
+
     public function getSale(): PluginSale|null
     {
         return $this->getSales()->whereRaw('CURRENT_TIMESTAMP() BETWEEN start_date AND COALESCE(end_date, (CURRENT_TIMESTAMP() + INTERVAL 1 SECOND))')->first();
@@ -97,7 +118,8 @@ class Plugin extends Model
             ->orderBy('created_at', 'desc');
     }
 
-    public function getPrice() {
+    public function getPrice()
+    {
         $sale = $this->getSale();
         if ($sale != null) {
             return round((($this->price / 100) * (100 - $sale->percentage)), 2);
