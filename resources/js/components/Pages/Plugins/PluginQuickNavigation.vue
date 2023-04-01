@@ -11,6 +11,9 @@
             <li>
                 <router-link :to="{ name: 'plugin-versions'}" active-class="active" class="plain">Versions</router-link>
             </li>
+            <li>
+                <router-link :to="{ name: 'plugin-purchases'}" active-class="active" class="plain">Purchases</router-link>
+            </li>
         </ul>
     </nav>
 

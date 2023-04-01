@@ -123,7 +123,8 @@ class PluginsController
         return response([]);
     }
 
-    public function handlePluginTransactionsRetrieval(Request $request, string|int $pluginId) {
+    public function handlePluginTransactionsRetrieval(Request $request, string|int $pluginId)
+    {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
@@ -138,8 +139,32 @@ class PluginsController
             ], 401);
         }
 
-        $transactions = $plugin->getTransactions()->paginate()->items();
-        return response()->json($transactions);
+        $perPage = min(25, max(1, $request->query('perPage', 15)));
+        $query = trim($request->query('query', ''));
+        $fromDate = $request->query('from', null);
+        $toDate = $request->query('to', null);
+
+        $transactions = $plugin->getTransactions();
+        if (strlen($query) > 0) {
+            $transactions = $transactions->where('users.username', 'like', "%$query%")
+                ->orWhere('users.email', 'like', "%$query%")
+                ->orWhere('payments.email', 'like', "%$query%");
+        }
+        if (!is_null($fromDate)) {
+            $transactions = $transactions->where('plugin_user.date', '>=', $fromDate);
+        }
+        if (!is_null($toDate)) {
+            $transactions = $transactions->where('plugin_user.date', '<=', $toDate);
+        }
+
+        $paginated = $transactions->paginate($perPage);
+
+        return response()->json([
+            'total' => $paginated->total(),
+            'currentPage' => $paginated->currentPage(),
+            'pages' => $paginated->lastPage(),
+            'transactions' => $paginated->items()
+        ]);
     }
 
     public function handlePluginUpdate(Request $request, string|int $pluginId)
@@ -321,7 +346,8 @@ class PluginsController
         ]);
     }
 
-    public function handlePluginUpdateRetrieval(Request $request, string|int $versionId) {
+    public function handlePluginUpdateRetrieval(Request $request, string|int $versionId)
+    {
         $updateRes = PluginUpdate::query()->whereKey($versionId)->first();
         if (!$updateRes) {
             return response()->json([
@@ -582,7 +608,8 @@ class PluginsController
         return $response;
     }
 
-    public function handleDownload(Request $request, $pluginId, $version = "latest") {
+    public function handleDownload(Request $request, $pluginId, $version = "latest")
+    {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;

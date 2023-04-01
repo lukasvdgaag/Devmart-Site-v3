@@ -24,6 +24,7 @@ import PasteInformationPage from "@/components/Pages/Paste/PasteInformationPage.
 import AuthPageLayout from "@/components/Pages/Auth/AuthPageLayout.vue";
 import wikiRoutes from "@/router/wiki-routes.js";
 import AccountPastes from "@/components/Pages/Account/Views/AccountPastes.vue";
+import PluginPurchasesPage from "@/components/Pages/Plugins/Views/PluginPurchasesPage.vue";
 
 const routes = [
     {
@@ -93,8 +94,11 @@ const routes = [
                 path: '',
                 name: 'plugin-overview',
                 component: PluginOverviewPage
-            },
-            {
+            }, {
+                path: 'purchases',
+                name: 'plugin-purchases',
+                component: PluginPurchasesPage,
+            }, {
                 path: 'versions',
                 component: PluginVersionsLayout,
                 children: [

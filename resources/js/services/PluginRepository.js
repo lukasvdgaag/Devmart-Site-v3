@@ -4,6 +4,8 @@ import PluginListResponse from "../models/rest/response/PluginListResponse";
 import PluginPermissions from "../models/rest/PluginPermissions";
 import PluginUpdate from "@/models/rest/PluginUpdate";
 import PluginUpdatesResponse from "@/models/rest/response/PluginUpdatesResponse";
+import PluginPurchase from "@/models/rest/PluginPurchase";
+import PluginPurchasesResponse from "@/models/rest/response/PluginPurchasesResponse";
 
 export const client = axios.create({
     baseURL: import.meta.env.VITE_APP_API_URL + "/api/plugins",
@@ -122,6 +124,35 @@ export default {
             updates.push(PluginUpdate.fromJson(update));
         }
         return new PluginUpdatesResponse(data.total, data.currentPage, data.pages, updates);
+    },
+
+    /**
+     * Fetches a list of recent purchases for a specific plugin.
+     * @param pluginId Id of the plugin
+     * @param page Page number
+     * @param perPage Number of items per page
+     * @param query Search query for email or username
+     * @param from Start date
+     * @param to End date
+     * @returns {Promise<PluginPurchasesResponse>}
+     */
+    async fetchPluginPurchases(pluginId, page = 1, perPage = 15, query = undefined, from = undefined, to = undefined) {
+        const res = await client.get(`/${pluginId}/transactions`, {
+            params: {
+                page,
+                perPage,
+                query,
+                from,
+                to
+            }
+        });
+        const data = res.data;
+
+        let purchases = [];
+        for (let purchase of res.data.transactions) {
+            purchases.push(PluginPurchase.fromJson(purchase));
+        }
+        return new PluginPurchasesResponse(data.total, data.currentPage, data.pages, purchases);
     },
 
     /**
