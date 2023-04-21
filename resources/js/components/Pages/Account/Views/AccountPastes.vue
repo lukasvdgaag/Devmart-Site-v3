@@ -104,7 +104,7 @@
 import Searchbar from "@/components/Common/Form/Searchbar.vue";
 import UserRepository from "@/services/UserRepository.js";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 import DateService from "../../../../services/DateService";
 
 export default {

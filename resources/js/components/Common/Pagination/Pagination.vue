@@ -65,7 +65,7 @@
 
 <script>
 import PaginationItem from "@/components/Common/Pagination/PaginationItem.vue";
-import Fetchable from "@/models/Fetchable.js";
+import Fetchable from "@/models/fetchable/Fetchable.js";
 
 export default {
     name: "Pagination",

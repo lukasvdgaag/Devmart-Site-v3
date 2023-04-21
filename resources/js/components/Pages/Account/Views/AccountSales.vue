@@ -89,7 +89,7 @@ import StringService from "@/services/StringService";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
 import DateService from "@/services/DateService";
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 
 export default {

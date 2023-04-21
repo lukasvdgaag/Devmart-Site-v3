@@ -8,16 +8,7 @@
         <font-awesome-icon class="ml-3 text-sm" icon="fa-solid fa-chevron-down"/>
     </button>
 
-    <div :id="id"
-         :class="{'md:w-60': !fullWidth}"
-         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute top-full left-0
-         w-[calc(100%-1.5rem)] border border-gray-200 dark:border-gray-600"
-    >
-        <div v-if="(header && header.length > 0) || (description && description.length > 0)" class="px-4 py-3">
-            <div v-if="header && header.length > 0" class="text-md font-medium dark:text-gray-200">{{ header }}</div>
-            <p v-if="description && description.length > 0" class="border-none dark:text-gray-400 leading-tight">{{ description }}</p>
-        </div>
-
+    <Dropdown :id="id" :full-width="fullWidth" :header="header" :description="description">
         <ul aria-labelledby="dropdownRadioHelperButton" class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200">
             <DropdownSelectItem
                 v-for="(item, i) in items"
@@ -29,17 +20,17 @@
                 @change="handleInput"
             />
         </ul>
-
-    </div>
+    </Dropdown>
 </template>
 
 <script>
 import DropdownSelectItem from "@/components/Common/Form/DropdownSelectItem.vue";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
+import Dropdown from "@/components/Common/Form/Dropdown.vue";
 
 export default {
     name: "DropdownSelect",
-    components: {DropdownSelectItem},
+    components: {Dropdown, DropdownSelectItem},
     emits: ['update:modelValue'],
 
     data() {

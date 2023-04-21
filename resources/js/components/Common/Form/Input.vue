@@ -6,6 +6,7 @@
            ]"
               :disabled="disabled"
               :maxlength="maxlength"
+              :name="name"
               :value="modelValue"
               class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full  dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
               @input="onInput($event)"></textarea>
@@ -19,6 +20,7 @@
            :disabled="disabled"
            :maxlength="maxlength"
            :type="type"
+           :name="name"
            :value="modelValue"
            class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
            @change="onChange($event)"
@@ -60,6 +62,10 @@ export default {
             type: String,
             required: false
         },
+        name: {
+            type: String,
+            required: false
+        }
     },
 
     computed: {
