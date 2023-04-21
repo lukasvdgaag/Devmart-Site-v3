@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 import DateService from "../../../../services/DateService";
 import StringService from "../../../../services/StringService";

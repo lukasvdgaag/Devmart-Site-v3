@@ -90,5 +90,5 @@ Route::get('/account', function () {
 })->middleware(['auth'])->name('account');
 
 Route::get('/{any}', function () {
-    return view('welcome', ['title' => 'Yeehaw']);
+    return view('welcome');
 })->where('any', '.*');

@@ -56,9 +56,10 @@ import Searchbar from "@/components/Common/Form/Searchbar.vue";
 import SidebarItem from "@/models/SidebarItem";
 import PluginRepository from "@/services/PluginRepository";
 import PluginPreview from "@/components/Pages/Plugins/PluginPreview.vue";
-import PluginsFetchable from "@/models/PluginsFetchable";
+import PluginsFetchable from "@/models/fetchable/PluginsFetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 import HeaderBackground from "@/components/Common/HeaderBackground.vue";
+import SeoBuilder from "@/services/SeoBuilder";
 
 export default {
     name: "PluginsListPage",
@@ -86,6 +87,13 @@ export default {
             totalPlugins: 0,
             pages: 0,
         }
+    },
+
+    head() {
+        return new SeoBuilder(this)
+            .title("Plugins")
+            .withReturn()
+            .build()
     },
 
     watch: {

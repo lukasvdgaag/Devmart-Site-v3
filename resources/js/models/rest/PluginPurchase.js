@@ -21,7 +21,7 @@ export default class PluginPurchase {
      */
     payment_id;
 
-    payment_amount;
+    amount;
     /**
      * @type {string}
      */
@@ -50,8 +50,12 @@ export default class PluginPurchase {
             if (key === "payment_date" || key === "date") {
                 pluginUpdate[key] = new Date(json[key]);
                 continue;
-            } else if (key === "id" || key === "user_id" || key === "plugin_id" || key === "payment_id" || key === "payment_amount") {
+            } else if (key === "id" || key === "user_id" || key === "plugin_id" || key === "payment_id") {
                 pluginUpdate[key] = parseInt(json[key]);
+                continue;
+            } else if (key === "amount") {
+                console.log(json[key]);
+                pluginUpdate[key] = parseFloat(json[key]);
                 continue;
             }
             pluginUpdate[key] = json[key];

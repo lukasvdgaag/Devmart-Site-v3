@@ -12,7 +12,7 @@
 <script>
 import Plugin from "@/models/rest/Plugin";
 import PluginPermissions from "@/models/rest/PluginPermissions";
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 import DateService from "../../../../services/DateService";
 import PluginUpdateInformation from "@/components/Pages/Plugins/PluginUpdateInformation.vue";
 

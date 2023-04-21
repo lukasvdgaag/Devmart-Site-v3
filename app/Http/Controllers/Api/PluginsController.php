@@ -157,6 +157,8 @@ class PluginsController
             $transactions = $transactions->where('plugin_user.date', '<=', $toDate);
         }
 
+        Log::error($transactions->toSql());
+
         $paginated = $transactions->paginate($perPage);
 
         return response()->json([

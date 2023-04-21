@@ -95,8 +95,8 @@ class Plugin extends Model
             ->select('plugin_user.*')
             ->addSelect([
                 DB::raw('payments.id AS payment_id'),
-                DB::raw('payments.payment_amount - payments.payment_fee AS payment_amount'),
-                'payments.email',
+                DB::raw('COALESCE(payments.payment_amount, 0) - COALESCE(payments.payment_fee, 0) AS amount'),
+                DB::raw('COALESCE(payments.email, users.email) AS email'),
                 'platform',
                 'payment_status',
                 'payments.created_at AS payment_date',

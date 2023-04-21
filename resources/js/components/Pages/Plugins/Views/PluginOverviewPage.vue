@@ -17,10 +17,18 @@ import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
 import Plugin from "@/models/rest/Plugin";
 import PluginPermissions from "@/models/rest/PluginPermissions";
+import SeoBuilder from "@/services/SeoBuilder";
 
 export default {
     name: "PluginOverviewPage",
     components: {Highlight, Highlights, BBCode},
+
+    head() {
+        return new SeoBuilder(this)
+            .title(this?.plugin?.title + " - Plugins")
+            .withReturn()
+            .build()
+    },
 
     computed: {
         supportedVersions() {
