@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PayPalController;
 use App\Models\Plugins\Plugin;
 use App\Models\Plugins\PluginSale;
 use App\Models\Plugins\PluginUpdate;
@@ -606,6 +607,36 @@ class PluginsController
         unset($response['sale_start_date']);
         unset($response['sale_end_date']);
         return $response;
+    }
+
+    public function handlePluginBuy(Request $request, $pluginId) {
+        Log::error('handlePluginBuy');
+
+        // throw error if user is not logged in
+        $user = Controller::getUserOrRedirect($request, $request->user()?->id ?? null);
+        if (!($user instanceof \App\Models\User)) return $user;
+
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        $plugin = $plugin['plugin'];
+
+        if ($plugin->hasAccess($user)) {
+            return response()->json([
+                'error' => 'You already own this plugin!'
+            ], 400);
+        }
+
+        $link = PayPalController::createPluginOrder($user, $plugin);
+
+        if ($link != null) {
+            return redirect($link);
+        } else {
+            return response()->json([
+                'error' => 'There was an error creating your order. Please try again later.'
+            ], 500);
+        }
     }
 
     public function handleDownload(Request $request, $pluginId, $version = "latest")

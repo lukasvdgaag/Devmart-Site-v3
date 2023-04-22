@@ -27,6 +27,11 @@ Route::prefix('api')->group(function () {
             return new UserResource($request->user());
         });
 
+        Route::prefix('payments')->group(function() {
+            Route::redirect('/complete', '/')->name('payments.return');
+            Route::redirect('/cancel', '/')->name('payments.cancel');
+        });
+
         Route::prefix('/users')->group(function () {
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
@@ -84,6 +89,7 @@ Route::get('/plugins/{pluginId}/download', [PluginsController::class, 'handleDow
     ->withoutMiddleware('auth:sanctum');
 Route::get('/plugins/{pluginId}/download/{version}', [PluginsController::class, 'handleDownload'])
     ->withoutMiddleware('auth:sanctum');
+Route::get('/plugins/{pluginId}/buy', [PluginsController::class, 'handlePluginBuy']);
 
 Route::get('/account', function () {
     return view('welcome', ['title' => 'Devmart | Account']);

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Plugin extends Model
 {
@@ -118,13 +119,17 @@ class Plugin extends Model
             ->orderBy('created_at', 'desc');
     }
 
-    public function getPrice()
-    {
+    public function getSalePart(): float {
         $sale = $this->getSale();
         if ($sale != null) {
-            return round((($this->price / 100) * (100 - $sale->percentage)), 2);
+            return round((($this->price / 100) * $sale->percentage), 2);
         }
-        return $this->price;
+        return 0;
+    }
+
+    public function getPrice()
+    {
+        return $this->price - $this->getSalePart();
     }
 
     public function getInfoArray(): array
