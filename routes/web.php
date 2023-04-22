@@ -27,11 +27,6 @@ Route::prefix('api')->group(function () {
             return new UserResource($request->user());
         });
 
-        Route::prefix('payments')->group(function() {
-            Route::redirect('/complete', '/')->name('payments.return');
-            Route::redirect('/cancel', '/')->name('payments.cancel');
-        });
-
         Route::prefix('/users')->group(function () {
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
@@ -78,6 +73,11 @@ Route::prefix('api')->group(function () {
             Route::get('/user/{userId}', [DiscordController::class, 'getUserInformation']);
         });
     });
+});
+
+Route::prefix('payments')->group(function() {
+    Route::get('/callback', [\App\Http\Controllers\PayPalController::class, 'handlePaymentComplete'])->name('payments.return');
+    Route::redirect('/cancel', '/')->name('payments.cancel');
 });
 
 Route::get('/paste/{pasteId}/raw', [PasteController::class, 'handleRawPasteRetrieval'])

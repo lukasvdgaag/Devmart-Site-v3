@@ -33,3 +33,16 @@ Stack trace:
 [21-Apr-2023 22:38:07 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
 [21-Apr-2023 22:38:10 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
 [21-Apr-2023 23:34:18 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 10:56:04 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:13:28 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:16:27 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:16:27 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:16:32 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:25:19 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:26:11 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:27:08 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:30:24 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:32:42 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:36:53 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:44:08 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
+[22-Apr-2023 11:47:42 UTC] PHP Warning:  Module "openssl" is already loaded in Unknown on line 0
