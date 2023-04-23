@@ -244,10 +244,10 @@ class PluginsController
 
     public function handlePluginRetrieval(Request $request, string|int $pluginId)
     {
-        $withAuthorNameField = $request->query('authorNameField', true);
-        $withTotalDownloadsField = $request->query('totalDownloadsField', true);
-        $withSaleField = $request->query('saleField', true);
-        $withFeaturesField = $request->query('featuresField', true);
+        $withAuthorNameField = $request->boolean('authorNameField', true);
+        $withTotalDownloadsField = $request->boolean('totalDownloadsField', true);
+        $withSaleField = $request->boolean('saleField', true);
+        $withFeaturesField = $request->boolean('featuresField', true);
 
         $plugin = $this->getPluginOrRespond(
             $request, $pluginId, true,
@@ -593,7 +593,7 @@ class PluginsController
      */
     public function formatSaleSection($response): array|null
     {
-        if ($response['sale_percentage'] != null) {
+        if (isset($response['sale_percentage']) && $response['sale_percentage'] != null) {
             $response['sale'] = [
                 'percentage' => $response['sale_percentage'],
                 'start_date' => $response['sale_start_date'],

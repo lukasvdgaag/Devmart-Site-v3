@@ -60,6 +60,10 @@ class Plugin extends Model
         return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')->sum('downloads');
     }
 
+    public function getUpdates(): HasMany {
+        return $this->hasMany(PluginUpdate::class, 'plugin', 'id')->orderByDesc('created_at');
+    }
+
     public function getAuthor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author');
@@ -111,12 +115,6 @@ class Plugin extends Model
     public function getSale(): PluginSale|null
     {
         return $this->getSales()->whereRaw('CURRENT_TIMESTAMP() BETWEEN start_date AND COALESCE(end_date, (CURRENT_TIMESTAMP() + INTERVAL 1 SECOND))')->first();
-    }
-
-    public function getUpdates(): BelongsTo
-    {
-        return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')
-            ->orderBy('created_at', 'desc');
     }
 
     public function getSalePart(): float {
