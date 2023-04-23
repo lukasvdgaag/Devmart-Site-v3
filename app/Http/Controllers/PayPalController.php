@@ -8,6 +8,7 @@ use App\Models\Plugins\Plugin;
 use App\Models\PluginUser;
 use App\Models\User;
 use http\Env\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -60,11 +61,13 @@ class PayPalController
 
         $price = $plugin->price;
 
+        $latestVersion = $plugin->getUpdates->last()?->getDisplayName();
+
         $items = [
             [
-                'name' => $plugin->title . ' (#' . $plugin->id . ')',
+                'name' => "{$plugin->title} (#{$plugin->id})",
                 'quantity' => 1,
-                'description' => $plugin->name . ' v' . $plugin->version . ' by ' . $plugin->getAuthor->username . '.',
+                'description' => "{$plugin->name} v{$latestVersion} by {$plugin->getAuthor->username}.",
                 'category' => 'DIGITAL_GOODS',
                 'unit_amount' => [
                     'currency_code' => 'EUR',
@@ -89,10 +92,18 @@ class PayPalController
         $custom = "devmart_purchase|plugin|{$plugin->id}|{$user->id}";
         $totalPrice = max(0, $price - $salePart);
 
+        $orderBreakdown = [
+            'items' => $items,
+            'breakdown' => $breakdown,
+            'custom' => $custom,
+            'total' => $totalPrice,
+        ];
+
         $order = Order::create([
             'user_id' => $user->id,
             'plugin_id' => $plugin->id,
             'payment_amount' => $totalPrice,
+            'breakdown' => json_encode($orderBreakdown),
         ]);
 
         return self::createOrder($order, $totalPrice, $items, $custom, $breakdown);
@@ -155,15 +166,18 @@ class PayPalController
 
     public static function handlePaymentComplete(\Illuminate\Http\Request $request)
     {
-        Log::error('Completing payment');
         if ($request->query('order') == null) {
-            return redirect('/');
+            return redirect('/payment-confirmed');
         }
 
         $order = Order::find($request->query('order'));
 
-        if ($order == null || $order->status == 'COMPLETED') {
-            return redirect('/');
+        if ($order == null) {
+            return redirect()->route('payments.confirmed', ['order', $request->query('order')]);
+        }
+
+        if ($order->status == 'COMPLETED') {
+            return redirect()->route('payments.confirmed', ['order' => $order->id]);
         }
 
         // Capturing the order
@@ -202,13 +216,26 @@ class PayPalController
             }
 
             // TODO: send email to user.
-
-            return redirect("/plugins/{$order->plugin_id}")->with('success', 'Payment completed successfully!');
         } else {
             Log::error('order capture error: ' . $response->body());
-            return redirect('/')->with('error', 'Payment failed!');
+        }
+        return redirect()->route('payments.confirmed', ['order' => $order->id]);
+    }
+
+    public static function handlePaymentCancel(\Illuminate\Http\Request $request) {
+        $order = Order::query()->where('order_id', $request->query('token'))->first();
+        if ($order == null) {
+            return redirect()->route('home');
         }
 
+        $redirectUri = \app('url')->to("/plugins/{$order->plugin_id}");
+
+        if ($order->status !== 'CREATED') {
+            return redirect($redirectUri);
+        }
+
+        $order->delete();
+        return redirect($redirectUri);
     }
 
 }
