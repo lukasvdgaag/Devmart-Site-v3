@@ -5,12 +5,16 @@
         <div class="d-grid mt-6 md:mt-12 h-full w-full">
             <div class="col-span-12 flex flex-col items-center">
                 <div class="text-center">
-                    <h1 class="text-4xl md:text-5xl bg-gradient-to-r from-primary-500 leading-snug md:!leading-normal dark:from-primary-400 to-purple-500 dark:to-purple-400 !text-transparent bg-clip-text">
+                    <h1 class="text-4xl md:text-5xl leading-snug md:!leading-normal"
+                        :class="{
+                            'bg-gradient-to-r from-primary-500 dark:from-primary-400 to-purple-500 dark:to-purple-400 !text-transparent bg-clip-text': !loading && order,
+                            'text-black': loading || !order
+                        }">
                         {{ loading ? 'Finding your order...' : order ? 'Thanks for your order!' : 'No order found!' }}
                     </h1>
                     <p class="text-lg md:text-xl mt-1 text-gray-500 dark:text-gray-400">
                         <span v-if="loading || order">
-                            {{ loading ? 'Looking for your order...' : 'Your order has been confirmed!'}}
+                            {{ loading ? 'Looking for your order...' : 'Your order has been confirmed!' }}
                         </span>
                         <span
                             v-if="!loading && !order">We could not find an order with the provided ID.<br>If you think this is wrong, please contact us.</span>
@@ -73,7 +77,7 @@
                     <PaymentPriceBreakdownItem label="Discount" :loading="loading" :value="-order?.breakdown?.breakdown?.discount?.value" is-discount/>
 
                     <hr class="my-1">
-                    <PaymentPriceBreakdownItem label="Discount" :loading="loading" :value="-order?.payment_amount" is-total/>
+                    <PaymentPriceBreakdownItem label="Discount" :loading="loading" :value="order?.payment_amount" is-total/>
                 </PaymentPageBox>
 
                 <div v-if="!loading && !order" class="my-6 flex justify-center">

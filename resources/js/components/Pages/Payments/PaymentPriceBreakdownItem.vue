@@ -1,7 +1,7 @@
 <template>
     <dl>
         <div class="flex justify-between">
-            <dt class="text-sm font-medium text-gray-800 dark:text-gray-300">Subtotal</dt>
+            <dt class="text-sm font-medium text-gray-800 dark:text-gray-300">{{label}}</dt>
             <div v-if="loading" class="animate-pulse ml-2 md:ml-4">
                 <div class="h-4 bg-gray-200 rounded dark:bg-gray-700" :class="isTotal ? 'w-20' : 'w-12'"></div>
             </div>

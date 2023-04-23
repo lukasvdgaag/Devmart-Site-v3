@@ -21,7 +21,7 @@ export default class Order {
     order_id;
 
     /**
-     * @type {float}
+     * @type {number}
      */
     payment_amount;
 

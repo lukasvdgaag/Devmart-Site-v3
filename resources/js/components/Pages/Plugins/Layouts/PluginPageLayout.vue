@@ -35,12 +35,10 @@
                             <div class="flex flex-row">
                                 <img :src="`/assets/img/${this.plugin.logo_url}`" alt="Resource Icon" class="resource-icon hide-big">
                                 <div class="ml-3-small">
-                                    <router-link :to="{name: 'plugin-overview', params: {pluginId: pluginId}}" class="plain">
-                                        <h1 class="font-black text-xl lg:text-4xl mb-1 lg:mb-2">
-                                            {{ plugin.title }}
-                                        </h1>
-                                        <p class="text-gray-600 dark:text-gray-400 text-xs lg:text-xl mb-3 lg:mb-6 font-roboto">{{ plugin.description }}</p>
-                                    </router-link>
+                                    <h1 class="font-black text-xl lg:text-4xl mb-1 lg:mb-2">
+                                        {{ plugin.title }}
+                                    </h1>
+                                    <p class="text-gray-600 dark:text-gray-400 text-xs lg:text-xl mb-3 lg:mb-6 font-roboto">{{ plugin.description }}</p>
 
                                     <Stats class="pb-2">
                                         <Stat>{{ plugin.downloads }} Downloads</Stat>
@@ -52,11 +50,11 @@
 
                             <div v-if="permissions?.modify" class="mt-2">
                                 <router-link :to="{name: 'update-plugin', params: {pluginId: plugin.id}}"
-                                class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
+                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Post Update</span></router-link>
                                 <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
-                                class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
+                                             class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
-                            <PluginQuickNavigation/>
+                            <PluginQuickNavigation :permissions="permissions"/>
 
                             <router-view :permissions="permissions" :plugin="plugin" :pluginId="pluginId"/>
                         </div>
@@ -87,9 +85,9 @@ export default {
     name: "PluginOverviewPage",
     components: {PluginQuickNavigation, PluginSalePart, PluginLabel, PluginSidebar, Stat, Stats, Navbar},
 
-    created() {
-        this.fetchPluginData();
-        this.fetchPermissions();
+    async mounted() {
+        await this.fetchPluginData();
+        await this.fetchPermissions();
     },
 
     beforeMount() {
@@ -131,6 +129,7 @@ export default {
         async fetchPluginData() {
             try {
                 let withFeaturesField = this.$route.matched.filter(r => r?.components?.default === PluginOverviewPage).length > 0;
+                console.log(this.$route);
 
                 this.plugin = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
             } catch (e) {

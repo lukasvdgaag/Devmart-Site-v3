@@ -6,7 +6,7 @@
                    title="(Soft) Dependencies"/>
     </Highlights>
 
-    <BBCode :source="plugin.features">
+    <BBCode :source="plugin?.features ?? ''">
     </BBCode>
 </template>
 
@@ -17,10 +17,17 @@ import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
 import Plugin from "@/models/rest/Plugin";
 import PluginPermissions from "@/models/rest/PluginPermissions";
+import PluginRepository from "@/services/PluginRepository";
 
 export default {
     name: "PluginOverviewPage",
     components: {Highlight, Highlights, BBCode},
+
+    async created() {
+        if (!this.plugin?.features) {
+            this.plugin.features = (await PluginRepository.fetchPlugin(this.pluginId, true)).features;
+        }
+    },
 
     computed: {
         supportedVersions() {

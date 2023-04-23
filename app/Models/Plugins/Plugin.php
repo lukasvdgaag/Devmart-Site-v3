@@ -99,15 +99,16 @@ class Plugin extends Model
         return $this->hasMany(PluginUser::class)
             ->select('plugin_user.*')
             ->addSelect([
-                DB::raw('payments.id AS payment_id'),
-                DB::raw('payments.payment_amount - payments.payment_fee AS payment_amount'),
-                'payments.email',
+                DB::raw('orders.id AS payment_id'),
+                DB::raw('COALESCE(payments.payment_amount, orders.payment_amount) - COALESCE(payments.payment_fee, 0) AS payment_amount'),
+                DB::raw('COALESCE(payments.email, users.email) AS email'),
                 'platform',
-                'payment_status',
-                'payments.created_at AS payment_date',
+                'status',
+                'orders.updated_at AS payment_date',
                 'users.username'
             ])
-            ->leftJoin('payments', 'payments.id', '=', 'plugin_user.payment_id')
+            ->leftJoin('orders', 'orders.id', '=', 'plugin_user.order_id')
+            ->leftJoin('payments', 'payments.order_id', '=', 'orders.id')
             ->leftJoin('users', 'users.id', '=', 'plugin_user.user_id')
             ->orderByDesc('plugin_user.date');
     }
