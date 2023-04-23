@@ -22,11 +22,11 @@ class Payments extends Migration
 //            $table->decimal('payment_amount');
 //            $table->decimal('payment_fee')->default(0);
 //            $table->string('payment_status', 25);
-//            $table->string('item_id', 25);
+//            $table->string('item_id', 25)->nullable();
 //            $table->string('email', 255)->nullable()->default(null);
 //            $table->enum('platform', ['MY_GCNT', 'SPIGOT_MC', 'MC_MARKET', 'CUSTOM'])->default('MY_GCNT');
-//            $table->dateTime('created_at')->useCurrent();
 //            $table->boolean('verified')->default(false);
+//            $table->timestamps();
 //
 //            $table->foreign('user_id')->references('id')->on('users')->onDelete('no action')->onUpdate('cascade');
 //            $table->foreign('plugin_id')->references('id')->on('plugins')->onDelete('cascade')->onUpdate('cascade');

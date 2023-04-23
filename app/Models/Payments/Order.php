@@ -15,6 +15,7 @@ class Order extends \Illuminate\Database\Eloquent\Model
         'order_id',
         'payment_amount',
         'status',
+        'breakdown'
     ];
 
     public function user()

@@ -25,7 +25,7 @@ import AuthPageLayout from "@/components/Pages/Auth/AuthPageLayout.vue";
 import wikiRoutes from "@/router/wiki-routes.js";
 import AccountPastes from "@/components/Pages/Account/Views/AccountPastes.vue";
 import PluginPurchasesPage from "@/components/Pages/Plugins/Views/PluginPurchasesPage.vue";
-import PaymentConfirmedPage from "@/components/Pages/Payments/PaymentConfirmedPage.vue";
+import PaymentConfirmedPage from "@/components/Pages/Payments/Views/PaymentConfirmedPage.vue";
 
 const routes = [
     {

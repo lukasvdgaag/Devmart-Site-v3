@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('order_id', 255)->nullable();
             $table->decimal('payment_amount');
             $table->string('status', 255)->nullable();
+            $table->text('breakdown');
 
             $table->timestamps();
         });
