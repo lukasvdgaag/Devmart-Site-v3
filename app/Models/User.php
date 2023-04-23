@@ -65,7 +65,12 @@ class User extends Authenticatable
                         ->orWhere('price', '>', 0);
                 });
         }
-        return $this->belongsToMany(Plugin::class, 'plugin_user', 'user_id', 'plugin_id')
-            ->orWhere('plugins.author', '=', $this->id);
+
+        return Plugin::query()
+            ->join('plugin_user', 'plugins.id', '=', 'plugin_user.plugin_id')
+            ->whereNested(function ($closure) {
+                $closure->where('plugins.author', $this->id)
+                    ->orWhere('plugin_user.user_id', $this->id);
+            });
     }
 }

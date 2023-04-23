@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PayPalController;
 use App\Models\Plugins\Plugin;
 use App\Models\Plugins\PluginSale;
 use App\Models\Plugins\PluginUpdate;
@@ -243,10 +244,10 @@ class PluginsController
 
     public function handlePluginRetrieval(Request $request, string|int $pluginId)
     {
-        $withAuthorNameField = $request->query('authorNameField', true);
-        $withTotalDownloadsField = $request->query('totalDownloadsField', true);
-        $withSaleField = $request->query('saleField', true);
-        $withFeaturesField = $request->query('featuresField', true);
+        $withAuthorNameField = $request->boolean('authorNameField', true);
+        $withTotalDownloadsField = $request->boolean('totalDownloadsField', true);
+        $withSaleField = $request->boolean('saleField', true);
+        $withFeaturesField = $request->boolean('featuresField', true);
 
         $plugin = $this->getPluginOrRespond(
             $request, $pluginId, true,
@@ -592,7 +593,7 @@ class PluginsController
      */
     public function formatSaleSection($response): array|null
     {
-        if ($response['sale_percentage'] != null) {
+        if (isset($response['sale_percentage']) && $response['sale_percentage'] != null) {
             $response['sale'] = [
                 'percentage' => $response['sale_percentage'],
                 'start_date' => $response['sale_start_date'],
@@ -606,6 +607,36 @@ class PluginsController
         unset($response['sale_start_date']);
         unset($response['sale_end_date']);
         return $response;
+    }
+
+    public function handlePluginBuy(Request $request, $pluginId) {
+        Log::error('handlePluginBuy');
+
+        // throw error if user is not logged in
+        $user = Controller::getUserOrRedirect($request, $request->user()?->id ?? null);
+        if (!($user instanceof \App\Models\User)) return $user;
+
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        $plugin = $plugin['plugin'];
+
+        if ($plugin->hasAccess($user)) {
+            return response()->json([
+                'error' => 'You already own this plugin!'
+            ], 400);
+        }
+
+        $link = PayPalController::createPluginOrder($user, $plugin);
+
+        if ($link != null) {
+            return redirect($link);
+        } else {
+            return response()->json([
+                'error' => 'There was an error creating your order. Please try again later.'
+            ], 500);
+        }
     }
 
     public function handleDownload(Request $request, $pluginId, $version = "latest")

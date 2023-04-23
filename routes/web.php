@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\DiscordController;
 use App\Http\Controllers\Api\PasteController;
 use App\Http\Controllers\Api\PluginsController;
+use App\Http\Controllers\Api\SalesController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -72,8 +73,18 @@ Route::prefix('api')->group(function () {
         Route::prefix('/discord')->group(function () {
             Route::get('/user/{userId}', [DiscordController::class, 'getUserInformation']);
         });
+
+        Route::prefix('/orders')->group(function () {
+            Route::get('/{orderId}', [SalesController::class, 'handleOrderRetrieval']);
+        });
     });
 });
+
+Route::prefix('payments')->group(function () {
+    Route::get('/callback', [\App\Http\Controllers\PayPalController::class, 'handlePaymentComplete'])->name('payments.return');
+    Route::get('/cancel', [\App\Http\Controllers\PayPalController::class, 'handlePaymentCancel'])->name('payments.cancel');
+});
+Route::get('/payment-confirmed', fn() => view('welcome'))->name('payments.confirmed');
 
 Route::get('/paste/{pasteId}/raw', [PasteController::class, 'handleRawPasteRetrieval'])
     ->withoutMiddleware('auth:sanctum');
@@ -84,6 +95,7 @@ Route::get('/plugins/{pluginId}/download', [PluginsController::class, 'handleDow
     ->withoutMiddleware('auth:sanctum');
 Route::get('/plugins/{pluginId}/download/{version}', [PluginsController::class, 'handleDownload'])
     ->withoutMiddleware('auth:sanctum');
+Route::get('/plugins/{pluginId}/buy', [PluginsController::class, 'handlePluginBuy']);
 
 Route::get('/account', function () {
     return view('welcome', ['title' => 'Devmart | Account']);

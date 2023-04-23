@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Payments;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class PluginUser extends Model
+class Order extends \Illuminate\Database\Eloquent\Model
 {
-
-    protected $table = 'plugin_user';
-    public $timestamps = false;
+    use HasUuids;
 
     protected $fillable = [
+        'id',
         'user_id',
         'plugin_id',
         'order_id',
-        'date'
+        'payment_amount',
+        'status',
+        'breakdown'
     ];
 
     public function user()
@@ -25,10 +26,6 @@ class PluginUser extends Model
     public function plugin()
     {
         return $this->belongsTo(\App\Models\Plugins\Plugin::class);
-    }
-
-    public function order() {
-        return $this->belongsTo(\App\Models\Payments\Order::class);
     }
 
 }

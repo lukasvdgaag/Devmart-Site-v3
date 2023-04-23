@@ -1,20 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Payments;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PluginUser extends Model
+class Payment extends \Illuminate\Database\Eloquent\Model
 {
-
-    protected $table = 'plugin_user';
-    public $timestamps = false;
 
     protected $fillable = [
         'user_id',
         'plugin_id',
         'order_id',
-        'date'
+        'transaction_id',
+        'payment_amount',
+        'payment_fee',
+        'payment_status',
+        'item_id',
+        'email',
+        'platform',
+        'verified'
     ];
 
     public function user()

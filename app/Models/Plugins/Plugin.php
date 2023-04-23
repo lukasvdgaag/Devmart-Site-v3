@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Plugin extends Model
 {
@@ -57,6 +58,10 @@ class Plugin extends Model
     public function getDownloads(): int
     {
         return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')->sum('downloads');
+    }
+
+    public function getUpdates(): HasMany {
+        return $this->hasMany(PluginUpdate::class, 'plugin', 'id')->orderByDesc('created_at');
     }
 
     public function getAuthor(): BelongsTo
@@ -112,19 +117,17 @@ class Plugin extends Model
         return $this->getSales()->whereRaw('CURRENT_TIMESTAMP() BETWEEN start_date AND COALESCE(end_date, (CURRENT_TIMESTAMP() + INTERVAL 1 SECOND))')->first();
     }
 
-    public function getUpdates(): BelongsTo
-    {
-        return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')
-            ->orderBy('created_at', 'desc');
+    public function getSalePart(): float {
+        $sale = $this->getSale();
+        if ($sale != null) {
+            return round((($this->price / 100) * $sale->percentage), 2);
+        }
+        return 0;
     }
 
     public function getPrice()
     {
-        $sale = $this->getSale();
-        if ($sale != null) {
-            return round((($this->price / 100) * (100 - $sale->percentage)), 2);
-        }
-        return $this->price;
+        return $this->price - $this->getSalePart();
     }
 
     public function getInfoArray(): array

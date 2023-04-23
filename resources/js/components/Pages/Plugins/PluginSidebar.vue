@@ -131,7 +131,7 @@ export default {
             }
 
             // otherwise return buy link
-            return "#";
+            return `/plugins/${this.plugin.id}/buy`;
         },
         downloadInfo() {
             let fileSize = this.plugin?.latest_update?.file_size;
