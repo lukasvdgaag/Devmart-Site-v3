@@ -137,5 +137,15 @@ export default {
     formatTime(date) {
         // format the time in 12h format, e.g. 12:00 PM
         return new Intl.DateTimeFormat('en-US', {hour: 'numeric', minute: 'numeric', hour12: true}).format(date);
+    },
+
+    /**
+     * Format a date and time in a human-readable format
+     * @param {Date} date The date to format
+     * @param {boolean} withYear Whether to include the year in the output
+     * @returns {string} e.g. January 1 at 12:00 PM
+     */
+    formatDateTime(date, withYear = false) {
+        return `${this.formatDate(date)}${withYear ? `, ${date.getFullYear()}` : ''} at ${this.formatTime(date)}`;
     }
 }

@@ -11,7 +11,7 @@
             <li>
                 <router-link :to="{ name: 'plugin-versions'}" active-class="active" class="plain">Versions</router-link>
             </li>
-            <li>
+            <li v-if="permissions?.modify ?? false">
                 <router-link :to="{ name: 'plugin-purchases'}" active-class="active" class="plain">Purchases</router-link>
             </li>
         </ul>
@@ -21,8 +21,17 @@
 </template>
 
 <script>
+import PluginPermissions from "@/models/rest/PluginPermissions";
+
 export default {
-    name: "PluginQuickNavigation"
+    name: "PluginQuickNavigation",
+
+    props: {
+        permissions: {
+            type: [PluginPermissions, null],
+            required: true,
+        }
+    }
 }
 </script>
 

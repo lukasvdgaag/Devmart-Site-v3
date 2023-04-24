@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Plugin extends Model
 {
@@ -59,6 +60,10 @@ class Plugin extends Model
         return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')->sum('downloads');
     }
 
+    public function getUpdates(): HasMany {
+        return $this->hasMany(PluginUpdate::class, 'plugin', 'id')->orderByDesc('created_at');
+    }
+
     public function getAuthor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author');
@@ -94,15 +99,16 @@ class Plugin extends Model
         return $this->hasMany(PluginUser::class)
             ->select('plugin_user.*')
             ->addSelect([
-                DB::raw('payments.id AS payment_id'),
-                DB::raw('COALESCE(payments.payment_amount, 0) - COALESCE(payments.payment_fee, 0) AS amount'),
+                DB::raw('orders.id AS payment_id'),
+                DB::raw('COALESCE(payments.payment_amount, orders.payment_amount, 0) - COALESCE(payments.payment_fee, 0) AS payment_amount'),
                 DB::raw('COALESCE(payments.email, users.email) AS email'),
                 'platform',
-                'payment_status',
-                'payments.created_at AS payment_date',
+                'status',
+                'orders.updated_at AS payment_date',
                 'users.username'
             ])
-            ->leftJoin('payments', 'payments.id', '=', 'plugin_user.payment_id')
+            ->leftJoin('orders', 'orders.id', '=', 'plugin_user.order_id')
+            ->leftJoin('payments', 'payments.order_id', '=', 'orders.id')
             ->leftJoin('users', 'users.id', '=', 'plugin_user.user_id')
             ->orderByDesc('plugin_user.date');
     }
@@ -112,19 +118,17 @@ class Plugin extends Model
         return $this->getSales()->whereRaw('CURRENT_TIMESTAMP() BETWEEN start_date AND COALESCE(end_date, (CURRENT_TIMESTAMP() + INTERVAL 1 SECOND))')->first();
     }
 
-    public function getUpdates(): BelongsTo
-    {
-        return $this->belongsTo(PluginUpdate::class, 'id', 'plugin')
-            ->orderBy('created_at', 'desc');
+    public function getSalePart(): float {
+        $sale = $this->getSale();
+        if ($sale != null) {
+            return round((($this->price / 100) * $sale->percentage), 2);
+        }
+        return 0;
     }
 
     public function getPrice()
     {
-        $sale = $this->getSale();
-        if ($sale != null) {
-            return round((($this->price / 100) * (100 - $sale->percentage)), 2);
-        }
-        return $this->price;
+        return $this->price - $this->getSalePart();
     }
 
     public function getInfoArray(): array

@@ -33,7 +33,7 @@
 
     <hr class="mb-3 -mt-2"/>
 
-    <table v-if="purchasesFetchable.loading || purchasesResponse.purchases?.length > 0">
+    <table v-if="purchasesFetchable.loading || purchasesResponse?.purchases?.length > 0">
         <thead>
         <tr>
             <th>Username</th>
@@ -67,12 +67,12 @@
     <Pagination v-if="!purchasesFetchable.loading"
                 :current-page="purchasesFetchable.page"
                 :fetchable="purchasesFetchable"
-                :last-page="purchasesResponse.pages"
+                :last-page="purchasesResponse?.pages ?? 1"
                 :per-page="10"
-                :total="purchasesResponse.total"
+                :total="purchasesResponse?.total ?? 1"
     />
 
-    <div v-if="!purchasesFetchable.loading && purchasesResponse.pastes?.length <= 0" class="grid place-content-center w-full my-8">
+    <div v-if="!purchasesFetchable.loading && purchasesResponse?.pastes?.length <= 0" class="grid place-content-center w-full my-8">
         <div class="flex flex-col items-center gap-3">
             <img src="/assets/img/no-results.svg" alt="no results" class="w-48"/>
             <div class="text-lg font-bold font-poppins">No purchases found!</div>
@@ -137,8 +137,12 @@ export default {
                     page: this.purchasesFetchable.page > 1 ? this.purchasesFetchable.page : undefined
                 }
             })
-            this.purchasesResponse = await PluginRepository.fetchPluginPurchases(this.pluginId, this.purchasesFetchable.page, 15, this.purchasesFetchable.query);
-            console.log(this.purchasesResponse)
+            try {
+                this.purchasesResponse = await PluginRepository.fetchPluginPurchases(this.pluginId, this.purchasesFetchable.page, 15, this.purchasesFetchable.query);
+                console.log(this.purchasesResponse)
+            } catch (e) {
+                this.$router.push({name: 'plugin-overview', params: {pluginId: this.pluginId}});
+            }
         },
         expiryDate(paste) {
             return paste.expire_at ? this.DateService.formatTimeLeft(new Date(paste.expire_at), true) : '-';

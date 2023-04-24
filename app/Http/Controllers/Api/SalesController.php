@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payments\Order;
 use App\Models\Plugins\PluginPayment;
 use App\Models\User;
 use App\Utils\WebUtils;
@@ -124,6 +125,18 @@ class SalesController extends Controller
         $json = $this->insertDifference($json, $curTotal, $previousPeriodTotal);
 
         return response()->json($json);
+    }
+
+    public function handleOrderRetrieval(Request $request, string $orderId) {
+        $user = $request->user();
+        if (!($user instanceof User)) return response()->json(['error' => 'Invalid user'], 403);
+
+        $order = Order::find($orderId);
+        if ($order == null) return response()->json(['error' => 'Order not found'], 404);
+
+        if ($order->user_id != $user->id) return response()->json(['error' => 'Unauthorized'], 403);
+
+        return response()->json($order);
     }
 
     public function insertDifference($json, $curTotal, $previousPeriodTotal)

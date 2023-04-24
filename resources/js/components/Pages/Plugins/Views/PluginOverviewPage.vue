@@ -6,7 +6,7 @@
                    title="(Soft) Dependencies"/>
     </Highlights>
 
-    <BBCode :source="plugin.features">
+    <BBCode :source="plugin?.features ?? ''">
     </BBCode>
 </template>
 
@@ -18,6 +18,7 @@ import DateService from "@/services/DateService";
 import Plugin from "@/models/rest/Plugin";
 import PluginPermissions from "@/models/rest/PluginPermissions";
 import SeoBuilder from "@/services/SeoBuilder";
+import PluginRepository from "@/services/PluginRepository";
 
 export default {
     name: "PluginOverviewPage",
@@ -28,6 +29,12 @@ export default {
             .title(this?.plugin?.title + " - Plugins")
             .withReturn()
             .build()
+    },
+
+    async created() {
+        if (!this.plugin?.features) {
+            this.plugin.features = (await PluginRepository.fetchPlugin(this.pluginId, true)).features;
+        }
     },
 
     computed: {
