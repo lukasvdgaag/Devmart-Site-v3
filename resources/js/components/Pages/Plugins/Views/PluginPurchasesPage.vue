@@ -6,32 +6,51 @@
             v-model="purchasesFetchable.query"
             :disabled="!purchasesFetchable.canRequest()"
             placeholder="Search a purchase by email or username..."
-            class="w-full"
+            class="w-full !mb-2"
             filter-button
             @submit="loadPurchases"
         />
     </div>
     <Dropdown id="filter-dropdown" header="Filters">
-        <form date-rangepicker class="flex flex-col p-3 gap-1" ref="selectDate">
+        <form date-rangepicker class="flex flex-col p-3 gap-1" ref="selectDate" @changeDate="updateDate">
             <label class="block font-medium text-sm">From</label>
             <div class="relative">
-                <div class="absolute flex h-full items-center left-0 flex items-center pointer-events-none pl-3">
+                <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
                     <font-awesome-icon icon="calendar" class="text-gray-500"/>
                 </div>
-                <Input name="start" placeholder="Select start date" class="pl-8"/>
+                <Input name="start" placeholder="Select start date" class="pl-8"
+                       v-model="purchasesFetchable.startDate"
+                />
             </div>
 
             <label class="block mt-1 font-medium text-sm">To</label>
             <div class="relative">
-                <div class="absolute flex h-full items-center left-0 flex items-center pointer-events-none pl-3">
+                <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
                     <font-awesome-icon icon="calendar" class="text-gray-500"/>
                 </div>
-                <Input name="end" placeholder="Select end date" class="pl-8"/>
+                <Input name="end" placeholder="Select end date" class="pl-8"
+                       v-model="purchasesFetchable.endDate"
+                />
             </div>
         </form>
     </Dropdown>
 
-    <hr class="mb-3 -mt-2"/>
+    <div class="lg:mt-auto gap-x-2 flex flex-row">
+        <PluginLabel v-if="purchasesFetchable.startDate"
+                     :label="`<span class='font-medium'>From</span> ${purchasesFetchable.endDate}`"
+                     :uppercase="false"
+                     :bold="false"
+                     icon="circle-xmark"
+        />
+        <PluginLabel v-if="purchasesFetchable.endDate"
+                     :label="`<span class='font-medium'>To</span> ${purchasesFetchable.endDate}`"
+                     :uppercase="false"
+                     :bold="false"
+                     icon="circle-xmark"
+        />
+    </div>
+
+    <hr class="mb-3 mt-2"/>
 
     <table v-if="purchasesFetchable.loading || purchasesResponse?.purchases?.length > 0">
         <thead>
@@ -59,7 +78,7 @@
             <td>{{ purchase.username ?? '-' }}</td>
             <td>{{ purchase.email ?? '-' }}</td>
             <td>{{ DateService.formatDateRelatively(purchase.date, true) }}</td>
-            <td class="hidden md:table-cell">{{ StringService.formatMoney(purchase.amount) }}</td>
+            <td class="hidden md:table-cell">{{ StringService.formatMoney(purchase.amount ?? purchase.payment_amount) }}</td>
         </tr>
         </tbody>
     </table>
@@ -94,6 +113,8 @@ import Input from "@/components/Common/Form/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {initDropdowns} from "flowbite";
 import Dropdown from "@/components/Common/Form/Dropdown.vue";
+import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
+import PurchasesFetchable from "@/models/fetchable/PurchasesFetchable";
 
 export default {
     name: "PluginPurchasesPage",
@@ -105,7 +126,7 @@ export default {
             return DateService
         },
     },
-    components: {Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
+    components: {PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
 
     async created() {
         this.purchasesFetchable.query = this.$route.query.query ?? '';
@@ -116,14 +137,23 @@ export default {
 
     mounted() {
         initDropdowns();
-        new DateRangePicker(this.$refs.selectDate, {
+        const picker = new DateRangePicker(this.$refs.selectDate, {
+            container: '#filter-dropdown',
             allowOneSidedRange: true,
             title: 'Date Range',
             format: 'mm-dd-yyyy',
-        })
+        });
+
+        picker.element.addEventListener('changeDate', this.updateDate)
+
+        console.log(picker.element);
     },
 
     methods: {
+        updateDate($event) {
+            console.log('updating date')
+            console.log($event);
+        },
         async loadPurchases() {
             this.loading = true;
 
@@ -131,10 +161,14 @@ export default {
             this.loading = this.purchasesResponse != null;
         },
         async fetchPurchases() {
+            console.log(this.purchasesFetchable.endDate);
+
             this.$router.replace({
                 query: {
                     query: this.purchasesFetchable.query?.length === 0 ? undefined : this.purchasesFetchable.query,
-                    page: this.purchasesFetchable.page > 1 ? this.purchasesFetchable.page : undefined
+                    page: this.purchasesFetchable.page > 1 ? this.purchasesFetchable.page : undefined,
+                    from: this.purchasesFetchable.startDate ?? undefined,
+                    to: this.purchasesFetchable.endDate ?? undefined,
                 }
             })
             try {
@@ -156,10 +190,12 @@ export default {
              * @type {PluginPurchasesResponse}
              */
             purchasesResponse: null,
-            purchasesFetchable: new Fetchable(
+            purchasesFetchable: new PurchasesFetchable(
                 this.fetchPurchases,
                 this.$route.query.query ?? '',
-                Number.parseInt(this.$route.query.page ?? '1')
+                Number.parseInt(this.$route.query.page ?? '1'),
+                this.$route.query.from ?? '',
+                this.$route.query.to ?? '',
             ),
         }
     },

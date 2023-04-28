@@ -77,6 +77,7 @@ export default {
     methods: {
         onChange(event) {
             if (event.target.type === "checkbox") this.$emit('update:modelValue', event.target.checked)
+            else this.$emit('update:modelValue', event.target.value);
         },
         onInput(event) {
             this.$emit('update:modelValue', event.target.value);
