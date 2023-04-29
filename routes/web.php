@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\DiscordController;
 use App\Http\Controllers\Api\PasteController;
-use App\Http\Controllers\Api\PluginsController;
 use App\Http\Controllers\Api\SalesController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\PluginsController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

@@ -140,10 +140,20 @@ class PluginsController
             ], 401);
         }
 
+        Validator::make($request->all(), [
+            'query' => 'nullable|string|max:255',
+            'from' => 'nullable|date|date_format:d-m-Y',
+            'to' => 'nullable|date|after_or_equal:from|date_format:d-m-Y',
+        ], [
+            'from' => 'The from date must be a valid date (dd-mm-yyyy).',
+            'to' => 'The to date must be a valid date (dd-mm-yyyy) and after the from date.',
+            'query' => 'The query must be a string with a maximum length of 255 characters.',
+        ])->validate();
+
         $perPage = min(25, max(1, $request->query('perPage', 15)));
         $query = trim($request->query('query', ''));
-        $fromDate = $request->query('from', null);
-        $toDate = $request->query('to', null);
+        $fromDate = $request->date('from');
+        $toDate = $request->date('to');
 
         $transactions = $plugin->getTransactions();
         if (strlen($query) > 0) {
@@ -152,13 +162,19 @@ class PluginsController
                 ->orWhere('payments.email', 'like', "%$query%");
         }
         if (!is_null($fromDate)) {
-            $transactions = $transactions->where('plugin_user.date', '>=', $fromDate);
+            $transactions = $transactions->whereNested(function (Builder $closure) use ($fromDate) {
+                $closure->whereRaw('DATE(plugin_user.date) >= ?', [$fromDate->toDateString()])
+                    ->orWhereRaw('DATE(orders.created_at) >= ?', [$fromDate->toDateString()])
+                    ->orWhereRaw('DATE(payments.created_at) >= ?', [$fromDate->toDateString()]);
+            });
         }
         if (!is_null($toDate)) {
-            $transactions = $transactions->where('plugin_user.date', '<=', $toDate);
+            $transactions = $transactions->whereNested(function (Builder $closure) use ($toDate) {
+                $closure->whereRaw("DATE(plugin_user.date) <= ?", [$toDate->toDateString()])
+                    ->orWhereRaw("DATE(orders.created_at) <= ?", [$toDate->toDateString()])
+                    ->orWhereRaw("DATE(payments.created_at) <= ?", [$toDate->toDateString()]);
+            });
         }
-
-        Log::error($transactions->toSql());
 
         $paginated = $transactions->paginate($perPage);
 
@@ -611,7 +627,8 @@ class PluginsController
         return $response;
     }
 
-    public function handlePluginBuy(Request $request, $pluginId) {
+    public function handlePluginBuy(Request $request, $pluginId)
+    {
         Log::error('handlePluginBuy');
 
         // throw error if user is not logged in

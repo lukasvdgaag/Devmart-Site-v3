@@ -5,7 +5,7 @@
         <Searchbar
             v-model="purchasesFetchable.query"
             :disabled="!purchasesFetchable.canRequest()"
-            placeholder="Search a purchase by email or username..."
+            placeholder="Find a purchase by email or username..."
             class="w-full !mb-2"
             filter-button
             ref="searchbar"
@@ -62,6 +62,8 @@
         />
     </div>
 
+    <ValidationError item="error" :errors="errors" />
+
     <hr class="mb-3 mt-2"/>
 
     <table v-if="purchasesFetchable.loading || purchasesResponse?.purchases?.length > 0">
@@ -96,7 +98,7 @@
     </table>
 
 
-    <div v-if="!purchasesFetchable.loading && purchasesResponse.purchases?.length <= 0" class="grid place-content-center w-full mt-6">
+    <div v-if="!purchasesFetchable.loading && purchasesResponse?.purchases?.length <= 0" class="grid place-content-center w-full mt-6">
         <div class="flex flex-col items-center gap-3">
             <img src="/assets/img/no-results.svg" alt="no results" class="w-48"/>
             <div class="text-lg font-bold font-poppins">No purchases found!</div>
@@ -111,7 +113,7 @@
                 :total="purchasesResponse?.total ?? 1"
     />
 
-    <div v-if="!purchasesFetchable.loading && purchasesResponse?.pastes?.length <= 0" class="grid place-content-center w-full my-8">
+    <div v-if="!purchasesFetchable.loading && (purchasesResponse?.pastes?.length <= 0 || errors?.error != null)" class="grid place-content-center w-full my-8">
         <div class="flex flex-col items-center gap-3">
             <img src="/assets/img/no-results.svg" alt="no results" class="w-48"/>
             <div class="text-lg font-bold font-poppins">No purchases found!</div>
@@ -130,10 +132,11 @@ import StringService from "../../../../services/StringService";
 import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import Input from "@/components/Common/Form/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {initDropdowns, Dropdown as FlowbiteDropdown} from "flowbite";
+import {Dropdown as FlowbiteDropdown} from "flowbite";
 import Dropdown from "@/components/Common/Form/Dropdown.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PurchasesFetchable from "@/models/fetchable/PurchasesFetchable";
+import ValidationError from "@/components/Common/Form/ValidationError.vue";
 
 export default {
     name: "PluginPurchasesPage",
@@ -145,7 +148,7 @@ export default {
             return DateService
         },
     },
-    components: {PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
+    components: {ValidationError, PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
 
     async created() {
         this.purchasesFetchable.query = this.$route.query.query ?? '';
@@ -158,8 +161,7 @@ export default {
 
     mounted() {
         this.filterDropdown = new FlowbiteDropdown(this.$refs.filterDropdown.$el, this.$refs.searchbar.$refs.filterButton);
-
-        const picker = new DateRangePicker(this.$refs.selectDate, {
+        new DateRangePicker(this.$refs.selectDate, {
             container: '#filter-dropdown',
             allowOneSidedRange: true,
             autohide: true,
@@ -192,9 +194,15 @@ export default {
                     this.purchasesFetchable.startDate,
                     this.purchasesFetchable.endDate,
                 );
-                console.log(this.purchasesResponse)
+                this.errors = {};
             } catch (e) {
-                this.$router.push({name: 'plugin-overview', params: {pluginId: this.pluginId}});
+                this.purchasesFetchable.loading = false;
+                if (e.response.status === 401) {
+                    this.$router.push({name: 'plugin-overview', params: {pluginId: this.pluginId}});
+                    return;
+                }
+
+                this.errors = {error: [e.response?.data?.message ?? 'An error occurred while fetching the purchases.']};
             }
         },
         expiryDate(paste) {
@@ -217,6 +225,7 @@ export default {
                 this.$route.query.to ?? '',
             ),
             filterDropdown: null,
+            errors: {},
         }
     },
 

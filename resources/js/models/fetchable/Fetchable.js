@@ -91,8 +91,14 @@ export default class Fetchable {
      */
     async fetch(thisArg) {
         if (this.start()) {
-            await this.fetcher.call(thisArg ?? this);
-            this.finish();
+            try {
+                await this.fetcher.call(thisArg ?? this);
+                this.finish();
+            } catch (e) {
+                console.log('catched')
+                this.finish();
+                throw e;
+            }
         }
     }
 
