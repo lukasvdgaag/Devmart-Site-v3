@@ -8,12 +8,13 @@
             placeholder="Search a purchase by email or username..."
             class="w-full !mb-2"
             filter-button
+            ref="searchbar"
             @submit="loadPurchases"
         />
     </div>
-    <Dropdown id="filter-dropdown" header="Filters">
-        <form date-rangepicker class="flex flex-col p-3 gap-1" ref="selectDate" @changeDate="updateDate">
-            <label class="block font-medium text-sm">From</label>
+    <Dropdown id="filter-dropdown" header="Filters" ref="filterDropdown">
+        <form date-rangepicker class="flex flex-col p-3 gap-1" ref="selectDate">
+            <label class="block font-medium text-sm">Start date</label>
             <div class="relative">
                 <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
                     <font-awesome-icon icon="calendar" class="text-gray-500"/>
@@ -23,7 +24,7 @@
                 />
             </div>
 
-            <label class="block mt-1 font-medium text-sm">To</label>
+            <label class="block mt-1 font-medium text-sm">End date</label>
             <div class="relative">
                 <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
                     <font-awesome-icon icon="calendar" class="text-gray-500"/>
@@ -32,21 +33,32 @@
                        v-model="purchasesFetchable.endDate"
                 />
             </div>
+
+            <button class="primary mt-3"
+                    type="button"
+                    :disabled="!purchasesFetchable.canRequest()"
+                    @click.prevent="filterDropdown.hide(); loadPurchases()">
+                Apply
+            </button>
         </form>
     </Dropdown>
 
     <div class="lg:mt-auto gap-x-2 flex flex-row">
         <PluginLabel v-if="purchasesFetchable.startDate"
-                     :label="`<span class='font-medium'>From</span> ${purchasesFetchable.endDate}`"
+                     :label="`<span class='font-medium'>From</span> ${purchasesFetchable.startDate}`"
                      :uppercase="false"
                      :bold="false"
+                     class="cursor-pointer"
                      icon="circle-xmark"
+                     @click="purchasesFetchable.startDate = null"
         />
         <PluginLabel v-if="purchasesFetchable.endDate"
-                     :label="`<span class='font-medium'>To</span> ${purchasesFetchable.endDate}`"
+                     :label="`<span class='font-medium'>Until</span> ${purchasesFetchable.endDate}`"
                      :uppercase="false"
                      :bold="false"
                      icon="circle-xmark"
+                     class="cursor-pointer"
+                     @click="purchasesFetchable.endDate = null"
         />
     </div>
 
@@ -57,8 +69,8 @@
         <tr>
             <th>Username</th>
             <th>Email</th>
-            <th class="hidden md:table-cell">Date</th>
-            <th>Amount</th>
+            <th>Date</th>
+            <th class="hidden md:table-cell">Amount</th>
         </tr>
         </thead>
         <tbody class="sale-search-result">
@@ -77,11 +89,19 @@
         <tr v-else v-for="purchase in purchasesResponse.purchases" :key="purchase.id">
             <td>{{ purchase.username ?? '-' }}</td>
             <td>{{ purchase.email ?? '-' }}</td>
-            <td>{{ DateService.formatDateRelatively(purchase.date, true) }}</td>
+            <td>{{ DateService.formatDateRelatively(purchase.date) }} <span class="hidden xl:inline-block">at {{ DateService.formatTime(purchase.date)}}</span></td>
             <td class="hidden md:table-cell">{{ StringService.formatMoney(purchase.amount ?? purchase.payment_amount) }}</td>
         </tr>
         </tbody>
     </table>
+
+
+    <div v-if="!purchasesFetchable.loading && purchasesResponse.purchases?.length <= 0" class="grid place-content-center w-full mt-6">
+        <div class="flex flex-col items-center gap-3">
+            <img src="/assets/img/no-results.svg" alt="no results" class="w-48"/>
+            <div class="text-lg font-bold font-poppins">No purchases found!</div>
+        </div>
+    </div>
 
     <Pagination v-if="!purchasesFetchable.loading"
                 :current-page="purchasesFetchable.page"
@@ -102,7 +122,6 @@
 <script>
 import Searchbar from "@/components/Common/Form/Searchbar.vue";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
-import Fetchable from "@/models/fetchable/Fetchable";
 import DateService from "../../../../services/DateService";
 import PluginRepository from "@/services/PluginRepository";
 import Plugin from "@/models/rest/Plugin";
@@ -111,7 +130,7 @@ import StringService from "../../../../services/StringService";
 import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import Input from "@/components/Common/Form/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {initDropdowns} from "flowbite";
+import {initDropdowns, Dropdown as FlowbiteDropdown} from "flowbite";
 import Dropdown from "@/components/Common/Form/Dropdown.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PurchasesFetchable from "@/models/fetchable/PurchasesFetchable";
@@ -131,29 +150,24 @@ export default {
     async created() {
         this.purchasesFetchable.query = this.$route.query.query ?? '';
         this.purchasesFetchable.page = this.$route.query.page ?? 1;
+        this.purchasesFetchable.startDate = this.$route.query.from ?? null;
+        this.purchasesFetchable.endDate = this.$route.query.to ?? null;
 
         await this.loadPurchases();
     },
 
     mounted() {
-        initDropdowns();
+        this.filterDropdown = new FlowbiteDropdown(this.$refs.filterDropdown.$el, this.$refs.searchbar.$refs.filterButton);
+
         const picker = new DateRangePicker(this.$refs.selectDate, {
             container: '#filter-dropdown',
             allowOneSidedRange: true,
-            title: 'Date Range',
-            format: 'mm-dd-yyyy',
+            autohide: true,
+            format: 'dd-mm-yyyy',
         });
-
-        picker.element.addEventListener('changeDate', this.updateDate)
-
-        console.log(picker.element);
     },
 
     methods: {
-        updateDate($event) {
-            console.log('updating date')
-            console.log($event);
-        },
         async loadPurchases() {
             this.loading = true;
 
@@ -161,8 +175,6 @@ export default {
             this.loading = this.purchasesResponse != null;
         },
         async fetchPurchases() {
-            console.log(this.purchasesFetchable.endDate);
-
             this.$router.replace({
                 query: {
                     query: this.purchasesFetchable.query?.length === 0 ? undefined : this.purchasesFetchable.query,
@@ -172,7 +184,14 @@ export default {
                 }
             })
             try {
-                this.purchasesResponse = await PluginRepository.fetchPluginPurchases(this.pluginId, this.purchasesFetchable.page, 15, this.purchasesFetchable.query);
+                this.purchasesResponse = await PluginRepository.fetchPluginPurchases(
+                    this.pluginId,
+                    this.purchasesFetchable.page,
+                    15,
+                    this.purchasesFetchable.query,
+                    this.purchasesFetchable.startDate,
+                    this.purchasesFetchable.endDate,
+                );
                 console.log(this.purchasesResponse)
             } catch (e) {
                 this.$router.push({name: 'plugin-overview', params: {pluginId: this.pluginId}});
@@ -197,6 +216,7 @@ export default {
                 this.$route.query.from ?? '',
                 this.$route.query.to ?? '',
             ),
+            filterDropdown: null,
         }
     },
 

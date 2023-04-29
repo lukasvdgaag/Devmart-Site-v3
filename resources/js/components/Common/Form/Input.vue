@@ -25,13 +25,14 @@
            class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
            @change="onChange($event)"
            @input="onInput($event)"
+           @changeDate="onChangeDate($event)"
     />
 </template>
 
 <script>
 export default {
     name: "Input",
-    emits: ['update:modelValue', 'input'],
+    emits: ['update:modelValue', 'input', 'changeDate'],
 
     props: {
         modelValue: {
@@ -82,6 +83,10 @@ export default {
         onInput(event) {
             this.$emit('update:modelValue', event.target.value);
             this.$emit('input', event);
+        },
+        onChangeDate(event) {
+            this.$emit('changeDate', event);
+            this.$emit('update:modelValue', event.target.value)
         }
     }
 }

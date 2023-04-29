@@ -3,6 +3,7 @@
         <button v-if="filterButton"
                 class="flex gap-3 w-fit break-keep min-h-[48px] h-full items-center justify-center bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                 data-dropdown-toggle="filter-dropdown"
+                ref="filterButton"
                 data-dropdown-placement="bottom-start"
                 @click.prevent="$emit('clickFilter')">
             <font-awesome-icon icon="filter" class="text-gray-500"/>
@@ -35,7 +36,7 @@
 <script>
 export default {
     name: "Searchbar",
-    emits: ['update:modelValue', 'input', 'submit'],
+    emits: ['update:modelValue', 'input', 'submit', 'clickFilter'],
 
     data() {
         return {
