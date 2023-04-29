@@ -108,6 +108,7 @@
         </form>
     </div>
     <ConfirmationModal v-if="pasteId"
+                       dangerous
                        id="confirm-delete-modal"
                        title="Are you sure you want to delete this paste?"
                        @submit="deletePaste"/>

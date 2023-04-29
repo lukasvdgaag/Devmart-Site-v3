@@ -1,7 +1,21 @@
 <template>
-    <h2 class="my-4">Purchases</h2>
+    <div class="flex justify-between items-center gap-2">
+        <h2 class="my-4">Purchases</h2>
 
-    <div class="flex gap-2">
+        <button class="primary w-fit h-fit"
+                data-modal-target="pl-add-user"
+                data-modal-toggle="pl-add-user">
+            Add user
+        </button>
+
+        <Modal id="pl-add-user" title="Add user" :description="`You are about to give a new user access to <span class='font-bold'>${plugin?.title}</span>. Enter the username below.`">
+
+            <Input name="username" placeholder="Username" class="mt-4 w-full"/>
+
+        </Modal>
+    </div>
+
+    <div class="flex flex-col items-end">
         <Searchbar
             v-model="purchasesFetchable.query"
             :disabled="!purchasesFetchable.canRequest()"
@@ -62,7 +76,7 @@
         />
     </div>
 
-    <ValidationError item="error" :errors="errors" />
+    <ValidationError item="error" :errors="errors"/>
 
     <hr class="mb-3 mt-2"/>
 
@@ -91,7 +105,8 @@
         <tr v-else v-for="purchase in purchasesResponse.purchases" :key="purchase.id">
             <td>{{ purchase.username ?? '-' }}</td>
             <td>{{ purchase.email ?? '-' }}</td>
-            <td>{{ DateService.formatDateRelatively(purchase.date) }} <span class="hidden xl:inline-block">at {{ DateService.formatTime(purchase.date)}}</span></td>
+            <td>{{ DateService.formatDateRelatively(purchase.date) }} <span class="hidden xl:inline-block">at {{ DateService.formatTime(purchase.date) }}</span>
+            </td>
             <td class="hidden md:table-cell">{{ StringService.formatMoney(purchase.amount ?? purchase.payment_amount) }}</td>
         </tr>
         </tbody>
@@ -132,11 +147,12 @@ import StringService from "../../../../services/StringService";
 import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import Input from "@/components/Common/Form/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {Dropdown as FlowbiteDropdown} from "flowbite";
+import {Dropdown as FlowbiteDropdown, initModals} from "flowbite";
 import Dropdown from "@/components/Common/Form/Dropdown.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PurchasesFetchable from "@/models/fetchable/PurchasesFetchable";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
+import Modal from "@/components/Common/Modal/Modal.vue";
 
 export default {
     name: "PluginPurchasesPage",
@@ -148,7 +164,7 @@ export default {
             return DateService
         },
     },
-    components: {ValidationError, PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
+    components: {Modal, ValidationError, PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
 
     async created() {
         this.purchasesFetchable.query = this.$route.query.query ?? '';
@@ -160,6 +176,8 @@ export default {
     },
 
     mounted() {
+        initModals();
+
         this.filterDropdown = new FlowbiteDropdown(this.$refs.filterDropdown.$el, this.$refs.searchbar.$refs.filterButton);
         new DateRangePicker(this.$refs.selectDate, {
             container: '#filter-dropdown',
