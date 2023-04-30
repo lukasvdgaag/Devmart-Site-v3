@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\Api\DiscordController;
 use App\Http\Controllers\Api\PasteController;
-use App\Http\Controllers\Api\PluginsController;
 use App\Http\Controllers\Api\SalesController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\PluginsController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +29,7 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/users')->group(function () {
+            Route::get('/search', [UsersController::class, 'handleUsernameSearch']);
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
 
@@ -68,6 +69,9 @@ Route::prefix('api')->group(function () {
             Route::get('/{pluginId}/transactions', [PluginsController::class, 'handlePluginTransactionsRetrieval']);
             Route::get("/{pluginId}/permissions", [PluginsController::class, 'handlePluginPermissionsRetrieval'])
                 ->withoutMiddleware('auth:sanctum');
+
+            Route::post('/{pluginId}/access/{userId}', [PluginsController::class, 'handlePluginAccessGranting']);
+            Route::delete('/{pluginId}/access/{userId}', [PluginsController::class, 'handlePluginAccessRevocation']);
         });
 
         Route::prefix('/discord')->group(function () {
@@ -102,5 +106,5 @@ Route::get('/account', function () {
 })->middleware(['auth'])->name('account');
 
 Route::get('/{any}', function () {
-    return view('welcome', ['title' => 'Yeehaw']);
+    return view('welcome');
 })->where('any', '.*');

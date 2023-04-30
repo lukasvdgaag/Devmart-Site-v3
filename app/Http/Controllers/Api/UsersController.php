@@ -22,6 +22,23 @@ class UsersController
         ]);
     }
 
+    public function handleUsernameSearch(Request $request) {
+        // requiring the 'username' parameter.
+        $request->validate([
+            'username' => ['required', 'string', 'max:255', 'min:2']
+        ]);
+
+        $username = $request->get('username');
+        $users = User::query()
+            ->where('username', 'LIKE', "$username%")
+            ->limit(10)
+            ->get(['id', 'username']);
+
+        return response()->json([
+            'users' => $users
+        ]);
+    }
+
     public function handleUserPayPalInformationRetrieval(Request $request, int $userId)
     {
         $user = Controller::getUserOrRedirect($request, $userId);

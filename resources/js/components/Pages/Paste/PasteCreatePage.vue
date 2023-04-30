@@ -49,7 +49,8 @@
                             placeholder="Style"
                         />
                         <button v-if="pasteId"
-                                class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white hidden md:block" data-modal-target="confirm-delete-modal"
+                                class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white hidden md:block"
+                                data-modal-target="confirm-delete-modal"
                                 data-modal-toggle="confirm-delete-modal"
                                 type="button">
                             <font-awesome-icon icon="fa-solid fa-trash-can"/>
@@ -57,7 +58,8 @@
                         <div class="flex gap-2 w-full">
 
                             <button v-if="pasteId"
-                                    class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden" data-modal-target="confirm-delete-modal"
+                                    class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden"
+                                    data-modal-target="confirm-delete-modal"
                                     data-modal-toggle="confirm-delete-modal"
                                     type="button">
                                 <font-awesome-icon icon="fa-solid fa-trash-can"/>
@@ -106,6 +108,7 @@
         </form>
     </div>
     <ConfirmationModal v-if="pasteId"
+                       dangerous
                        id="confirm-delete-modal"
                        title="Are you sure you want to delete this paste?"
                        @submit="deletePaste"/>
@@ -124,6 +127,7 @@ import PastesRepository from "@/services/PastesRepository";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import {useAuth} from "@/store/authStore";
 import ConfirmationModal from "@/components/Common/Modal/ConfirmationModal.vue";
+import SeoBuilder from "@/services/SeoBuilder";
 
 export default {
     name: "PasteCreatePage",
@@ -241,6 +245,13 @@ export default {
                 this.fullScreenBtnRight = '0.5rem';
             }
         }
+    },
+
+    head() {
+        return new SeoBuilder(this)
+            .title(this.pasteId ? `Edit ${this.paste.title ?? 'Unknown Paste'}` : 'Create a new paste' + " - Pastes")
+            .withReturn()
+            .build()
     },
 
     data() {

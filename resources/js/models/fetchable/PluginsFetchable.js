@@ -1,4 +1,4 @@
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 
 export default class PluginsFetchable extends Fetchable {
 

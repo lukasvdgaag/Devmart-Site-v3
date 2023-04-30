@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -79,6 +80,40 @@ class Plugin extends Model
         return false;
     }
 
+    public function grantAccess($user): PluginUser|null {
+        if ($user instanceof User) {
+            if ($this->hasAccess($user)) {
+                return null;
+            }
+
+            return PluginUser::create([
+                'plugin_id' => $this->id,
+                'user_id' => $user->id,
+            ]);
+        }
+        return null;
+    }
+
+    public function revokeAccess($user): bool|string {
+        if ($user instanceof User) {
+            if ($this->hasModifyAccess($user)) {
+                return 'Cannot revoke access from this user.';
+            }
+
+            $pluginUser = PluginUser::where('plugin_id', '=', $this->id)->where('user_id', '=', $user->id)->first();
+            if ($pluginUser == null) {
+                return 'User does not have access to this plugin.';
+            }
+            if ($pluginUser->order_id != null && !Auth::user()->isAdmin()) {
+                return 'You can only revoke access from manually granted users.';
+            }
+
+            $pluginUser->delete();
+            return true;
+        }
+        return 'Invalid user.';
+    }
+
     public function hasModifyAccess($user): bool
     {
         if ($user != null) {
@@ -100,7 +135,7 @@ class Plugin extends Model
             ->select('plugin_user.*')
             ->addSelect([
                 DB::raw('orders.id AS payment_id'),
-                DB::raw('COALESCE(payments.payment_amount, orders.payment_amount) - COALESCE(payments.payment_fee, 0) AS payment_amount'),
+                DB::raw('COALESCE(payments.payment_amount, orders.payment_amount, 0) - COALESCE(payments.payment_fee, 0) AS payment_amount'),
                 DB::raw('COALESCE(payments.email, users.email) AS email'),
                 'platform',
                 'status',

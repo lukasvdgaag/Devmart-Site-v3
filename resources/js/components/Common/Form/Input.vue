@@ -6,6 +6,7 @@
            ]"
               :disabled="disabled"
               :maxlength="maxlength"
+              :name="name"
               :value="modelValue"
               class="rounded-md shadow-sm focus:ring focus:ring-opacity-50 checked:bg-blue-600 w-full  dark:text-gray-300 dark:bg-gray-800 dark:border-gray-700"
               @input="onInput($event)"></textarea>
@@ -19,17 +20,19 @@
            :disabled="disabled"
            :maxlength="maxlength"
            :type="type"
+           :name="name"
            :value="modelValue"
            class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
            @change="onChange($event)"
            @input="onInput($event)"
+           @changeDate="onChangeDate($event)"
     />
 </template>
 
 <script>
 export default {
     name: "Input",
-    emits: ['update:modelValue', 'input'],
+    emits: ['update:modelValue', 'input', 'changeDate'],
 
     props: {
         modelValue: {
@@ -60,6 +63,10 @@ export default {
             type: String,
             required: false
         },
+        name: {
+            type: String,
+            required: false
+        }
     },
 
     computed: {
@@ -71,10 +78,15 @@ export default {
     methods: {
         onChange(event) {
             if (event.target.type === "checkbox") this.$emit('update:modelValue', event.target.checked)
+            else this.$emit('update:modelValue', event.target.value);
         },
         onInput(event) {
             this.$emit('update:modelValue', event.target.value);
             this.$emit('input', event);
+        },
+        onChangeDate(event) {
+            this.$emit('changeDate', event);
+            this.$emit('update:modelValue', event.target.value)
         }
     }
 }

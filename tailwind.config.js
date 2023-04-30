@@ -40,6 +40,7 @@ module.exports = {
                 11: '2.75rem',
                 12: '3rem',
                 24: '6rem',
+                60: '15rem',
             },
             minHeight: {
                 'screen-1/2': '50vh',
@@ -166,5 +167,6 @@ module.exports = {
     },
     plugins: [
         require('flowbite/plugin'),
+        require('@headlessui/tailwindcss')({ prefix: 'ui' })
     ],
 }

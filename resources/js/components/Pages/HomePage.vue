@@ -133,10 +133,19 @@
 
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
+import SeoBuilder from "@/services/SeoBuilder";
 
 export default {
     name: "HomeView",
-    components: {Navbar}
+    components: {Navbar},
+
+    head() {
+        return new SeoBuilder(this)
+            .title('Home')
+            .withReturn()
+            .build()
+    },
+
 }
 </script>
 

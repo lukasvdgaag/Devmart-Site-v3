@@ -51,6 +51,7 @@ import DateService from "@/services/DateService";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import CodeHighlightBlock from "@/components/Pages/Paste/CodeHighlightBlock.vue";
 import PasteActionLink from "@/components/Pages/Paste/PasteActionLink.vue";
+import SeoBuilder from "@/services/SeoBuilder";
 
 export default {
     name: "PasteInformationPage",
@@ -64,7 +65,36 @@ export default {
             paste: null,
             loading: true,
             sharing: false,
+            websiteTitle: 'Loading paste...',
         }
+    },
+
+    // head() {
+    //     return {
+    //         title() {
+    //             const he = {
+    //                 ...SeoBuilder.createTitle(''),
+    //                 inner: `${this.websiteTitle} - Pastes`,
+    //             };
+    //             console.log(he);
+    //             return he;
+    //         }
+    //     }
+    // },
+
+    head() {
+        return {
+            title() {
+                console.log('tit', this.websiteTitle)
+                return {
+                    inner: this.websiteTitle,
+                }
+            }
+        }
+        // return new SeoBuilder(this)
+        //     .title(this.websiteTitle + " - Pastes")
+        //     .withReturn()
+        //     .build()
     },
 
     computed: {
@@ -80,8 +110,8 @@ export default {
         }
     },
 
-    created() {
-        this.fetchPaste();
+    async created() {
+        await this.fetchPaste();
     },
 
     watch: {
@@ -96,6 +126,10 @@ export default {
             this.loading = true;
             try {
                 this.paste = await PastesRepository.fetchPaste(this.pasteId);
+                this.websiteTitle = this.paste.title;
+                this.$emit('updateHead', this.websiteTitle)
+
+                console.log(this.websiteTitle)
             } catch (e) {
                 this.$router.push({name: 'not-found'});
             }

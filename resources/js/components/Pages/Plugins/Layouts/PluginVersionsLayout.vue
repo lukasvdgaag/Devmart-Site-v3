@@ -13,7 +13,7 @@
 <script>
 import Plugin from "@/models/rest/Plugin";
 import PluginPermissions from "@/models/rest/PluginPermissions";
-import Fetchable from "@/models/Fetchable";
+import Fetchable from "@/models/fetchable/Fetchable";
 import PluginRepository from "@/services/PluginRepository";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 

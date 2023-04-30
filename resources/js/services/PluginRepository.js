@@ -218,6 +218,14 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }
         })
+    },
+
+    async grantPluginAccess(pluginId, userId) {
+        return await client.post(`/${pluginId}/access/${userId}`);
+    },
+
+    async revokePluginAccess(pluginId, userId) {
+        return await client.delete(`/${pluginId}/access/${userId}`);
     }
 
 }

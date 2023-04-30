@@ -54,7 +54,7 @@
                                 <router-link :to="{name: 'edit-plugin', params: {pluginId: plugin.id}}"
                                              class="action-button purple flex-col align-center flex lg:hidden"><span>Edit Plugin</span></router-link>
                             </div>
-                            <PluginQuickNavigation :permissions="permissions"/>
+                            <PluginQuickNavigation :permissions="permissions" :plugin="plugin"/>
 
                             <router-view :permissions="permissions" :plugin="plugin" :pluginId="pluginId"/>
                         </div>
@@ -129,7 +129,6 @@ export default {
         async fetchPluginData() {
             try {
                 let withFeaturesField = this.$route.matched.filter(r => r?.components?.default === PluginOverviewPage).length > 0;
-                console.log(this.$route);
 
                 this.plugin = await PluginRepository.fetchPlugin(this.pluginId, withFeaturesField);
             } catch (e) {
