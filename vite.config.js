@@ -20,11 +20,17 @@ export default defineConfig({
     plugins: [
         tailwindcss,
         autoprefixer,
-        vue(),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
         laravel({
             input: [
-                'resources/css/**/*',
-                'resources/js/**/*',
+                'resources/js/app.js',
             ]
         },),
     ],
