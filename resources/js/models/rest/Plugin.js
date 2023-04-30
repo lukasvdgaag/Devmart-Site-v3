@@ -120,4 +120,8 @@ export default class Plugin {
         );
     }
 
+    canBePurchased() {
+        return this.price > 0 || this.custom
+    }
+
 }

@@ -20,6 +20,18 @@ export default {
             return null;
         }
     },
+    async findUsersByUsername(username) {
+        try {
+            const res = await client.get(`/search`, {
+                params: {
+                    username
+                }
+            });
+            return res.data.users;
+        } catch (e) {
+            return null;
+        }
+    },
     async updateUserById(id, payload) {
         try {
             const res = await client.put(`/${id}`, JSON.stringify(payload));

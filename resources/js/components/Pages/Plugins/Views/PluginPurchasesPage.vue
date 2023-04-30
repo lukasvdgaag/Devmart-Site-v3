@@ -1,4 +1,11 @@
 <template>
+    <Alert type="success" icon="check-circle" v-if="userAdded" class="mt-3" @close="userAdded = null">
+        {{ userAdded.username }} has been granted access to this plugin!
+    </Alert>
+    <Alert type="error" icon="ban" v-if="userRevoked" class="mt-3" @close="userRevoked = null">
+        {{ userRevoked.username }}'s access to this plugin has been revoked!
+    </Alert>
+
     <div class="flex justify-between items-center gap-2">
         <h2 class="my-4">Purchases</h2>
 
@@ -8,11 +15,7 @@
             Add user
         </button>
 
-        <Modal id="pl-add-user" title="Add user" :description="`You are about to give a new user access to <span class='font-bold'>${plugin?.title}</span>. Enter the username below.`">
-
-            <Input name="username" placeholder="Username" class="mt-4 w-full"/>
-
-        </Modal>
+        <AddPluginUserModal @user-added="handleUserAdd($event)" :plugin="plugin"/>
     </div>
 
     <div class="flex flex-col items-end">
@@ -28,20 +31,20 @@
     </div>
     <Dropdown id="filter-dropdown" header="Filters" ref="filterDropdown">
         <form date-rangepicker class="flex flex-col p-3 gap-1" ref="selectDate">
-            <label class="block font-medium text-sm">Start date</label>
+            <Label value="Start date"/>
             <div class="relative">
                 <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
-                    <font-awesome-icon icon="calendar" class="text-gray-500"/>
+                    <font-awesome-icon icon="calendar" class="text-gray-400 dark:text-gray-700"/>
                 </div>
                 <Input name="start" placeholder="Select start date" class="pl-8"
                        v-model="purchasesFetchable.startDate"
                 />
             </div>
 
-            <label class="block mt-1 font-medium text-sm">End date</label>
+            <Label value="End date" class="mt-2"/>
             <div class="relative">
                 <div class="absolute flex h-full items-center left-0 pointer-events-none pl-3">
-                    <font-awesome-icon icon="calendar" class="text-gray-500"/>
+                    <font-awesome-icon icon="calendar" class="text-gray-400 dark:text-gray-700"/>
                 </div>
                 <Input name="end" placeholder="Select end date" class="pl-8"
                        v-model="purchasesFetchable.endDate"
@@ -87,6 +90,7 @@
             <th>Email</th>
             <th>Date</th>
             <th class="hidden md:table-cell">Amount</th>
+            <th></th>
         </tr>
         </thead>
         <tbody class="sale-search-result">
@@ -108,10 +112,28 @@
             <td>{{ DateService.formatDateRelatively(purchase.date) }} <span class="hidden xl:inline-block">at {{ DateService.formatTime(purchase.date) }}</span>
             </td>
             <td class="hidden md:table-cell">{{ StringService.formatMoney(purchase.amount ?? purchase.payment_amount) }}</td>
+            <td>
+                <button v-if="purchase.user_id && (purchase.order_id == null || useAuth().user?.role === 'admin')"
+                        class="py-1 px-2 bg-red-400 dark:bg-red-600"
+                        title="Revoke access"
+                        @click.prevent="revokingAccessTo = purchase">
+                    <font-awesome-icon icon="ban" class="text-white"/>
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
 
+    <ConfirmationModal v-if="revokingAccessTo"
+                       ref="revokingAccessModal"
+                       id="revoking-access-modal"
+                       :title="`Are you sure you want to revoke access from ${revokingAccessTo?.username}?`"
+                       :description="`After revoking access, <strong>${revokingAccessTo.username}</strong> will no longer be able to download the plugin.`"
+                       show
+                       dangerous
+                       @submit="revokeAccess"
+                       @cancel="revokingAccessTo = null"
+    />
 
     <div v-if="!purchasesFetchable.loading && purchasesResponse?.purchases?.length <= 0" class="grid place-content-center w-full mt-6">
         <div class="flex flex-col items-center gap-3">
@@ -139,11 +161,11 @@
 <script>
 import Searchbar from "@/components/Common/Form/Searchbar.vue";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
-import DateService from "../../../../services/DateService";
-import PluginRepository from "@/services/PluginRepository";
-import Plugin from "@/models/rest/Plugin";
-import PluginPermissions from "@/models/rest/PluginPermissions";
-import StringService from "../../../../services/StringService";
+import DateService from "../../../../services/DateService.js";
+import PluginRepository from "@/services/PluginRepository.js";
+import Plugin from "@/models/rest/Plugin.js";
+import PluginPermissions from "@/models/rest/PluginPermissions.js";
+import StringService from "../../../../services/StringService.js";
 import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import Input from "@/components/Common/Form/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -153,6 +175,12 @@ import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import PurchasesFetchable from "@/models/fetchable/PurchasesFetchable";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
 import Modal from "@/components/Common/Modal/Modal.vue";
+import UserSelectInput from "@/components/Common/Form/UserSelectInput.vue";
+import AddPluginUserModal from "@/components/Pages/Plugins/forms/AddPluginUserModal.vue";
+import Alert from "@/components/Common/Alert.vue";
+import ConfirmationModal from "@/components/Common/Modal/ConfirmationModal.vue";
+import {useAuth} from "@/store/authStore.js";
+import Label from "@/components/Common/Form/Label.vue";
 
 export default {
     name: "PluginPurchasesPage",
@@ -164,9 +192,21 @@ export default {
             return DateService
         },
     },
-    components: {Modal, ValidationError, PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar},
+    components: {
+        Label,
+        ConfirmationModal,
+        Alert,
+        AddPluginUserModal,
+        UserSelectInput,
+        Modal, ValidationError, PluginLabel, Dropdown, FontAwesomeIcon, Input, Pagination, Searchbar
+    },
 
     async created() {
+        if (!this.plugin.canBePurchased()) {
+            this.$router.push({name: 'plugin-overview', params: {pluginId: this.pluginId}});
+            return;
+        }
+
         this.purchasesFetchable.query = this.$route.query.query ?? '';
         this.purchasesFetchable.page = this.$route.query.page ?? 1;
         this.purchasesFetchable.startDate = this.$route.query.from ?? null;
@@ -176,8 +216,6 @@ export default {
     },
 
     mounted() {
-        initModals();
-
         this.filterDropdown = new FlowbiteDropdown(this.$refs.filterDropdown.$el, this.$refs.searchbar.$refs.filterButton);
         new DateRangePicker(this.$refs.selectDate, {
             container: '#filter-dropdown',
@@ -188,6 +226,29 @@ export default {
     },
 
     methods: {
+        useAuth,
+        async revokeAccess() {
+            if (this.revokingAccessTo == null || this.revokingAccessTo?.user_id == null) return;
+
+            try {
+                this.purchasesFetchable.loading = true;
+                await PluginRepository.revokePluginAccess(this.pluginId, this.revokingAccessTo.user_id)
+                this.userRevoked = this.revokingAccessTo;
+                this.revokingAccessTo = null;
+
+                await this.fetchPurchases();
+                this.purchasesFetchable.loading = false;
+            } catch (e) {
+                console.error(e);
+            }
+        },
+        async handleUserAdd(event) {
+            this.userAdded = event.user;
+
+            this.purchasesFetchable.loading = true;
+            await this.fetchPurchases();
+            this.purchasesFetchable.loading = false;
+        },
         async loadPurchases() {
             this.loading = true;
 
@@ -244,6 +305,9 @@ export default {
             ),
             filterDropdown: null,
             errors: {},
+            userAdded: null,
+            revokingAccessTo: null,
+            userRevoked: null,
         }
     },
 

@@ -73,4 +73,9 @@ class User extends Authenticatable
                     ->orWhere('plugin_user.user_id', $this->id);
             });
     }
+
+    public function isAdmin(): bool {
+        return $this->role === "admin";
+    }
+
 }

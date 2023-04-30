@@ -11,7 +11,7 @@
             <li>
                 <router-link :to="{ name: 'plugin-versions'}" active-class="active" class="plain">Versions</router-link>
             </li>
-            <li v-if="permissions?.modify ?? false">
+            <li v-if="(permissions?.modify ?? false) && plugin?.canBePurchased()">
                 <router-link :to="{ name: 'plugin-purchases'}" active-class="active" class="plain">Purchases</router-link>
             </li>
         </ul>
@@ -30,7 +30,11 @@ export default {
         permissions: {
             type: [PluginPermissions, null],
             required: true,
-        }
+        },
+        plugin: {
+            type: Object,
+            required: true,
+        },
     }
 }
 </script>

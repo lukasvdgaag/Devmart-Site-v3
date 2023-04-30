@@ -124,6 +124,71 @@ class PluginsController
         return response([]);
     }
 
+    public function handlePluginAccessGranting(Request $request, string|int $pluginId, string|int $userId)
+    {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @var Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+        if (!$plugin->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json([
+                'error' => ['User not found']
+            ], 404);
+        }
+
+        $granted = $plugin->grantAccess($user);
+        if (!$granted) {
+            return response()->json([
+                'error' => ['User already has access']
+            ], 400);
+        }
+
+        return response()->json($granted);
+    }
+
+    public function handlePluginAccessRevocation(Request $request, string|int $pluginId, string|int $userId) {
+        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        // $plugin responded with a response instead of a plugin, so returning that.
+        if (!is_array($plugin)) return $plugin;
+
+        /**
+         * @var Plugin $plugin
+         */
+        $plugin = $plugin['plugin'];
+        if (!$plugin->hasModifyAccess($request->user())) {
+            return response()->json([
+                'error' => 'Not authorized'
+            ], 401);
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json([
+                'error' => ['User not found']
+            ], 404);
+        }
+
+        $revoked = $plugin->revokeAccess($user);
+        if ($revoked !== true) {
+            return response()->json([
+                'error' => [$revoked]
+            ], 400);
+        }
+
+        return response('access revoked');
+    }
+
     public function handlePluginTransactionsRetrieval(Request $request, string|int $pluginId)
     {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);

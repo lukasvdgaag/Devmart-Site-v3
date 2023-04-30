@@ -95,7 +95,6 @@ export default class Fetchable {
                 await this.fetcher.call(thisArg ?? this);
                 this.finish();
             } catch (e) {
-                console.log('catched')
                 this.finish();
                 throw e;
             }

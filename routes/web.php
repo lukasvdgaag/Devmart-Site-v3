@@ -29,6 +29,7 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/users')->group(function () {
+            Route::get('/search', [UsersController::class, 'handleUsernameSearch']);
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
 
@@ -68,6 +69,9 @@ Route::prefix('api')->group(function () {
             Route::get('/{pluginId}/transactions', [PluginsController::class, 'handlePluginTransactionsRetrieval']);
             Route::get("/{pluginId}/permissions", [PluginsController::class, 'handlePluginPermissionsRetrieval'])
                 ->withoutMiddleware('auth:sanctum');
+
+            Route::post('/{pluginId}/access/{userId}', [PluginsController::class, 'handlePluginAccessGranting']);
+            Route::delete('/{pluginId}/access/{userId}', [PluginsController::class, 'handlePluginAccessRevocation']);
         });
 
         Route::prefix('/discord')->group(function () {
