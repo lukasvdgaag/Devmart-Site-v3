@@ -23,5 +23,5 @@ jobs:
       run: php artisan key:generate
     - name: Cache config files
       run: php artisan config:cache
-    - name: Cache routes
-      run: php artisan route:cache
+#    - name: Cache routes
+#      run: php artisan route:cache
