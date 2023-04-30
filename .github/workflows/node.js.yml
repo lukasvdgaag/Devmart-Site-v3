@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm i
+    - run: npm --max_old_space_size=1024 i
     - run: npx tailwindcss -i resources/css/input.css -o resources/css/output.css --minify
     - run: npm run build --if-present
 #    - run: npm test
