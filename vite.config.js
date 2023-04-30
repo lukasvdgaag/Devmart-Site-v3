@@ -23,8 +23,8 @@ export default defineConfig({
         vue(),
         laravel({
             input: [
-                'resources/css/*',
-                'resources/js/*',
+                'resources/css/**/*',
+                'resources/js/**/*',
             ]
         },),
     ],
