@@ -1,0 +1,27 @@
+name: Laravel
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  laravel-deploy:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Directory Permissions
+      run: |
+        mkdir -p bootstrap/cache storage
+        chmod -R 777 storage bootstrap/cache
+    - name: Generate key
+      run: php artisan key:generate
+    - name: Cache config files
+      run: php artisan config:cache
+#    - name: Cache routes
+#      run: php artisan route:cache
