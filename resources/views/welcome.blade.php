@@ -9,6 +9,5 @@
 <div class="font-sans antialiased h-full" id="app"></div>
 
 @vite('resources/js/app.js')
-@vite('public/js/main.js')
 </body>
 </html>

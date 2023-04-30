@@ -84,12 +84,12 @@
 import MutedText from "@/components/Common/MutedText.vue";
 import QuickLink from "@/components/Common/QuickLink.vue";
 import Searchbar from "@/components/Common/Form/Searchbar.vue";
-import PluginRepository from "@/services/PluginRepository";
-import StringService from "@/services/StringService";
+import PluginRepository from "@/services/PluginRepository.js";
+import StringService from "@/services/StringService.js";
 import GraphIcon from "@/components/Common/Icon/GraphIcon.vue";
 import Vue3Apexcharts from "vue3-apexcharts/src/vue3-apexcharts";
-import DateService from "@/services/DateService";
-import Fetchable from "@/models/fetchable/Fetchable";
+import DateService from "@/services/DateService.js";
+import Fetchable from "@/models/fetchable/Fetchable.js";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 
 export default {
