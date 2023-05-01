@@ -15,7 +15,7 @@ jobs:
           .env
           storage/
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      run: php -r "copy('/var/www/secret-files/devmart-v3.prod.env', '.env');"
 
 #   laravel-deploy:
 #     runs-on: self-hosted
