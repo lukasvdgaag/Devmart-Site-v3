@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  prepare:
+  deploy:
     runs-on: self-hosted
     
     steps:
@@ -17,10 +17,10 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-  laravel-deploy:
-    runs-on: self-hosted
+#   laravel-deploy:
+#     runs-on: self-hosted
 
-    steps:
+#     steps:
     - name: Install Composer Dependencies
       run: |
         composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -36,10 +36,10 @@ jobs:
 #    - name: Cache routes
 #      run: php artisan route:cache
 
-  npm-deploy:
-    runs-on: self-hosted
+#   npm-deploy:
+#     runs-on: self-hosted
   
-    steps:
+#     steps:
     - name: Use Node.js 16.x
       uses: actions/setup-node@v3
       with:
