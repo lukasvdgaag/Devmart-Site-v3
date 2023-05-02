@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    
+
     steps:
     - uses: actions/checkout@v3
       with:
@@ -38,7 +38,7 @@ jobs:
 
 #   npm-deploy:
 #     runs-on: self-hosted
-  
+
 #     steps:
     - name: Use Node.js 16.x
       uses: actions/setup-node@v3
@@ -47,5 +47,4 @@ jobs:
         cache: 'npm'
     - run: npm --max_old_space_size=2048 i
     - run: npx tailwindcss -i resources/css/input.css -o resources/css/output.css --minify
-#     - run: npm run build --if-present
-    - run: npm run dev --host
+    - run: npm run build --if-present
