@@ -190,7 +190,7 @@ const routes = [
 ];
 
 let index = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.APP_URL),
     routes: [
         ...routes,
         ...wikiRoutes
