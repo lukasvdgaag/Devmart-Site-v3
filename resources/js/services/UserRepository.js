@@ -4,7 +4,7 @@ import Paste from "@/models/rest/paste/Paste";
 import PasteListResponse from "@/models/rest/response/PasteListResponse";
 
 export const client = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL + "/api/users",
+    baseURL: "/api/users",
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },

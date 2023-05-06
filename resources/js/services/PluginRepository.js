@@ -8,7 +8,7 @@ import PluginPurchase from "@/models/rest/PluginPurchase";
 import PluginPurchasesResponse from "@/models/rest/response/PluginPurchasesResponse";
 
 export const client = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL + "/api/plugins",
+    baseURL: "/api/plugins",
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },
@@ -85,7 +85,7 @@ export default {
      * @throws {Error} If the route could or an error occurred
      */
     async fetchPlugins(filter = "all", query = "", page = 1, perPage = 6) {
-        const res = await client.get('.', {
+        const res = await client.get(client.defaults.baseURL, {
             params: {
                 filter,
                 query,

@@ -2,7 +2,7 @@ import axios from "axios";
 import Order from "@/models/rest/order/Order";
 
 export const client = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL + "/api/orders",
+    baseURL: "/api/orders",
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },

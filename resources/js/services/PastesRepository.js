@@ -2,7 +2,7 @@ import Paste from "@/models/rest/paste/Paste";
 import PasteListResponse from "@/models/rest/response/PasteListResponse";
 
 export const client = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_URL + "/api/paste",
+    baseURL: "/api/paste",
     headers: {
         "X-Requested-With": "XMLHttpRequest",
     },
@@ -18,7 +18,7 @@ export default {
      * @returns {Promise<PasteListResponse>}
      */
     async fetchRecentPastes(page = 1, perPage = 8) {
-        const res = await client.get(".", {
+        const res = await client.get(client.defaults.baseURL, {
             params: {page, perPage}
         });
 
@@ -36,7 +36,7 @@ export default {
      */
     async createPaste(body) {
         try {
-            const res = await client.post("/", body);
+            const res = await client.post(client.defaults.baseURL, body);
 
             return Paste.fromJson(res.data);
         } catch (e) {
