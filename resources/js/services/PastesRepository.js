@@ -18,7 +18,7 @@ export default {
      * @returns {Promise<PasteListResponse>}
      */
     async fetchRecentPastes(page = 1, perPage = 8) {
-        const res = await client.get(client.defaults.baseURL, {
+        const res = await axios.get(client.defaults.baseURL, {
             params: {page, perPage}
         });
 
@@ -36,7 +36,7 @@ export default {
      */
     async createPaste(body) {
         try {
-            const res = await client.post(client.defaults.baseURL, body);
+            const res = await axios.post(client.defaults.baseURL, body);
 
             return Paste.fromJson(res.data);
         } catch (e) {
