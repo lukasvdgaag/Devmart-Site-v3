@@ -18,7 +18,7 @@ export default {
      * @returns {Promise<PasteListResponse>}
      */
     async fetchRecentPastes(page = 1, perPage = 8) {
-        const res = await client.get("/", {
+        const res = await client.get(".", {
             params: {page, perPage}
         });
 

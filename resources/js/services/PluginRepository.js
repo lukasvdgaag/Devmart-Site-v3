@@ -85,13 +85,13 @@ export default {
      * @throws {Error} If the route could or an error occurred
      */
     async fetchPlugins(filter = "all", query = "", page = 1, perPage = 6) {
-        const res = await client.get("/", {
+        const res = await client.get('.', {
             params: {
                 filter,
                 query,
                 page,
                 perPage
-            }
+            },
         });
         const data = res.data;
 
