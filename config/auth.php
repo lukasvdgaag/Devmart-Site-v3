@@ -120,8 +120,8 @@ return [
     ],
 
     'discord' => [
-        'client_id' => env('DISCORD_CLIENT_ID'),
-        'client_secret' => env('DISCORD_CLIENT_SECRET'),
+        'client_id' => env('DISCORD_BOT_CLIENT_ID'),
+        'client_secret' => env('DISCORD_BOT_CLIENT_SECRET'),
         'token' => env('DISCORD_BOT_TOKEN')
     ]
 
