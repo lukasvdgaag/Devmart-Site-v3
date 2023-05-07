@@ -7,6 +7,8 @@
             </div>
         </a>
 
+        <ValidationError class="text-center" :errors="errors" item="discord"/>
+
         <hr/>
 
         <div>
@@ -71,6 +73,14 @@ import ValidationError from "@/components/Common/Form/ValidationError.vue";
 export default {
     name: "LoginPage",
     components: {ValidationError, Input, Label, Navbar},
+
+    created() {
+        if (this.$route.query?.error === 'discord') {
+            this.errors = {
+                discord: ["No account found with this Discord account!"]
+            }
+        }
+    },
 
     data() {
         return {

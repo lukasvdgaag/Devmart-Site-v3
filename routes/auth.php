@@ -34,14 +34,14 @@ Route::middleware('guest')->group(function () {
             return $authCon->store(LoginRequest::createFrom($request));
         }
         return redirect('/login')->withErrors(['discord' => 'Failed to login with your Discord account.']);
-    });
+    })->name('login.discord');
     Route::get('register-discord', function (\Illuminate\Http\Request $request) {
         if ($request->has('code')) {
             $controller = new RegisteredUserController();
             return $controller->storeDiscordUser($request);
         }
         return redirect('/register')->withErrors(['discord' => 'Failed to login with your Discord account.']);
-    });
+    })->name('register.discord');
 
     Route::get('link-discord', function (\Illuminate\Http\Request $request) {
         if ($request->has('code') || $request->has('error')) {

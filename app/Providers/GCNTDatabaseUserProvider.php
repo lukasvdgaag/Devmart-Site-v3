@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Closure;
 use Exception;
 use GuzzleHttp\Client;
@@ -12,7 +13,9 @@ use Illuminate\Auth\GenericUser;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -73,11 +76,11 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
 
     public static function verifyDiscordLogin($code)
     {
-        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, 'http://127.0.0.1:8000/login-discord');
+        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, URL::route('login.discord'));
     }
 
     public static function verifyDiscordRegister($code) {
-        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, 'http://127.0.0.1:8000/register-discord', 'identify email');
+        return GCNTDatabaseUserProvider::verifyDiscordAuth($code, URL::route('register.discord'), 'identify email');
     }
 
     /**
@@ -94,11 +97,11 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
         // First we will add each credential element to the query as a where clause.
         // Then we can execute the query and, if we found a user, return it in a
         // generic "user" object that will be utilized by the Guard instances.
-        $query = $this->conn->table($this->table);
+        $query = User::query();
 
         $withDiscord = false;
         if (isset($credentials['code']) && $credentials['code'] && $credentials['code'] !== '') {
-            $discordId = GCNTDatabaseUserProvider::verifyDiscordLogin($credentials['code'])->id;
+            $discordId = GCNTDatabaseUserProvider::verifyDiscordLogin($credentials['code'])?->id;
             if (!$discordId) return;
 
             $query->where('discord_id', $discordId)
@@ -135,7 +138,7 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
 
     public function getGenericUser($user) {
         if (! is_null($user)) {
-            return new GenericUser((array) $user);
+            return $user;
         }
     }
 

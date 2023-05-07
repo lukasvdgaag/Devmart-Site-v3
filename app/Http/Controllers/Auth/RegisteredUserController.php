@@ -93,7 +93,7 @@ class RegisteredUserController extends Controller
             if ($existingUser || $isAlphaNumeric) {
                 $storedInfo = $this->storeDiscordAuthInfo($verify);
 
-                $redirectUri = '/register?discord_error=username_in_use&email=' . urlencode($verify->email) . '&discord_auth_token=' . urlencode($storedInfo->token);
+                $redirectUri = '/register?discord_error=username_in_use&username=' . urlencode($verify->username) . '&email=' . urlencode($verify->email) . '&discord_auth_token=' . urlencode($storedInfo->token);
                 if ($isAlphaNumeric) $redirectUri .= '&username=' . urlencode($verify->username);
 
                 return redirect($redirectUri);

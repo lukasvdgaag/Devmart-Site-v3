@@ -22,6 +22,9 @@ class AuthenticatedSessionController extends Controller
         try {
             $request->authenticate();
         } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->query('code')) {
+                return redirect('/login?error=discord');
+            }
             return \response()->json(['errors' => $e->errors()], 401);
         }
 
