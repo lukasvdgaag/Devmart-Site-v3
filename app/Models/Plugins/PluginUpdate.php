@@ -73,7 +73,7 @@ class PluginUpdate extends Model
     }
 
     public function getFilePath(): string {
-        return env('DIR_UPLOADS') . $this->plugin . '/' . $this->getFileName();
+        return \config('filesystems.links.uploads') . $this->plugin . '/' . $this->getFileName();
     }
 
     public function getFileDetails($withFileExtension = true): string|null {

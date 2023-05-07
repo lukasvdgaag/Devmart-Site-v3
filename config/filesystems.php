@@ -71,6 +71,8 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        'assets' => env('DIR_ASSETS'),
+        'uploads' => env('DIR_UPLOADS'),
     ],
 
 ];

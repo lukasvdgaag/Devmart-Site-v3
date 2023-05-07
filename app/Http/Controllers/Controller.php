@@ -39,8 +39,7 @@ class Controller extends BaseController
         $extension = explode('/', mime_content_type($base64))[1];
         $filename = uniqid() . '.' . $extension;
 
-        $dir = env('DIR_ASSETS') . $path;
-        Log::error("Saving file to: " . $dir . $filename);
+        $dir = \config('filesystems.links.assets') . $path;
         if (!file_exists($dir)) {
             Log::error("Directory does not exist, creating...");
             mkdir($dir, 0777, true);

@@ -49,20 +49,20 @@ Route::middleware('guest')->group(function () {
             return $cont->relinkDiscordUser($request);
         }
 
-        $clientId = env('DISCORD_CLIENT_ID');
-        $redirectUrl = urlencode(env('APP_URL') . '/link-discord');
+        $clientId = \config('auth.discord.client_id');
+        $redirectUrl = urlencode(\config('app.url') . '/link-discord');
         $discordUrl = "https://discord.com/api/oauth2/authorize?client_id=$clientId&redirect_uri=$redirectUrl&response_type=code&scope=identify";
         return redirect($discordUrl);
     })->withoutMiddleware('guest');
     Route::get('register-with-discord', function () {
-        $clientId = env('DISCORD_CLIENT_ID');
-        $redirectUrl = urlencode(env('APP_URL') . '/register-discord');
+        $clientId = \config('auth.discord.client_id');
+        $redirectUrl = urlencode(\config('app.url') . '/register-discord');
         $discordUrl = "https://discord.com/api/oauth2/authorize?client_id=$clientId&redirect_uri=$redirectUrl&response_type=code&scope=identify%20email";
         return redirect($discordUrl);
     });
     Route::get('login-with-discord', function () {
-        $clientId = env('DISCORD_CLIENT_ID');
-        $redirectUrl = urlencode(env('APP_URL') . '/login-discord');
+        $clientId = \config('auth.discord.client_id');
+        $redirectUrl = urlencode(\config('app.url') . '/login-discord');
         $discordUrl = "https://discord.com/api/oauth2/authorize?client_id=$clientId&redirect_uri=$redirectUrl&response_type=code&scope=identify";
         return redirect($discordUrl);
     });

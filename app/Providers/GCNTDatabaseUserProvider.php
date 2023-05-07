@@ -33,8 +33,8 @@ class GCNTDatabaseUserProvider extends EloquentUserProvider
     public static function verifyDiscordAuth($code, $redirectUri, $scope = 'identify') {
         $payload = [
             'code' => $code,
-            'client_id' => env('DISCORD_BOT_CLIENT_ID'),
-            'client_secret' => env('DISCORD_BOT_CLIENT_SECRET'),
+            'client_id' => \config('auth.discord.client_id'),
+            'client_secret' => \config('auth.discord.client_secret'),
             'grant_type' => 'authorization_code',
             'redirect_uri' => $redirectUri,
             'scope' => $scope,

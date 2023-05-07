@@ -292,7 +292,7 @@ class PluginsController
         }
 
         try {
-            $file->move(env('DIR_UPLOADS') . $plugin->id, $update->getFileName());
+            $file->move(\config('filesystems.links.uploads') . $plugin->id, $update->getFileName());
         } catch (\Exception $e) {
             return response()->json([
                 'errors' => [
