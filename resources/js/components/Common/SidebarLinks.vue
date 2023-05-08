@@ -1,45 +1,16 @@
 <template>
     <Sidebar :margin="margin">
-        <template v-for="item in links">
-            <router-link v-if="item.renderRequirements" :key="item.id" :class="{'sidebar-active': this.isActive(item)}" :to="item.link" active-class=""
-                         class="py-3 px-4 my-2 lg:mr-3 rounded-lg flex flex-row items-center plain"
-                         exact-active-class="">
-                <div v-if="item.icon" class="preview-link-icon flex justify-center">
-                    <font-awesome-icon :icon="item.icon"/>
-                </div>
-                <div class="preview-link-title">{{ item.label }}</div>
-            </router-link>
-        </template>
+        <SidebarItem v-for="item in links" :item="item" :links="links" />
     </Sidebar>
 </template>
 
 <script>
 import Sidebar from "@/components/Common/Sidebar.vue";
+import SidebarItem from "@/components/Common/SidebarItem.vue";
 
 export default {
     name: "SidebarLinks",
-    components: {Sidebar},
-
-    methods: {
-        isDefault(item) {
-            const def = this.links.find((link) => link.isDefault);
-            if (!def || def !== item) return false;
-
-            return this.links.filter(l => this.isActive(l, false)).length === 0;
-        },
-        isActive(item, checkForDefault = true) {
-            if (item.activeRequirements) return true;
-            if (checkForDefault && this.isDefault(item)) return true;
-
-            if ('name' in item.link && this.$route.matched.filter(i => i.name === item.link.name).length === 0) return false;
-            if ('query' in item.link) {
-                for (let key in item.link.query) {
-                    if (this.$route.query[key] !== item.link.query[key]) return false;
-                }
-            }
-            return true;
-        }
-    },
+    components: {SidebarItem, Sidebar},
 
     props: {
         margin: {

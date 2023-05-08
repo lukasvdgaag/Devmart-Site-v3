@@ -9,11 +9,11 @@
 
                 <hr class="lg:hidden"/>
 
-                <router-link :target="isCreatePage ? '_blank' : '_self'"
-                             :to="{name: 'paste'}"
-                             class="action-button primary btn-text-full flex flex-col gap-0 align-center">
-                    Create New Paste
-                </router-link>
+                <SidebarItem :target="isCreatePage ? '_blank' : '_self'"
+                             :item="new SidebarItemModel('/paste', 'plus', 'Create new paste')"
+                             :margin-right="false"
+                />
+
                 <!-- :to="{name: 'paste-list'}" -->
                 <router-link v-if="useAuth().loggedIn"
                              :target="isCreatePage ? '_blank' : '_self'"
@@ -63,15 +63,20 @@ import PastesRepository from "@/services/PastesRepository";
 import PluginSidebarHeader from "@/components/Pages/Plugins/PluginSidebarHeader.vue";
 import DateService from "../../../services/DateService";
 import PasteCreatePage from "@/components/Pages/Paste/PasteCreatePage.vue";
+import SidebarItem from "@/components/Common/SidebarItem.vue";
+import {default as SidebarItemModel} from "@/models/SidebarItem";
 
 export default {
     name: "PastePageLayout",
     computed: {
+        SidebarItemModel() {
+            return SidebarItemModel
+        },
         DateService() {
             return DateService
         }
     },
-    components: {PluginSidebarHeader, Sidebar, HeaderBackground, Navbar},
+    components: {SidebarItem, PluginSidebarHeader, Sidebar, HeaderBackground, Navbar},
 
     created() {
         this.fetchRecentPastes();
