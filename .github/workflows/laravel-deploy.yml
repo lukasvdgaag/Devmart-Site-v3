@@ -129,7 +129,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           envs: RELEASE_PATH
-          scripts: |
+          script: |
             cd $RELEASE_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
             cd $ARTIFACTS_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
           
