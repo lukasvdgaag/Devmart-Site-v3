@@ -8,6 +8,7 @@ jobs:
   create-deployment-artifacts:
     name: Create deployment artifacts
     runs-on: ubuntu-20.04
+    environment: production
     
     steps:
     - uses: actions/checkout@v3
@@ -44,6 +45,7 @@ jobs:
     name: Prepare release
     runs-on: ubuntu-20.04
     needs: create-deployment-artifacts
+    environment: production
     
     steps:
       - uses: actions/download-artifact@v3
@@ -86,6 +88,7 @@ jobs:
     name: Activate release
     runs-on: ubuntu-20.04
     needs: [ create-deployment-artifacts, prepare-release-on-server ]
+    environment: production
     
     steps:
       - name: Activate release
@@ -112,6 +115,7 @@ jobs:
     name: Clean up
     runs-on: ubuntu-20.04
     needs: [ create-deployment-artifacts, prepare-release-on-server, activate-release ]
+    environment: production
     
     steps:
       - name: Run after 
