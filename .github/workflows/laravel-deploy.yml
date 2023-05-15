@@ -42,7 +42,7 @@ jobs:
         
   prepare-release-on-server:
     name: Prepare release
-    runs-on: ubuntu-20.4
+    runs-on: ubuntu-20.04
     needs: create-deployment-artifacts
     
     steps:
@@ -81,7 +81,7 @@ jobs:
             
   activate-release:
     name: Activate release
-    runs-on: ubuntu-20.4
+    runs-on: ubuntu-20.04
     needs: [ create-deployment-artifacts, prepare-release-on-server ]
     
     steps:
@@ -107,7 +107,7 @@ jobs:
           
   clean-up:
     name: Clean up
-    runs-on: ubuntu-20.4
+    runs-on: ubuntu-20.04
     needs: [ create-deployment-artifacts, prepare-release-on-server, activate-release ]
     
     steps:
