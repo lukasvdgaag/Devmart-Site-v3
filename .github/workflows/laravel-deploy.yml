@@ -76,7 +76,7 @@ jobs:
           port: 22
           envs: GITHUB_SHA
           script: |
-            mkdit -p "${{ secrets.SERVER_PATH }}/releases/${GITHUB_SHA}"
+            mkdir -p "${{ secrets.SERVER_PATH }}/releases/${GITHUB_SHA}"
             tar xzf ${{ secrets.SERVER_PATH }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ secrets.SERVER_PATH }}/releases/${GITHUB_SHA}"
             rm -rf ${{ secrets.SERVER_PATH }}/releases/${GITHUB_SHA}/storage
             
