@@ -28,7 +28,6 @@ jobs:
     - name: Composer install
       run: |
         composer install --no-dev --no-interaction --prefer-dist
-        php artisan config:cache
     
     - name: Create deployment artifact
       env:
@@ -106,6 +105,7 @@ jobs:
           port: 22
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,STORAGE_PATH,BASE_PATH,ENV_PATH
           script: |
+            cd $RElEASE_PATH && php artisan config:cache && php artisan key:generate
             ln -s -f $BASE_PATH/.env $RELEASE_PATH
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
@@ -130,7 +130,7 @@ jobs:
           port: 22
           envs: RELEASE_PATH
           script: |
-            cd $RELEASE_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
-            cd $ARTIFACTS_PATH && ls -t -1 | tail -n +6 | xargs rm -rf
+            cd $RELEASE_PATH && ls -t -1 | tail -n +3 | xargs rm -rf
+            cd $ARTIFACTS_PATH && ls -t -1 | tail -n +3 | xargs rm -rf
           
           
