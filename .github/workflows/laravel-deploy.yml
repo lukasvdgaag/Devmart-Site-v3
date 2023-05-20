@@ -81,7 +81,7 @@ jobs:
 
             mkdir -p ${{ secrets.SERVER_PATH }}/storage/{app,public,framework,logs}
             mkdir -p ${{ secrets.SERVER_PATH }}/storage/framework/{cache,sessions,testing,views}
-            chmod -R 0777 ${{ secrets.SERVER_PATH }}/storage
+            sudo chmod -R 0777 ${{ secrets.SERVER_PATH }}/storage
 
   activate-release:
     name: Activate release
