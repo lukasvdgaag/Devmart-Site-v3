@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Controller extends BaseController
 {
@@ -39,15 +40,10 @@ class Controller extends BaseController
         $extension = explode('/', mime_content_type($base64))[1];
         $filename = uniqid() . '.' . $extension;
 
-        $dir = \config('filesystems.links.assets') . $path;
-        if (!file_exists($dir)) {
-            Log::error("Directory does not exist, creating...");
-            mkdir($dir, 0777, true);
-        }
+        // saving the file to storage.
+        Storage::makeDirectory("$path");
+        Storage::put("$path/$filename", $data);
 
-        $file = fopen($dir . $filename, 'w');
-        fwrite($file, $data);
-        fclose($file);
         return $filename;
     }
 

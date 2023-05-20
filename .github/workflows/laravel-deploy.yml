@@ -109,7 +109,7 @@ jobs:
             ln -s -f $BASE_PATH/.env $RELEASE_PATH
             ln -s -f $STORAGE_PATH $RELEASE_PATH
             ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
-            ln -s -f $STORAGE_PATH/public/app $RELEASE_PATH/public/assets/storage
+            ln -s -f $STORAGE_PATH/app/public $RELEASE_PATH/public/assets/storage
             sudo systemctl reload php8.1-fpm
 
   clean-up:
