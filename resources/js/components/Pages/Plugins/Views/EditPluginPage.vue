@@ -22,12 +22,12 @@
 
         <FormSection>
             <FormRow label="Banner Image">
-                <img :src="bannerUrl" alt="Banner image" class="plugin-preview-banner"/>
+                <img :src="plugin.getBannerUrl()" alt="Banner image" class="plugin-preview-banner"/>
 
                 <FileInput accept=".jpg,.jpeg,.png,.webp,.svg,.avif" @upload="updateBannerPreview"/>
             </FormRow>
             <FormRow label="Logo Image">
-                <img :src="iconUrl" alt="Logo image" class="icon huge rounded-xl"/>
+                <img :src="plugin.getLogoUrl()" alt="Logo image" class="icon huge rounded-xl"/>
 
                 <FileInput accept=".jpg,.jpeg,.png,.webp,.svg,.avif" @upload="updateLogoPreview"/>
             </FormRow>
@@ -192,28 +192,6 @@ export default {
     computed: {
         StringService() {
             return StringService
-        },
-        bannerUrl() {
-            if (!this.plugin.banner_url) {
-                return this.originalBanner ?? '/assets/img/default-plugin-banner.png';
-            }
-
-            if (this.plugin.banner_url.startsWith('data:')) {
-                return this.plugin.banner_url;
-            } else {
-                return `/assets/img/${this.plugin.banner_url}`;
-            }
-        },
-        iconUrl() {
-            if (!this.plugin.logo_url) {
-                return this.originalIcon ?? 'img/logo.png';
-            }
-
-            if (this.plugin.logo_url.startsWith('data:')) {
-                return this.plugin.logo_url;
-            } else {
-                return `/assets/img/${this.plugin.logo_url}`;
-            }
         },
     },
     components: {

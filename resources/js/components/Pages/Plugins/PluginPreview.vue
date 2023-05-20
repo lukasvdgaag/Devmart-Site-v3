@@ -1,15 +1,15 @@
 <template>
     <router-link :to="{name: 'plugin-overview', params: {pluginId: plugin.id}}" class="plain">
         <div class="gap-x-4 w-full col-gap-4 flex flex-row">
-            <img :src="bannerUrl"
+            <img :src="plugin.getBannerUrl()"
                  alt="Banner image"
                  class="plugin-preview-banner hide-small">
-            <img :src="iconUrl"
+            <img :src="plugin.getLogoUrl()"
                  alt="Logo image"
                  class="resource-icon hide-big">
             <div class="h-full lg:min-h-[9rem] flex flex-col">
                 <div class="flex flex-row">
-                    <img :src="iconUrl" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
+                    <img :src="plugin.getLogoUrl()" alt="Plugin logo" class="hide-small w-6 h-6 rounded-md mr-1.5">
                     <h2 class="text-base font-bold break-words">
                         {{ plugin.title }}
                         <span v-if="plugin?.version" class="text-gray-400 font-normal ml-1">{{ plugin?.version }}</span>
@@ -55,28 +55,6 @@ export default {
         formattedDate() {
             let date = new Date(this.plugin.last_updated);
             return DateService.formatDateRelatively(date, DateService.diffInDays(new Date(), date) <= 7);
-        },
-        bannerUrl() {
-            if (!this.plugin.banner_url) {
-                return '/assets/img/default-plugin-banner.png';
-            }
-
-            if (this.plugin.banner_url.startsWith('data:')) {
-                return this.plugin.banner_url;
-            } else {
-                return `/assets/img/${this.plugin.banner_url}`;
-            }
-        },
-        iconUrl() {
-            if (!this.plugin.logo_url) {
-                return 'img/logo.png';
-            }
-
-            if (this.plugin.logo_url.startsWith('data:')) {
-                return this.plugin.logo_url;
-            } else {
-                return `/assets/img/${this.plugin.logo_url}`;
-            }
         },
     },
 

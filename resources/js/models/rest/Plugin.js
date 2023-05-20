@@ -124,4 +124,28 @@ export default class Plugin {
         return this.price > 0 || this.custom
     }
 
+    getLogoUrl() {
+        if (!this.logo_url) {
+            return '/assets/img/logo.png';
+        }
+
+        if (this.logo_url.startsWith('data:')) {
+            return this.logo_url;
+        } else {
+            return `/assets/storage/${this.logo_url}`;
+        }
+    }
+
+    getBannerUrl() {
+        if (!this.banner_url) {
+            return '/assets/img/default-plugin-banner.png';
+        }
+
+        if (this.banner_url.startsWith('data:')) {
+            return this.banner_url;
+        } else {
+            return `/assets/storage/${this.banner_url}`;
+        }
+    }
+
 }

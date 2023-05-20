@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\File;
 
@@ -25,7 +26,7 @@ class PluginsController
 
     public function handlePluginEdit(Request $request, string|int $pluginId)
     {
-        $plugin = $this->getPluginOrRespond($request, $pluginId, false);
+        $plugin = $this->getPluginOrRespond($request, $pluginId, true);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
 
@@ -76,8 +77,12 @@ class PluginsController
         if ($json['logo_url']) {
             // uploading the new logo when it's not the default/old one.
             if (filter_var($json['logo_url'], FILTER_VALIDATE_URL) === false) {
-                $logoUrl = Controller::saveBase64File($json['logo_url'], '/img/plugins/');
-                $json['logo_url'] = "/plugins/" . $logoUrl;
+                if ($plugin->logo_url && Storage::exists($plugin->logo_url) && \Illuminate\Support\Facades\File::isFile(Storage::path($plugin->logo_url))) {
+                    Storage::delete($plugin->logo_url);
+                }
+
+                $logoUrl = Controller::saveBase64File($json['logo_url'], 'resources/icons');
+                $json['logo_url'] = "resources/icons/" . $logoUrl;
             }
         } else {
             unset($json['logo_url']);
@@ -86,8 +91,12 @@ class PluginsController
         if ($json['banner_url']) {
             // uploading the new logo when it's not the default/old one.
             if (filter_var($json['banner_url'], FILTER_VALIDATE_URL) === false) {
-                $logoUrl = Controller::saveBase64File($json['banner_url'], '/img/plugins/');
-                $json['banner_url'] = "/plugins/" . $logoUrl;
+                if ($plugin->banner_url && Storage::exists($plugin->banner_url) && \Illuminate\Support\Facades\File::isFile(Storage::path($plugin->banner_url))) {
+                    Storage::delete($plugin->banner_url);
+                }
+
+                $logoUrl = Controller::saveBase64File($json['banner_url'], 'resources/banners');
+                $json['banner_url'] = "resources/banners/" . $logoUrl;
             }
         } else {
             unset($json['banner_url']);
@@ -157,7 +166,8 @@ class PluginsController
         return response()->json($granted);
     }
 
-    public function handlePluginAccessRevocation(Request $request, string|int $pluginId, string|int $userId) {
+    public function handlePluginAccessRevocation(Request $request, string|int $pluginId, string|int $userId)
+    {
         $plugin = $this->getPluginOrRespond($request, $pluginId, false);
         // $plugin responded with a response instead of a plugin, so returning that.
         if (!is_array($plugin)) return $plugin;
@@ -694,8 +704,6 @@ class PluginsController
 
     public function handlePluginBuy(Request $request, $pluginId)
     {
-        Log::error('handlePluginBuy');
-
         // throw error if user is not logged in
         $user = Controller::getUserOrRedirect($request, $request->user()?->id ?? null);
         if (!($user instanceof \App\Models\User)) return $user;
@@ -761,7 +769,6 @@ class PluginsController
         $update->increment('downloads');
 
         $str = $plugin->name . ' v' . $update->getDisplayName();
-        Log::error('str: ' . $str);
         return response()->download($path, $str . '.jar');
     }
 
