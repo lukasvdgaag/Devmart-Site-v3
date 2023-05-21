@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\PasteController;
 use App\Http\Controllers\Api\SalesController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\PluginsController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -85,8 +86,8 @@ Route::prefix('api')->group(function () {
 });
 
 Route::prefix('payments')->group(function () {
-    Route::get('/callback', [\App\Http\Controllers\PayPalController::class, 'handlePaymentComplete'])->name('payments.return');
-    Route::get('/cancel', [\App\Http\Controllers\PayPalController::class, 'handlePaymentCancel'])->name('payments.cancel');
+    Route::get('/callback', [PayPalController::class, 'handlePaymentComplete'])->name('payments.return');
+    Route::get('/cancel', [PayPalController::class, 'handlePaymentCancel'])->name('payments.cancel');
 });
 Route::get('/payment-confirmed', fn() => view('welcome'))->name('payments.confirmed');
 
