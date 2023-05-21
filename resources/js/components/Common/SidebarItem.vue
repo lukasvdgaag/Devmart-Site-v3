@@ -1,5 +1,11 @@
 <template>
-    <router-link v-if="item.renderRequirements" :key="item.id" :class="{'sidebar-active': this.isActive(), 'lg:mr-3': marginRight}" :to="item.link" active-class=""
+    <router-link v-if="item.renderRequirements" :key="item.id"
+                 :class="{
+                    'sidebar-active hover:bg-gray-300 dark:hover:bg-gray-600': this.isActive(this.item),
+                    'lg:mr-3': marginRight,
+                    'bg-gray-100 dark:bg-gray-800': this.highlight,
+                    'hover:bg-gray-100 dark:hover:bg-gray-800': !this.isActive(this.item),
+                 }" :to="item.link" active-class=""
                  class="py-3 px-4 my-2 rounded-lg flex flex-row items-center plain"
                  exact-active-class="">
         <div v-if="item.icon" class="preview-link-icon flex justify-center">
@@ -16,21 +22,21 @@ export default {
     name: "SidebarItem",
 
     methods: {
-        isDefault() {
+        isDefault(item) {
             if (!this.links) return true;
             const def = this.links.find((link) => link.isDefault);
-            if (!def || def !== this.item) return false;
+            if (!def || def !== item) return false;
 
-            return this.links.filter(l => this.isActive(false)).length === 0;
+            return this.links.filter(l => this.isActive(l, false)).length === 0;
         },
-        isActive(checkForDefault = true) {
-            if (this.item.activeRequirements) return true;
-            if (checkForDefault && this.isDefault(this.item)) return true;
+        isActive(item, checkForDefault = true) {
+            if (item.activeRequirements) return true;
+            if (checkForDefault && this.isDefault(item)) return true;
 
-            if ('name' in this.item.link && this.$route.matched.filter(i => i.name === this.item.link.name).length === 0) return false;
-            if ('query' in this.item.link) {
-                for (let key in this.item.link.query) {
-                    if (this.$route.query[key] !== this.item.link.query[key]) return false;
+            if ('name' in item.link && this.$route.matched.filter(i => i.name === item.link.name).length === 0) return false;
+            if ('query' in item.link) {
+                for (let key in item.link.query) {
+                    if (this.$route.query[key] !== item.link.query[key]) return false;
                 }
             }
             return true;
@@ -50,6 +56,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        highlight: {
+            type: Boolean,
+            default: false,
+        }
     }
 }
 </script>

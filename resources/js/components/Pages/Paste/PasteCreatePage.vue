@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col gap-2 w-full h-full">
-        <h2 class="dark:text-gray-100">{{ pasteId ? 'Edit your Paste' : 'Create a new Paste' }}</h2>
+        <h2 class="dark:text-gray-100 text-3xl mb-4 mt-1">{{ pasteId ? 'Edit your Paste' : 'Create a new Paste' }}</h2>
 
         <form class="h-full">
             <div class="flex flex-col gap-1">
-                <Label class="uppercase text-md">Title</Label>
+                <Label class="text-md">Title</Label>
                 <Input v-model="paste.title"
                        :errors="errors"
                        class="w-full px-4 text-base"
@@ -18,8 +18,8 @@
 
             <div class="flex flex-col-reverse flex-wrap md:flex-col md:flex-nowrap gap-2 mt-2">
                 <div class="flex gap-1 justify-between items-end flex-wrap ">
-                    <Label class="uppercase text-md md:hidden">Options</Label>
-                    <Label class="uppercase text-md hidden md:block">Content</Label>
+                    <Label class="text-md md:hidden">Options</Label>
+                    <Label class="text-md hidden md:block">Content</Label>
                     <div class="flex gap-2 md:gap-1 w-full flex-wrap md:flex-nowrap">
                         <DropdownSelect
                             id="dd-lifetime"

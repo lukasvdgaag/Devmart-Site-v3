@@ -13,14 +13,21 @@
                              :item="new SidebarItemModel('/paste', 'plus', 'Create new paste')"
                              :margin-right="false"
                 />
+                <SidebarItem v-if="useAuth().loggedIn"
+                             :target="isCreatePage ? '_blank' : '_self'"
+                             :item="new SidebarItemModel({name: 'accountPastes'}, 'fa-paste', 'Your pastes', true, false, false)"
+                             :links="[]"
+                             :margin-right="false"
+                             highlight
+                />
 
                 <!-- :to="{name: 'paste-list'}" -->
-                <router-link v-if="useAuth().loggedIn"
-                             :target="isCreatePage ? '_blank' : '_self'"
-                             class="action-button gray flex flex-col align-center"
-                             :to="{name: 'accountPastes'}">
-                    Your Pastes
-                </router-link>
+<!--                <router-link v-if="useAuth().loggedIn"-->
+<!--                             :target="isCreatePage ? '_blank' : '_self'"-->
+<!--                             class="action-button gray flex flex-col align-center"-->
+<!--                             :to="{name: 'accountPastes'}">-->
+<!--                    Your Pastes-->
+<!--                </router-link>-->
 
                 <hr/>
                 <PluginSidebarHeader>Recent Pastes</PluginSidebarHeader>
