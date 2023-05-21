@@ -26,6 +26,7 @@ import wikiRoutes from "@/router/wiki-routes.js";
 import AccountPastes from "@/components/Pages/Account/Views/AccountPastes.vue";
 import PluginPurchasesPage from "@/components/Pages/Plugins/Views/PluginPurchasesPage.vue";
 import PaymentConfirmedPage from "@/components/Pages/Payments/Views/PaymentConfirmedPage.vue";
+import AdminHomePage from "@/components/Pages/Admin/AdminHomePage.vue";
 
 const routes = [
     {
@@ -77,7 +78,13 @@ const routes = [
         name: 'builds',
     }, {
         path: '/admin',
-        name: 'admin',
+        children: [
+            {
+                path: '',
+                name: 'admin',
+                component: AdminHomePage,
+            }
+        ],
         meta: {
             requireAuth: true,
             requireAdmin: true

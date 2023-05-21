@@ -82,4 +82,12 @@ export default class User {
         return this;
     }
 
+    /**
+     * Returns true if the user is an admin.
+     * @returns {boolean}
+     */
+    isAdmin() {
+        return this.role === "admin";
+    }
+
 }
