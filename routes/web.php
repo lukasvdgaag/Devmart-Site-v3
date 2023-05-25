@@ -30,6 +30,7 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/users')->group(function () {
+            Route::get('', [UsersController::class, 'handleUserListRetrieval']);
             Route::get('/search', [UsersController::class, 'handleUsernameSearch']);
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);

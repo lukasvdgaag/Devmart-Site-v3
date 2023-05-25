@@ -27,6 +27,7 @@ import AccountPastes from "@/components/Pages/Account/Views/AccountPastes.vue";
 import PluginPurchasesPage from "@/components/Pages/Plugins/Views/PluginPurchasesPage.vue";
 import PaymentConfirmedPage from "@/components/Pages/Payments/Views/PaymentConfirmedPage.vue";
 import AdminHomePage from "@/components/Pages/Admin/AdminHomePage.vue";
+import AdminManageUsersPage from "@/components/Pages/Admin/AdminManageUsersPage.vue";
 
 const routes = [
     {
@@ -83,6 +84,10 @@ const routes = [
                 path: '',
                 name: 'admin',
                 component: AdminHomePage,
+            }, {
+                path: 'users',
+                name: 'admin-users',
+                component: AdminManageUsersPage,
             }
         ],
         meta: {
