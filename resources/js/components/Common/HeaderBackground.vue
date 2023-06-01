@@ -1,5 +1,7 @@
 <template>
-    <div class="flex flex-col align-center relative top-[-80px] mb-[-80px] p-[6.25rem_1.5rem_4rem] bg-primary w-full h-full left-0 min-h-[15rem] max-h-[16rem]">
+    <div class="flex flex-col align-center relative top-[-80px] mb-[-80px] p-[6.25rem_1.5rem_4rem]
+    bg-gradient-to-r from-indigo-600 to-purple-600
+     w-full h-full left-0 min-h-[15rem] max-h-[16rem]">
         <div class="flex flex-col align-center">
             <div class="d-grid h-full">
                 <div class="text-white col-span-12 text-center flex flex-col gap-2 align-center h-full">

@@ -3,6 +3,7 @@ import './bootstrap';
 import {createApp, markRaw} from 'vue'
 import App from './App.vue'
 import router from "@/router/index";
+import "aos/dist/aos.css";
 import "../css/output.css";
 import VueHead from "vue-head";
 
