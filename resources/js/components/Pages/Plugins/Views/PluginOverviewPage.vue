@@ -15,8 +15,8 @@ import BBCode from "@/components/Common/BBCode.vue";
 import Highlights from "@/components/Pages/Plugins/Highlights.vue";
 import Highlight from "@/components/Pages/Plugins/Highlight.vue";
 import DateService from "@/services/DateService";
-import Plugin from "@/models/rest/Plugin";
-import PluginPermissions from "@/models/rest/PluginPermissions";
+import Plugin from "@/models/rest/plugin/Plugin";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
 import SeoBuilder from "@/services/SeoBuilder";
 import PluginRepository from "@/services/PluginRepository";
 

@@ -1,11 +1,11 @@
 import axios from "axios";
-import Plugin from "../models/rest/Plugin";
-import PluginListResponse from "../models/rest/response/PluginListResponse";
-import PluginPermissions from "../models/rest/PluginPermissions";
-import PluginUpdate from "@/models/rest/PluginUpdate";
-import PluginUpdatesResponse from "@/models/rest/response/PluginUpdatesResponse";
-import PluginPurchase from "@/models/rest/PluginPurchase";
-import PluginPurchasesResponse from "@/models/rest/response/PluginPurchasesResponse";
+import Plugin from "../models/rest/plugin/Plugin";
+import PluginListResponse from "../models/rest/plugin/PluginListResponse";
+import PluginPermissions from "../models/rest/plugin/PluginPermissions";
+import PluginUpdate from "@/models/rest/plugin/PluginUpdate";
+import PluginUpdatesResponse from "@/models/rest/plugin/PluginUpdatesResponse";
+import PluginPurchase from "@/models/rest/plugin/PluginPurchase";
+import PluginPurchasesResponse from "@/models/rest/plugin/PluginPurchasesResponse";
 
 export const client = axios.create({
     baseURL: "/api/plugins",

@@ -61,7 +61,7 @@ class UsersController
             ->orWhere('email', 'LIKE', "%$query%")
             ->orWhere('id', '=', $query)
             ->orWhere('discord_id', '=', $query)
-            ->orderBy('id');
+            ->orderByDesc('id');
 
         $paginated = $users->paginate($perPage, [
             'id', 'username', 'email', 'role', 'spigot', 'discord_id', 'created_at', 'updated_at'

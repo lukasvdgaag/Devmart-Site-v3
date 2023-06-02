@@ -1,34 +1,3 @@
-<script>
-    import Navbar from "@/components/Common/Navbar.vue";
-    import Searchbar from "@/components/Common/Form/Searchbar.vue";
-    import Fetchable from "@/models/fetchable/Fetchable";
-
-    export default {
-        name: "AdminManageUsersPage",
-        components: {Searchbar, Navbar},
-
-        methods: {
-            async submitSearch() {
-                if (!this.fetcher.canRequest()) {
-                    return;
-                }
-
-                await this.fetcher.fetch(this);
-            },
-            async fetchUsers() {
-
-            }
-        },
-
-        data() {
-            return {
-                users: [],
-                fetcher: new Fetchable(this.fetchUsers, this.$route.query?.query ?? '', parseInt(this.$route.query?.page ?? '1') ?? 1),
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="flex flex-row">
         <div class="w-full flex flex-col items-center m-0 p-0">
@@ -45,7 +14,7 @@
                     <Searchbar v-model="fetcher.query"
                                :disabled="!fetcher.canRequest()"
                                @submit="submitSearch"
-                               placeholder="Find by username, email or id..." />
+                               placeholder="Find by username, email or id..."/>
 
                     <table>
                         <thead>
@@ -56,18 +25,63 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>6</td>
-                            <td>minifridge</td>
-                            <td>lukasvdgaag@gmail.com</td>
+                        <tr v-for="user in userListResponse?.users ?? []">
+                            <td>{{user.id}}</td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email}}</td>
                         </tr>
                         </tbody>
                     </table>
+
+                    <Pagination :last-page="userListResponse?.pages ?? 1"
+                                :current-page="fetcher.page"
+                                :per-page="userListResponse?.perPage ?? 15"
+                                :total="userListResponse?.total ?? 0"
+                                :fetchable="fetcher"
+                    />
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script>
+import Navbar from "@/components/Common/Navbar.vue";
+import Searchbar from "@/components/Common/Form/Searchbar.vue";
+import Fetchable from "@/models/fetchable/Fetchable";
+import Pagination from "@/components/Common/Pagination/Pagination.vue";
+import UserRepository from "@/services/UserRepository";
+
+export default {
+    name: "AdminManageUsersPage",
+    components: {Pagination, Searchbar, Navbar},
+
+    methods: {
+        async submitSearch() {
+            if (!this.fetcher.canRequest()) {
+                return;
+            }
+
+            await this.fetcher.fetch(this);
+        },
+        async fetchUsers() {
+            this.userListResponse = await UserRepository.findUsersByQuery(this.fetcher.query, this.fetcher.page);
+            console.log(this.userListResponse)
+        }
+    },
+
+    mounted() {
+        this.submitSearch();
+    },
+
+    data() {
+        return {
+            users: [],
+            fetcher: new Fetchable(this.fetchUsers, this.$route.query?.query ?? '', parseInt(this.$route.query?.page ?? '1') ?? 1),
+            userListResponse: null,
+        }
+    }
+}
+</script>
 
 <style scoped>
 

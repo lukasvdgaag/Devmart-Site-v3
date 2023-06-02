@@ -1,7 +1,8 @@
 import axios from "axios";
-import User from "@/models/rest/User";
+import User from "@/models/rest/user/User";
 import Paste from "@/models/rest/paste/Paste";
-import PasteListResponse from "@/models/rest/response/PasteListResponse";
+import PasteListResponse from "@/models/rest/paste/PasteListResponse";
+import UserListResponse from "@/models/rest/user/UserListResponse";
 
 export const client = axios.create({
     baseURL: "/api/users",
@@ -17,6 +18,27 @@ export default {
             const res = await client.get(`/${id}`);
             return User.fromJson(res.data.user);
         } catch (e) {
+            return null;
+        }
+    },
+    async findUsersByQuery(query = '', page = 1, perPage = 15) {
+        try {
+            const res = await axios.get(client.defaults.baseURL, {
+                params: {
+                    query,
+                    page,
+                    perPage,
+                }
+            });
+
+            return new UserListResponse(
+                res.data.users.map(User.fromJson),
+                res.data.total,
+                res.data.currentPage,
+                res.data.pages
+            );
+        } catch (e) {
+            console.error(e);
             return null;
         }
     },

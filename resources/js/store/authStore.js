@@ -1,7 +1,7 @@
 import AuthService from "@/services/AuthService";
 import router from "@/router/index";
 import {defineStore} from "pinia";
-import User from "@/models/rest/User";
+import User from "@/models/rest/user/User";
 
 export const useAuth = defineStore({
     id: "authStore",

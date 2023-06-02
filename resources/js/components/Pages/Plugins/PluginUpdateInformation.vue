@@ -48,9 +48,9 @@
 <script>
 import Stats from "@/components/Common/Stats.vue";
 import Stat from "@/components/Common/Stat.vue";
-import PluginUpdate from "@/models/rest/PluginUpdate";
+import PluginUpdate from "@/models/rest/plugin/PluginUpdate";
 import DateService from "../../../services/DateService";
-import PluginPermissions from "@/models/rest/PluginPermissions";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
 
 export default {
     name: "PluginUpdateInformation",

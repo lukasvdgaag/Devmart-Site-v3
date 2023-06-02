@@ -1,4 +1,4 @@
-export default class Sale {
+export default class ProductSale {
 
     /**
      * @type {number}
@@ -15,7 +15,7 @@ export default class Sale {
 
     static fromJson(json) {
         if (!json) return null;
-        let sale = new Sale();
+        let sale = new ProductSale();
         for (let key in json) {
             if (key === "percentage") {
                 sale[key] = parseInt(json[key]);

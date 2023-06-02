@@ -1,5 +1,5 @@
-import PluginUpdate from "@/models/rest/PluginUpdate";
-import Sale from "@/models/rest/Sale";
+import PluginUpdate from "@/models/rest/plugin/PluginUpdate";
+import Sale from "@/models/rest/ProductSale";
 import DateService from "@/services/DateService";
 
 export default class Plugin {

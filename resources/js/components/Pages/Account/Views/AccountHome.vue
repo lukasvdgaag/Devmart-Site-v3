@@ -212,7 +212,7 @@ import DateService from "@/services/DateService";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
 import {initDropdowns} from "flowbite";
-import User from "@/models/rest/User";
+import User from "@/models/rest/user/User";
 
 export default {
     name: "AccountHome",

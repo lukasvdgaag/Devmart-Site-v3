@@ -39,7 +39,7 @@ import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
 import Stats from "@/components/Common/Stats.vue";
 import Stat from "@/components/Common/Stat.vue";
 import StringService from "../../../services/StringService";
-import Plugin from "@/models/rest/Plugin";
+import Plugin from "@/models/rest/plugin/Plugin";
 
 export default {
     name: "PluginPreview",

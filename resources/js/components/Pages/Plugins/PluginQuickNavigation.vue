@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import PluginPermissions from "@/models/rest/PluginPermissions";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
 
 export default {
     name: "PluginQuickNavigation",
