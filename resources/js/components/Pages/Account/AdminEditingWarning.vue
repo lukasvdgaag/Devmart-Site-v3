@@ -6,7 +6,7 @@
                 You are viewing the account page of {{ username }}. Be aware of the details you edit and
                 make sure that they are valid. Any changes made must be reported to the user concerned.
                 <br>
-                <router-link :to="{name:'admin'}" class="block !text-black mt-1 italic">
+                <router-link :to="{name:'admin'}" class="block text-black dark:text-slate-100 mt-1 italic">
                     &#60; Click here to go back to the admin page.
                 </router-link>
             </div>

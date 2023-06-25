@@ -28,13 +28,13 @@ export default {
         classes() {
             switch (this.type) {
                 case "success":
-                    return ["bg-green-100 dark:text-green-400 text-green-800"];
+                    return ["bg-green-100 dark:bg-green-900 dark:text-green-400 text-green-800"];
                 case "error":
-                    return ["bg-red-100 dark:text-red-400 text-red-800"];
+                    return ["bg-red-100 dark:bg-red-900 dark:text-red-400 text-red-800"];
                 case "warning":
-                    return ["bg-yellow-100 dark:text-yellow-400 text-yellow-800"];
+                    return ["bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-400 text-yellow-800"];
                 default:
-                    return ["bg-primary-100 dark:text-primary-400 text-primary-800"];
+                    return ["bg-primary-100 dark:bg-primary-900 dark:text-primary-400 text-primary-800"];
             }
         }
     },
