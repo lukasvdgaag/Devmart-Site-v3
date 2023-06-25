@@ -1,6 +1,6 @@
 <template>
     <div :class="[classes, {'hidden': closed}]"
-         class="flex items-center gap-4 rounded-lg px-4 py-3 dark:bg-gray-800 relative">
+         class="flex items-center gap-4 rounded-lg px-4 pr-10 py-3 dark:bg-gray-800 relative">
         <div class="absolute h-full top-0 right-4 flex items-center">
             <font-awesome-icon v-if="closable" icon="xmark" class="cursor-pointer" size="lg"
                                @click="closed = true; $emit('close')"/>

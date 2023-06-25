@@ -26,9 +26,9 @@
                         </thead>
                         <tbody>
                         <tr v-for="user in userListResponse?.users ?? []">
-                            <td>{{user.id}}</td>
-                            <td>{{user.username}}</td>
-                            <td>{{user.email}}</td>
+                            <td><a :href="`/account?user=${user.id}`" :title="`View ${user.username}'s account information.`" class="block w-full">{{user.id}}</a></td>
+                            <td><a :href="`/account?user=${user.id}`" :title="`View ${user.username}'s account information.`" class="block w-full">{{user.username}}</a></td>
+                            <td><a :href="`/account?user=${user.id}`" :title="`View ${user.username}'s account information.`" class="block w-full">{{user.email}}</a></td>
                         </tr>
                         </tbody>
                     </table>
