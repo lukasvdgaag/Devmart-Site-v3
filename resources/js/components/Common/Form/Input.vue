@@ -13,16 +13,17 @@
 
     <input v-else
            :class="[
-               hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 focus:border-indigo-300 focus:ring-indigo-200',
+               hasError ? 'border-red-300 focus:border-red-300 focus:ring-red-200' : 'border-gray-300 dark:border-gray-700 focus:border-indigo-300 dark:ring-offset-gray-700 focus:ring-indigo-200',
                type === 'checkbox' ? 'p-2.5 rounded-md' : '',
-               disabled ? 'bg-gray-100 dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600' : 'bg-white dark:text-gray-300 dark:bg-gray-800'
+               disabled ? 'bg-gray-100 dark:text-gray-400 dark:bg-gray-700 dark:border-gray-600' :
+                (`bg-white dark:bg-gray-800 ${type === 'checkbox' ? 'dark:text-blue-600' : 'dark:text-gray-300'}`)
            ]"
            :disabled="disabled"
            :maxlength="maxlength"
            :type="type"
            :name="name"
            :value="modelValue"
-           class="!rounded-md shadow-sm focus:ring dark:border-gray-700 focus:ring-opacity-50 checked:bg-blue-600"
+           class="!rounded-md shadow-sm dark:!shadow-gray-700 focus:ring dark:border-gray-700 focus:ring-opacity-50"
            @change="onChange($event)"
            @input="onInput($event)"
            @changeDate="onChangeDate($event)"
@@ -81,6 +82,7 @@ export default {
             else this.$emit('update:modelValue', event.target.value);
         },
         onInput(event) {
+            if (event.target.type === 'checkbox') return;
             this.$emit('update:modelValue', event.target.value);
             this.$emit('input', event);
         },

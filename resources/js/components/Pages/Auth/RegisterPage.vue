@@ -77,7 +77,7 @@
                        v-model="data.accept_tos"
                        required type="checkbox"/>
 
-                <span class="ml-2 text-sm text-gray-600">I have read and agree to Devmart's
+                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">I have read and agree to Devmart's
                                             <a class="static"
                                                href="/terms-of-service"
                                                target="_blank">Terms of Service</a>.</span>
