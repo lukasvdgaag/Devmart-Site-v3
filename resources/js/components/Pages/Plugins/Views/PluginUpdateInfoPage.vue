@@ -9,8 +9,8 @@
 <script>
 import PluginRepository from "@/services/PluginRepository";
 import PluginUpdateInformation from "@/components/Pages/Plugins/PluginUpdateInformation.vue";
-import Plugin from "@/models/rest/Plugin";
-import PluginPermissions from "@/models/rest/PluginPermissions";
+import Plugin from "@/models/rest/plugin/Plugin";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
 
 export default {
     name: "PluginUpdateInfoPage",

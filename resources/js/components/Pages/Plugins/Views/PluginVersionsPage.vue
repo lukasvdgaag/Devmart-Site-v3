@@ -36,8 +36,8 @@ import Fetchable from "@/models/fetchable/Fetchable";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";
 import DateService from "../../../../services/DateService";
 import StringService from "../../../../services/StringService";
-import PluginPermissions from "@/models/rest/PluginPermissions";
-import Plugin from "@/models/rest/Plugin";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
+import Plugin from "@/models/rest/plugin/Plugin";
 
 export default {
     name: "PluginVersionsPage",

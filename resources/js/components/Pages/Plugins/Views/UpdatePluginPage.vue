@@ -98,7 +98,7 @@ import MutedText from "@/components/Common/MutedText.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import Input from "@/components/Common/Form/Input.vue";
 import ValidationError from "@/components/Common/Form/ValidationError.vue";
-import Plugin from "@/models/rest/Plugin";
+import Plugin from "@/models/rest/plugin/Plugin";
 
 export default {
     name: "UpdatePluginPage",

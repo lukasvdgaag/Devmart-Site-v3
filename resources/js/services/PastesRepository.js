@@ -1,5 +1,5 @@
 import Paste from "@/models/rest/paste/Paste";
-import PasteListResponse from "@/models/rest/response/PasteListResponse";
+import PasteListResponse from "@/models/rest/paste/PasteListResponse";
 
 export const client = axios.create({
     baseURL: "/api/paste",

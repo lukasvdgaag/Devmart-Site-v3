@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import Plugin from "@/models/rest/Plugin";
-import PluginPermissions from "@/models/rest/PluginPermissions";
+import Plugin from "@/models/rest/plugin/Plugin";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
 import Fetchable from "@/models/fetchable/Fetchable";
 import PluginRepository from "@/services/PluginRepository";
 import Pagination from "@/components/Common/Pagination/Pagination.vue";

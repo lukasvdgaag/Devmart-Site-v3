@@ -212,7 +212,8 @@ import DateService from "@/services/DateService";
 import DropdownSelectItemModel from "@/models/DropdownSelectItemModel";
 import DropdownSelect from "@/components/Common/Form/DropdownSelect.vue";
 import {initDropdowns} from "flowbite";
-import User from "@/models/rest/User";
+import User from "@/models/rest/user/User";
+import {useAuth} from "@/store/authStore";
 
 export default {
     name: "AccountHome",
@@ -304,6 +305,8 @@ export default {
         },
         selectTheme(theme) {
             this.user.theme = theme;
+
+            useAuth().applyTheme(theme);
         },
         async updateUser() {
             if (this.loading) return;

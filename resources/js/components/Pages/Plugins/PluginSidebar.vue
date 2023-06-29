@@ -89,8 +89,8 @@ import PluginSidebarHeader from "@/components/Pages/Plugins/PluginSidebarHeader.
 import PluginCategory from "@/components/Pages/Plugins/PluginCategory.vue";
 import Icon from "@/components/Common/Icon/Icon.vue";
 import PluginLabel from "@/components/Pages/Plugins/PluginLabel.vue";
-import PluginPermissions from "@/models/rest/PluginPermissions";
-import Plugin from "@/models/rest/Plugin";
+import PluginPermissions from "@/models/rest/plugin/PluginPermissions";
+import Plugin from "@/models/rest/plugin/Plugin";
 import DateService from "../../../services/DateService";
 
 export default {

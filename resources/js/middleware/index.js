@@ -13,7 +13,7 @@ export const checkAuthenticated = async (to) => {
 
     // redirecting the user to the login page when request a page that requires authentication
     // or when the page requires the user to be an admin while they're not.
-    if ((to?.meta?.requireAuth && !authStore.user) || (to?.meta?.requireAdmin && !authStore?.user?.admin)) {
+    if ((to?.meta?.requireAuth && !authStore.user) || (to?.meta?.requireAdmin && !authStore?.user?.isAdmin())) {
         return {
             name: 'login',
             query: {

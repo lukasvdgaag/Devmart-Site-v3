@@ -8,11 +8,12 @@
                 </div>
 
                 <div class="flex flex-col align-center gap-0 text-center" style="height: 100%;margin-top:-80px;">
-                    <h1 class="uppercase"
+                    <h1 class="uppercase" data-aos="fade-down" data-aos-once="false"
                         style="font-size: 100px;line-height:110px;color:#fff;font-weight: 900;">
                         DEVMART
                     </h1>
-                    <div class="text-2xl" style="color:#fff;margin-top:4px;">Minecraft plugins, web, builds, and more.
+                    <div class="text-2xl" style="color:#fff;margin-top:4px;" data-aos="fade-up">
+                        Minecraft plugins, web, builds, and more.
                     </div>
                 </div>
             </div>
@@ -21,14 +22,14 @@
             <div class="d-grid">
                 <div class="col-span-12 text-center mb-3">
                     <div class="max-w-screen-md mx-auto">
-                        <h2 class="text-4xl font-bold text-white">Go custom.</h2>
-                        <p class="text-base mt-3">Order a custom-built Minecraft plugin, website, build or Discord bot
+                        <h2 class="text-4xl font-bold text-white" data-aos="fade-right">Go custom.</h2>
+                        <p class="text-base mt-3" data-aos="fade-left">Order a custom-built Minecraft plugin, website, build or Discord bot
                             from
                             GCNT</p>
                     </div>
                 </div>
-                <div class="col-span-12 grid d-grid-auto mt-5">
-                    <div class="card home-card flex flex-col justify-center">
+                <div class="col-span-12 grid auto-cols-max grid-cols-2 gap-5 mt-5">
+                    <div class="card home-card flex flex-col justify-center" data-aos="zoom-in">
                         <div class="icon flex flex-col align-center">
                             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                                 <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -40,7 +41,7 @@
                         <p class="text-base mt-3">Custom development rates range from 12 to 16 EUR per hour and are hourly
                             charged.</p>
                     </div>
-                    <div class="card home-card">
+                    <div class="card home-card" data-aos="zoom-out">
                         <div class="icon flex flex-col align-center">
                             <font-awesome-icon :icon="['fab', 'github']" size="6x"></font-awesome-icon>
                         </div>
@@ -48,7 +49,7 @@
                         <p class="text-base mt-3">Get the source of your project at no additional costs, provided through
                             GitHub.</p>
                     </div>
-                    <div class="card home-card">
+                    <div class="card home-card" data-aos="zoom-out">
                         <div class="icon flex flex-col align-center">
                             <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                                 <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -59,7 +60,7 @@
                         <h3 class="text-base font-bold uppercase mt-4 text-white">Best performance</h3>
                         <p class="text-base mt-3">Expect only max performance of our products and nothing less.</p>
                     </div>
-                    <div class="card home-card">
+                    <div class="card home-card" data-aos="zoom-in">
                         <div class="icon flex flex-col align-center">
                             <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
                                 <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -71,7 +72,7 @@
                         <p class="text-base mt-3">Our products have sold over 120.000 times with an average rating of 4.6
                             stars and are well maintained.</p>
                     </div>
-                    <div class="card home-card">
+                    <div class="card home-card" data-aos="zoom-in">
                         <div class="icon flex flex-col align-center">
                             <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
                                 <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -82,7 +83,7 @@
                         <h3 class="text-base font-bold uppercase mt-4 text-white">What we code</h3>
                         <p class="text-base mt-3">Java, JavaScript, NodeJS, PHP, HTML, CSS, SQL, MongoDB, Redis.</p>
                     </div>
-                    <div class="card home-card">
+                    <div class="card home-card"  data-aos="zoom-out">
                         <div class="icon flex flex-col align-center">
                             <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg">
                                 <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
@@ -134,6 +135,7 @@
 <script>
 import Navbar from "@/components/Common/Navbar.vue";
 import SeoBuilder from "@/services/SeoBuilder";
+import AOS from "aos";
 
 export default {
     name: "HomeView",
@@ -145,6 +147,10 @@ export default {
             .withReturn()
             .build()
     },
+
+    mounted() {
+        AOS.init();
+    }
 
 }
 </script>

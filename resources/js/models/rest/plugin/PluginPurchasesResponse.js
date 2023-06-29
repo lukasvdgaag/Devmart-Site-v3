@@ -1,4 +1,4 @@
-import PageableRestResponse from "@/models/rest/response/PageableRestResponse";
+import PageableRestResponse from "@/models/rest/PageableRestResponse";
 
 export default class PluginPurchasesResponse extends PageableRestResponse {
 

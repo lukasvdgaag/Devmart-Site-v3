@@ -1,7 +1,8 @@
 import AuthService from "@/services/AuthService";
 import router from "@/router/index";
 import {defineStore} from "pinia";
-import User from "@/models/rest/User";
+import User from "@/models/rest/user/User";
+import AccountTheme from "@/models/AccountTheme";
 
 export const useAuth = defineStore({
     id: "authStore",
@@ -45,6 +46,19 @@ export const useAuth = defineStore({
                 this.loaded = true;
                 this.error = error;
                 return error;
+            }
+        },
+        applyTheme(theme = undefined) {
+            if (!theme) theme = this.user?.theme ?? AccountTheme.SYSTEM;
+
+            if (theme === AccountTheme.SYSTEM) {
+                theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? AccountTheme.DARK : AccountTheme.LIGHT
+            }
+
+            if (theme === AccountTheme.DARK) {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
             }
         }
     },

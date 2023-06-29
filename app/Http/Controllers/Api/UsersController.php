@@ -39,6 +39,42 @@ class UsersController
         ]);
     }
 
+    public function handleUserListRetrieval(Request $request) {
+        if ($request->user() == null || $request->user()?->role !== 'admin') {
+            return response()->json([
+                'errors' => [
+                    'user' => 'You are not allowed to access this resource.'
+                ]
+            ], 403);
+        }
+
+        $request->validate([
+            'query' => ['nullable', 'string', 'max:255'],
+            'perPage' => ['nullable', 'integer', 'min:1', 'max:25'],
+        ]);
+
+        $query = $request->get('query', '');
+        $perPage = $request->integer('perPage', 10);
+
+        $users = User::query()
+            ->where('username', 'LIKE', "%$query%")
+            ->orWhere('email', 'LIKE', "%$query%")
+            ->orWhere('id', '=', $query)
+            ->orWhere('discord_id', '=', $query)
+            ->orderByDesc('id');
+
+        $paginated = $users->paginate($perPage, [
+            'id', 'username', 'email', 'role', 'spigot', 'discord_id', 'created_at', 'updated_at'
+        ]);
+
+        return response()->json([
+            'total' => $paginated->total(),
+            'currentPage' => $paginated->currentPage(),
+            'pages' => $paginated->lastPage(),
+            'users' => $paginated->items(),
+        ]);
+    }
+
     public function handleUserPayPalInformationRetrieval(Request $request, int $userId)
     {
         $user = Controller::getUserOrRedirect($request, $userId);

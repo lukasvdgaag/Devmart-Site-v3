@@ -48,11 +48,11 @@
                 </MutedText>
             </FormRow>
 
-            <FormRow v-if="plugin.price > 0" label="Sale">
+            <FormRow v-if="plugin.price > 0" label="ProductSale">
                 <button v-if="!plugin?.sale"
                         class="primary new-sale"
                         type="button"
-                        @click="createNewSale()">New Sale
+                        @click="createNewSale()">New ProductSale
                 </button>
                 <div v-else>
                     <div class="flex flex-row">
@@ -184,8 +184,8 @@ import SwitchInput from "@/components/Common/Form/SwitchInput.vue";
 import BBCodeEditor from "@/components/Common/BBCodeEditor.vue";
 import StickyFooter from "@/components/Common/StickyFooter.vue";
 import UploadService from "@/services/UploadService";
-import Plugin from "@/models/rest/Plugin";
-import Sale from "@/models/rest/Sale";
+import Plugin from "@/models/rest/plugin/Plugin";
+import ProductSale from "@/models/rest/ProductSale";
 
 export default {
     name: "EditPluginPage",
@@ -266,7 +266,7 @@ export default {
             }
         },
         createNewSale() {
-            this.plugin.sale = new Sale();
+            this.plugin.sale = new ProductSale();
         },
         async savePlugin() {
             this.isSaving = true;
