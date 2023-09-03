@@ -18,9 +18,9 @@
 
             <div class="flex flex-col-reverse flex-wrap md:flex-col md:flex-nowrap gap-2 mt-2">
                 <div class="flex gap-1 justify-between items-end flex-wrap ">
-                    <Label class="text-md md:hidden">Options</Label>
                     <Label class="text-md hidden md:block">Content</Label>
                     <div class="flex gap-2 md:gap-1 w-full flex-wrap md:flex-nowrap">
+                        <Label class="text-md md:hidden">Paste lifetime</Label>
                         <DropdownSelect
                             id="dd-lifetime"
                             v-model="selectedLifetime"
@@ -30,6 +30,8 @@
                             header="Paste Lifetime"
                             placeholder="Lifetime"
                         />
+
+                        <Label class="text-md md:hidden">Visibility</Label>
                         <DropdownSelect
                             id="dd-visibility"
                             v-model="selectedVisibility"
@@ -39,6 +41,8 @@
                             header="Visibility"
                             placeholder="Visibility"
                         />
+
+                        <Label class="text-md md:hidden">Paste styling (format)</Label>
                         <DropdownSelect
                             id="dd-style"
                             v-model="selectedStyle"
@@ -55,8 +59,7 @@
                                 type="button">
                             <font-awesome-icon icon="fa-solid fa-trash-can"/>
                         </button>
-                        <div class="flex gap-2 w-full">
-
+                        <div class="hidden md:flex gap-2 w-full">
                             <button v-if="pasteId"
                                     class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden"
                                     data-modal-target="confirm-delete-modal"
@@ -76,9 +79,9 @@
                     </div>
                 </div>
                 <div class="lg:mb-6">
-                    <Label class="uppercase text-md mb-1 md:hidden">Content</Label>
+                    <Label class="text-md mb-1 md:hidden">Content</Label>
 
-                    <div :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']" class="transition transition-all">
+                    <div :class="[ fullScreen ? 'fixed top-0 left-0 w-screen h-screen z-20': 'relative']" class="transition-all">
                         <Input ref="content"
                                v-model="paste.content"
                                :class="{'!rounded-none h-full': fullScreen}"
@@ -105,6 +108,26 @@
                     </div>
                 </div>
             </div>
+
+            <StickyFooter class="md:hidden !px-0">
+                <div class="flex gap-2 w-full">
+                    <button v-if="pasteId"
+                            class="w-fit px-4 py-2 mt-0 rounded-md flex align-center gap-2 !bg-red-400 text-white md:hidden"
+                            data-modal-target="confirm-delete-modal"
+                            data-modal-toggle="confirm-delete-modal"
+                            type="button">
+                        <font-awesome-icon icon="fa-solid fa-trash-can"/>
+                        <span class="break-keep">Delete</span>
+                    </button>
+                    <button :disabled="loading"
+                            class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2"
+                            type="submit"
+                            @click.prevent="uploadPaste">
+                        <font-awesome-icon class="text-sm" icon="fa-solid fa-cloud-arrow-up"/>
+                        <span class="break-keep">{{ loading ? "Uploading..." : this.pasteId ? "Update Paste" : "Upload Paste" }}</span>
+                    </button>
+                </div>
+            </StickyFooter>
         </form>
     </div>
     <ConfirmationModal v-if="pasteId"

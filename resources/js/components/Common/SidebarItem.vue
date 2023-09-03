@@ -3,8 +3,9 @@
                  :class="{
                     'sidebar-active hover:bg-gray-300 dark:hover:bg-gray-600': this.isActive(this.item),
                     'lg:mr-3': marginRight,
-                    'bg-gray-100 dark:bg-gray-800': this.highlight,
-                    'hover:bg-gray-100 dark:hover:bg-gray-800': !this.isActive(this.item),
+                    'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700': this.highlight,
+                    'hover:bg-gray-100 dark:hover:bg-gray-800': !this.isActive(this.item) && !this.highlight,
+                    'hover:bg-gray-200 dark:hover:bg-gray-700': !this.isActive(this.item) && this.highlight,
                  }" :to="item.link" active-class=""
                  class="py-3 px-4 my-2 rounded-lg flex flex-row items-center plain"
                  exact-active-class="">
