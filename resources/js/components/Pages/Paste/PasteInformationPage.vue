@@ -14,7 +14,7 @@
             <Stat v-if="paste.style && paste.style !== 'none'">{{ paste.style == 'less' ? 'Error' : paste.style }}</Stat>
         </Stats>
 
-        <div class="mt-4 mb-6">
+        <div class="mt-4 mb-12 flex-grow">
             <div class="flex gap-2 justify-end font-semibold">
                 <PasteActionLink :href="`/paste/${pasteId}/download`" icon="fa-solid fa-download" smallIcon target="_blank" text="Download"/>
                 <PasteActionLink :href="`/paste/${pasteId}/raw`" icon="fa-solid fa-align-left" smallIcon text="Raw"/>
@@ -30,14 +30,14 @@
                                 ref="codeHighlightBlock"
                                 :code="paste.content ?? ''"
                                 :language="paste.style"
-                                class="mt-2"
+                                class="mt-2 h-full lg:h-fit"
             />
         </div>
 
         <StickyFooter class="lg:hidden">
             <button class="primary w-full p-2 mt-0 rounded-md flex align-center gap-2" @click="share">
-                <font-awesome-icon icon="fa-solid fa-share-nodes"/>
-                Share
+                <font-awesome-icon :icon="shareIcons"/>
+                {{ shareText }}
             </button>
         </StickyFooter>
     </div>

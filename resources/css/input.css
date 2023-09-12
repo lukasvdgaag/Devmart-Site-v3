@@ -428,7 +428,7 @@ html:not(.dark) header.header-filled .nav-action:hover {
 }
 
 .preview-link-title {
-    @apply text-base font-normal text-gray-700 dark:text-gray-400;
+    @apply text-base font-normal text-gray-700 dark:text-gray-300;
 }
 
 .sidebar-active {
