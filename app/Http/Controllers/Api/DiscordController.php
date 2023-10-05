@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 class DiscordController
 {
 
-    function getUserInformation(\Illuminate\Http\Request $request, $userId) {
-        $url = "https://discord.com/api/v9/users/$userId";
+    function getUserInformation(\Illuminate\Http\Request $request, $discordId) {
+        $url = "https://discord.com/api/v9/users/$discordId";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

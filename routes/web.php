@@ -21,9 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__ . '/auth.php';
-
 Route::prefix('api')->group(function () {
+    Route::prefix('auth')->group(function () {
+        require __DIR__ . '/auth.php';
+    });
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', function (Request $request) {
             return new UserResource($request->user());
@@ -34,8 +36,6 @@ Route::prefix('api')->group(function () {
             Route::get('/search', [UsersController::class, 'handleUsernameSearch']);
             Route::get('/{userId}', [UsersController::class, 'handleUserSearch']);
             Route::put('/{userId}', [UsersController::class, 'handleUserUpdate']);
-
-            Route::get('/{userId}/pastes', [PasteController::class, 'handleUserPastesRetrieval']);
 
             Route::get('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationRetrieval']);
             Route::put('/{userId}/paypal', [UsersController::class, 'handleUserPayPalInformationUpdate']);
@@ -49,6 +49,7 @@ Route::prefix('api')->group(function () {
                 Route::get('/{pasteId}', [PasteController::class, 'handlePasteRetrieval']);
                 Route::put('/{pasteId}', [PasteController::class, 'handlePasteEdit']);
                 Route::delete('/{pasteId}', [PasteController::class, 'handlePasteDeletion']);
+                Route::get('/user/{userId}', [PasteController::class, 'handleUserPastesRetrieval']);
             });
 
         Route::prefix('/plugins')->group(function () {
@@ -77,7 +78,7 @@ Route::prefix('api')->group(function () {
         });
 
         Route::prefix('/discord')->group(function () {
-            Route::get('/user/{userId}', [DiscordController::class, 'getUserInformation']);
+            Route::get('/user/{discordId}', [DiscordController::class, 'getUserInformation']);
         });
 
         Route::prefix('/orders')->group(function () {
