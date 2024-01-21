@@ -30,8 +30,8 @@ class AuthenticatedSessionController extends Controller
 
 //        $request->session()->regenerate();
 //        return redirect()->intended(WebUtils::redirectOrGo    Home($request, true));
-        return redirect()->intended();
-//        return \response()->json(['message' => 'Auth was successful.', 'user' => new UserResource(Auth::user())])->setStatusCode(200);
+//        return redirect()->intended();
+        return \response()->json(['message' => 'Auth was successful.', 'user' => new UserResource(Auth::user())])->setStatusCode(200);
     }
 
     /**

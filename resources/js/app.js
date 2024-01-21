@@ -5,7 +5,6 @@ import App from './App.vue'
 import router from "@/router/index";
 import "aos/dist/aos.css";
 import "../css/output.css";
-import VueHead from "vue-head";
 
 import {faDiscord, faGithub} from "@fortawesome/free-brands-svg-icons";
 import {fas} from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +24,6 @@ const pinia = createPinia().use(({store}) => {
 });
 
 createApp(App)
-    .use(VueHead)
     .use(router)
     .use(pinia)
     .component('font-awesome-icon', FontAwesomeIcon)

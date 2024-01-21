@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .navbar-popup-item {
-    @apply block px-4 py-2 w-full rounded-none text-sm flex flex-row items-center gap-2;
+    @apply px-4 py-2 w-full rounded-none text-sm flex flex-row items-center gap-2;
 }
 
 .navbar-popup-item-bg {

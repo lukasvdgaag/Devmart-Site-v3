@@ -16,8 +16,8 @@
 
 <script>
 import highlighter from "highlight.js";
-import "@/../css/highlight/github.css"
-import "@/../css/highlight/github-dark.css"
+import "highlight.js/styles/github.css"
+import "highlight.js/styles/github-dark.css"
 
 export default {
     name: "CodeHighlightBlock",

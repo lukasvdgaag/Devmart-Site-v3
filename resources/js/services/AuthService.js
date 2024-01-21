@@ -10,17 +10,17 @@ export const authClient = axios.create({
 export default {
     async login(payload) {
         await authClient.get("/sanctum/csrf-cookie");
-        return authClient.post("/login", payload);
+        return authClient.post("/api/auth/login", payload);
     },
     logout() {
-        return authClient.post("/logout");
+        return authClient.post("/api/auth/logout");
     },
     getAuthUser() {
         return authClient.get("/api/user");
     },
     async registerUser(payload, discordAuthToken) {
         await authClient.get("/sanctum/csrf-cookie");
-        return authClient.post(`/register${discordAuthToken ? `?discord_auth_token=${discordAuthToken}` : ''}`, payload);
+        return authClient.post(`/api/auth/register${discordAuthToken ? `?discord_auth_token=${discordAuthToken}` : ''}`, payload);
     }
 
 }
